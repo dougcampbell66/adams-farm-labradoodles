@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { stats } from '../data/stats.js';
 
 const dogs = await getCollection('dogs');
 const sire = dogs.find((d) => d.data.role === 'sire');
@@ -25,6 +26,23 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
         </div>
       </div>
       <div class="hero-photo">Photo: puppy at home</div>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="container stats-inner">
+      <div class="stat">
+        <span class="stat-number">{stats.yearsBreeding}</span>
+        <span class="stat-label">Years breeding</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">{stats.littersPlaced}</span>
+        <span class="stat-label">Litters placed</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">{stats.happyFamilies}</span>
+        <span class="stat-label">Happy families</span>
+      </div>
     </div>
   </section>
 
@@ -72,8 +90,8 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
         </div>
       )}
       <div class="card">
-        <p class="eyebrow" style="margin-bottom:6px;">Our story</p>
-        <p style="margin:0;">We're working toward a future home on a real farm in Jamestown, NC.</p>
+        <p class="eyebrow" style="margin-bottom:6px;">Visits &amp; updates</p>
+        <p style="margin:0;">In-home visits at 6 weeks, plus weekly photos, videos, and live video calls until go-home day.</p>
       </div>
     </div>
   </section>
@@ -104,6 +122,33 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
     justify-content: center;
     color: #8C7550;
     font-size: 0.85rem;
+  }
+  .stats-bar {
+    background: var(--color-card);
+    padding: 28px 0;
+  }
+  .stats-inner {
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-pine);
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-top: 4px;
   }
   .trust-inner {
     display: flex;

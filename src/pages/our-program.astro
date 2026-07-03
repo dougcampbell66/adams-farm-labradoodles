@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { stats, program } from '../data/stats.js';
+---
+<Layout title="Our program" description="How Adams Farm Labradoodles raises every litter — health, transparency, and lifelong support.">
+  <section class="section container">
+    <p class="eyebrow">ALAA Gold Paw &middot; {stats.yearsBreeding} years breeding &middot; {stats.littersPlaced} litters placed</p>
+    <h1>Our program</h1>
+    <p class="intro">Four things guide every litter we raise.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <h2>Health &amp; integrity</h2>
+        <p>Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We stand behind every puppy with a {program.healthGuarantee.length} health guarantee covering {program.healthGuarantee.covers}. If a covered condition is confirmed by a licensed veterinarian, we provide {program.healthGuarantee.remedy}.</p>
+      </div>
+
+      <div class="pillar">
+        <h2>Purposeful raising</h2>
+        <p>Every puppy goes through a structured early socialization program from birth, refined over {stats.littersPlaced} litters. We don't publish the specifics of our method, but the result is confident, well-adjusted puppies ready for family life.</p>
+      </div>
+
+      <div class="pillar">
+        <h2>Transparency</h2>
+        <p>Families are welcome to visit in person at {program.visitAge}, and every family receives {program.updates} from birth until go-home day — you'll watch your puppy grow before they're home.</p>
+      </div>
+
+      <div class="pillar">
+        <h2>Lifetime support</h2>
+        <p>Our relationship with your family doesn't end at pickup. We're here for questions, guidance, and support for the life of your dog.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    color: var(--color-muted);
+    margin-bottom: 24px;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .pillar {
+    background: var(--color-card);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .pillar h2 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  .pillar p {
+    margin: 0;
+    color: var(--color-charcoal);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  @media (max-width: 640px) {
+    .pillars { grid-template-columns: 1fr; }
+  }
+</style>
