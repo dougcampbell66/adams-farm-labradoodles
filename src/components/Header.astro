@@ -1,0 +1,47 @@
+---
+---
+<header>
+  <div class="container header-inner">
+    <a href="/" class="logo">Adams Farm Labradoodles</a>
+    <nav>
+      <a href="/our-dogs">Our dogs</a>
+      <a href="/puppies">Puppies</a>
+      <a href="/testimonials">Testimonials</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    padding: 18px 0;
+  }
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-pine);
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--color-pine);
+  }
+  @media (max-width: 640px) {
+    nav { display: none; }
+  }
+</style>

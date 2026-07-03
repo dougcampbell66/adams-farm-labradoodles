@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const testimonials = await getCollection('testimonials');
+---
+<Layout title="Testimonials">
+  <section class="section container">
+    <p class="eyebrow">From our forever families</p>
+    <h1>Testimonials</h1>
+    <div class="testimonial-list">
+      {testimonials.map((t) => (
+        <div class="card">
+          <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
+          <p class="quote-attr">&mdash; {t.data.family}, {t.data.year}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .testimonial-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-pine);
+    margin: 0 0 8px;
+  }
+  .quote-attr {
+    font-size: 0.8rem;
+    color: var(--color-brick);
+    margin: 0;
+  }
+</style>

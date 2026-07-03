@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const dogs = await getCollection('dogs');
+---
+<Layout title="Our dogs">
+  <section class="section container">
+    <p class="eyebrow">Health tested &middot; ALAA accredited</p>
+    <h1>Our dogs</h1>
+    <div class="dog-grid">
+      {dogs.map((dog) => (
+        <div class="card dog-card">
+          <h2>{dog.data.name} <span class="role">({dog.data.role})</span></h2>
+          {dog.data.hipScore && <p class="detail">{dog.data.hipScore}</p>}
+          {dog.data.dnaPanel && <p class="detail">{dog.data.dnaPanel}</p>}
+          <p>{dog.data.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .dog-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .role {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+  .detail {
+    color: var(--color-mustard);
+    font-size: 0.8rem;
+    margin: 4px 0;
+  }
+  @media (max-width: 640px) {
+    .dog-grid { grid-template-columns: 1fr; }
+  }
+</style>

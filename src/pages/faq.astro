@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  {
+    q: 'Are your dogs health tested?',
+    a: 'Yes. Both our sire and dam have completed hip and elbow evaluations and full genetic DNA panels. Results are available on request.'
+  },
+  {
+    q: 'Are you ALAA accredited?',
+    a: 'Yes, Adams Farm Labradoodles is an accredited breeder with the Australian Labradoodle Association of America.'
+  },
+  {
+    q: 'Where are you located?',
+    a: 'We are based in Greensboro, NC. We are working toward moving to a farm property in Jamestown, NC in the coming years.'
+  },
+  {
+    q: 'How do I reserve a puppy?',
+    a: 'Reach out through our contact form and we will walk you through our waitlist and reservation process.'
+  }
+];
+---
+<Layout title="FAQ">
+  <section class="section container">
+    <p class="eyebrow">Common questions</p>
+    <h1>FAQ</h1>
+    <div class="faq-list">
+      {faqs.map((item) => (
+        <div class="faq-item">
+          <h2>{item.q}</h2>
+          <p>{item.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .faq-list {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .faq-item h2 {
+    font-size: 1.1rem;
+  }
+  .faq-item p {
+    color: var(--color-muted);
+    margin: 0;
+  }
+</style>

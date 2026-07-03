@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const dogs = await getCollection('dogs');
+const sire = dogs.find((d) => d.data.role === 'sire');
+const dam = dogs.find((d) => d.data.role === 'dam');
+
+const litters = await getCollection('litters');
+const currentLitter = litters.find((l) => l.data.status === 'available');
+
+const testimonials = await getCollection('testimonials');
+const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
+---
+<Layout title="Home">
+  <section class="section hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">ALAA accredited &middot; Greensboro, NC</p>
+        <h1>Health-tested Labradoodles, raised in our home</h1>
+        <p class="hero-copy">Every litter comes from fully health-tested parents and grows up in our home, surrounded by our family, before going to yours.</p>
+        <div class="hero-actions">
+          <a href="/puppies" class="btn btn-primary">See available puppies</a>
+          <a href="/our-dogs" class="btn btn-secondary">Meet the parents</a>
+        </div>
+      </div>
+      <div class="hero-photo">Photo: puppy at home</div>
+    </div>
+  </section>
+
+  {currentLitter && (
+    <section class="trust-strip">
+      <div class="container trust-inner">
+        <p class="eyebrow" style="margin:0;">This litter's pedigree</p>
+        <div class="pedigree-row">
+          {sire && (
+            <div class="pedigree-item">
+              <span class="pedigree-name">Sire</span>
+              <span class="pedigree-detail">{sire.data.hipScore}</span>
+            </div>
+          )}
+          {dam && (
+            <div class="pedigree-item">
+              <span class="pedigree-name">Dam</span>
+              <span class="pedigree-detail">{dam.data.dnaPanel}</span>
+            </div>
+          )}
+          <div class="pedigree-item">
+            <span class="pedigree-name">Litter</span>
+            <span class="pedigree-detail">Ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {featured && (
+    <section class="section">
+      <div class="container quote-block">
+        <p class="quote">&ldquo;{featured.data.quote}&rdquo;</p>
+        <p class="quote-attr">&mdash; {featured.data.family}, {featured.data.year}</p>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container status-grid">
+      {currentLitter && (
+        <div class="card">
+          <p class="eyebrow" style="margin-bottom:6px;">Available now</p>
+          <p style="margin:0;">{currentLitter.data.availableCount} puppies &middot; ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+        </div>
+      )}
+      <div class="card">
+        <p class="eyebrow" style="margin-bottom:6px;">Our story</p>
+        <p style="margin:0;">We're working toward a future home on a real farm in Jamestown, NC.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .hero-copy {
+    color: var(--color-muted);
+    max-width: 420px;
+    margin: 0 0 24px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .hero-photo {
+    background: #E4D5B8;
+    border-radius: 12px;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8C7550;
+    font-size: 0.85rem;
+  }
+  .trust-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .pedigree-row {
+    display: flex;
+    gap: 24px;
+  }
+  .pedigree-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  .pedigree-name {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+  }
+  .pedigree-detail {
+    font-size: 0.7rem;
+    color: var(--color-mustard);
+    margin-top: 2px;
+  }
+  .quote-block {
+    text-align: center;
+    max-width: 640px;
+  }
+  .quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--color-pine);
+  }
+  .quote-attr {
+    font-size: 0.8rem;
+    color: var(--color-brick);
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .hero-grid, .status-grid { grid-template-columns: 1fr; }
+  }
+</style>

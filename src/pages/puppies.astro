@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const litters = (await getCollection('litters')).sort(
+  (a, b) => new Date(b.data.birthdate).getTime() - new Date(a.data.birthdate).getTime()
+);
+---
+<Layout title="Puppies">
+  <section class="section container">
+    <p class="eyebrow">Current &amp; upcoming litters</p>
+    <h1>Puppies</h1>
+    <div class="litter-list">
+      {litters.map((litter) => (
+        <div class="card litter-card">
+          <div class="litter-header">
+            <h2>{litter.data.title}</h2>
+            <span class={`status status-${litter.data.status}`}>{litter.data.status}</span>
+          </div>
+          <p class="detail">Ready {new Date(litter.data.readyDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          {litter.data.availableCount !== undefined && (
+            <p class="detail">{litter.data.availableCount} of {litter.data.puppyCount} available</p>
+          )}
+          <p>{litter.data.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .litter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .litter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .status {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+  .status-available { background: #E1F5EE; color: #085041; }
+  .status-reserved { background: #FAEEDA; color: #633806; }
+  .status-planned { background: #E6F1FB; color: #0C447C; }
+  .status-past { background: #F1EFE8; color: #444441; }
+  .detail {
+    color: var(--color-mustard);
+    font-size: 0.85rem;
+    margin: 4px 0;
+  }
+</style>
