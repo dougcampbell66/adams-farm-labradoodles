@@ -4,8 +4,9 @@ import { getCollection } from 'astro:content';
 import { stats } from '../data/stats.js';
 
 const dogs = await getCollection('dogs');
-const sire = dogs.find((d) => d.data.role === 'sire');
-const dam = dogs.find((d) => d.data.role === 'dam');
+const activeDogs = dogs.filter((d) => d.data.status !== 'retired');
+const sire = activeDogs.find((d) => d.data.role === 'sire');
+const dam = activeDogs.find((d) => d.data.role === 'dam');
 
 const litters = await getCollection('litters');
 const currentLitter = litters.find((l) => l.data.status === 'available');
@@ -25,7 +26,7 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
           <a href="/our-dogs" class="btn btn-secondary">Meet the parents</a>
         </div>
       </div>
-      <div class="hero-photo">Photo: puppy at home</div>
+      <img src="/images/home-hero.jpg" alt="Silas and Winnie" class="hero-photo-img" />
     </div>
   </section>
 
@@ -113,15 +114,11 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
     display: flex;
     gap: 12px;
   }
-  .hero-photo {
-    background: #E4D5B8;
+  .hero-photo-img {
     border-radius: 12px;
+    width: 100%;
     height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #8C7550;
-    font-size: 0.85rem;
+    object-fit: cover;
   }
   .stats-bar {
     background: var(--color-card);

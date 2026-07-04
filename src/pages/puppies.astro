@@ -10,25 +10,39 @@ const litters = (await getCollection('litters')).sort(
   <section class="section container">
     <p class="eyebrow">Current &amp; upcoming litters</p>
     <h1>Puppies</h1>
-    <div class="litter-list">
-      {litters.map((litter) => (
-        <div class="card litter-card">
-          <div class="litter-header">
-            <h2>{litter.data.title}</h2>
-            <span class={`status status-${litter.data.status}`}>{litter.data.status}</span>
+    {litters.length === 0 ? (
+      <p class="empty-message">
+        No litters listed right now — reach out through our <a href="/contact">contact page</a> to join the waitlist and be notified when one is announced.
+      </p>
+    ) : (
+      <div class="litter-list">
+        {litters.map((litter) => (
+          <div class="card litter-card">
+            <div class="litter-header">
+              <h2>{litter.data.title}</h2>
+              <span class={`status status-${litter.data.status}`}>{litter.data.status}</span>
+            </div>
+            <p class="detail">Ready {new Date(litter.data.readyDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+            {litter.data.availableCount !== undefined && (
+              <p class="detail">{litter.data.availableCount} of {litter.data.puppyCount} available</p>
+            )}
+            <p>{litter.data.description}</p>
           </div>
-          <p class="detail">Ready {new Date(litter.data.readyDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
-          {litter.data.availableCount !== undefined && (
-            <p class="detail">{litter.data.availableCount} of {litter.data.puppyCount} available</p>
-          )}
-          <p>{litter.data.description}</p>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    )}
   </section>
 </Layout>
 
 <style>
+  .empty-message {
+    margin-top: 24px;
+    color: var(--color-muted);
+  }
+  .empty-message a {
+    color: var(--color-pine);
+    text-decoration: underline;
+  }
   .litter-list {
     display: flex;
     flex-direction: column;

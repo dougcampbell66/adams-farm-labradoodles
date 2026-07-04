@@ -5,6 +5,19 @@ const dogs = defineCollection({
   schema: z.object({
     name: z.string(),
     role: z.enum(['sire', 'dam']),
+    status: z.enum(['active', 'retired']).default('active'),
+    registeredName: z.string().optional(),
+    regNumber: z.string().optional(),
+    color: z.string().optional(),
+    microchip: z.string().optional(),
+    parents: z.string().optional(),
+    coi: z.string().optional(),
+    healthTests: z.array(z.object({
+      test: z.string(),
+      date: z.string(),
+      result: z.string()
+    })).optional(),
+    gallery: z.array(z.string()).optional(),
     birthdate: z.string(),
     photo: z.string(),
     hipScore: z.string().optional(),

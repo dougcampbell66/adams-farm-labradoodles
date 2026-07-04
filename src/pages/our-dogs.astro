@@ -3,30 +3,119 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const dogs = await getCollection('dogs');
+const active = dogs.filter((d) => d.data.status !== 'retired');
+const retired = dogs.filter((d) => d.data.status === 'retired');
 ---
 <Layout title="Our dogs">
   <section class="section container">
     <p class="eyebrow">Health tested &middot; ALAA accredited</p>
     <h1>Our dogs</h1>
+
+    <h2 class="section-heading">Current breeding dogs</h2>
     <div class="dog-grid">
-      {dogs.map((dog) => (
+      {active.map((dog) => (
         <div class="card dog-card">
-          <h2>{dog.data.name} <span class="role">({dog.data.role})</span></h2>
-          {dog.data.hipScore && <p class="detail">{dog.data.hipScore}</p>}
-          {dog.data.dnaPanel && <p class="detail">{dog.data.dnaPanel}</p>}
+          <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
+          {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
+          {dog.data.coi && (
+            <p class="coi">
+              Coefficient of inbreeding (COI): {dog.data.coi}
+              <span class="coi-caption">Lower COI means greater genetic diversity.</span>
+            </p>
+          )}
           <p>{dog.data.description}</p>
+          {dog.data.healthTests && dog.data.healthTests.length > 0 && (
+            <div class="health-tests">
+              <table class="health-table">
+                <thead>
+                  <tr>
+                    <th>Test</th>
+                    <th>Date</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dog.data.healthTests.map((ht) => (
+                    <tr>
+                      <td>{ht.test}</td>
+                      <td class="date-cell">{new Date(ht.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                      <td>{ht.result}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p class="ofa-note">Results verifiable at <a href="https://www.ofa.org" target="_blank" rel="noopener noreferrer">www.ofa.org</a> by registration number.</p>
+            </div>
+          )}
         </div>
       ))}
     </div>
+
+    {retired.length > 0 && (
+      <>
+        <h2 class="section-heading retired-heading">Retired</h2>
+        <div class="dog-grid">
+          {retired.map((dog) => (
+            <div class="card dog-card retired-card">
+              <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
+              {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
+              {dog.data.coi && (
+                <p class="coi">
+                  Coefficient of inbreeding (COI): {dog.data.coi}
+                  <span class="coi-caption">Lower COI means greater genetic diversity.</span>
+                </p>
+              )}
+              <p>{dog.data.description}</p>
+              {dog.data.healthTests && dog.data.healthTests.length > 0 && (
+                <div class="health-tests">
+                  <table class="health-table">
+                    <thead>
+                      <tr>
+                        <th>Test</th>
+                        <th>Date</th>
+                        <th>Result</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dog.data.healthTests.map((ht) => (
+                        <tr>
+                          <td>{ht.test}</td>
+                          <td class="date-cell">{new Date(ht.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                          <td>{ht.result}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <p class="ofa-note">Results verifiable at <a href="https://www.ofa.org" target="_blank" rel="noopener noreferrer">www.ofa.org</a> by registration number.</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </>
+    )}
   </section>
 </Layout>
 
 <style>
+  .section-heading {
+    margin-top: 36px;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .retired-heading {
+    margin-top: 48px;
+  }
   .dog-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    margin-top: 24px;
+  }
+  .retired-card {
+    opacity: 0.75;
   }
   .role {
     font-size: 0.9rem;
@@ -37,6 +126,52 @@ const dogs = await getCollection('dogs');
     color: var(--color-mustard);
     font-size: 0.8rem;
     margin: 4px 0;
+  }
+  .coi {
+    font-size: 0.8rem;
+    margin: 6px 0 2px;
+    color: var(--color-pine);
+  }
+  .coi-caption {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    margin-top: 1px;
+  }
+  .health-tests {
+    margin-top: 14px;
+  }
+  .health-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+  .health-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    padding: 4px 6px 4px 0;
+    border-bottom: 1px solid #E4DDD0;
+  }
+  .health-table td {
+    padding: 5px 6px 5px 0;
+    border-bottom: 1px solid #F1EDE6;
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .date-cell {
+    white-space: nowrap;
+    color: var(--color-muted);
+  }
+  .ofa-note {
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    margin-top: 8px;
+  }
+  .ofa-note a {
+    color: var(--color-pine);
   }
   @media (max-width: 640px) {
     .dog-grid { grid-template-columns: 1fr; }
