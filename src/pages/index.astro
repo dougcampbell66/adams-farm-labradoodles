@@ -1,40 +1,34 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { stats, program } from '../data/stats.js';
 
-const dogs = await getCollection('dogs');
-const activeDogs = dogs.filter((d) => d.data.status !== 'retired');
-const sire = activeDogs.find((d) => d.data.role === 'sire');
-const dam = activeDogs.find((d) => d.data.role === 'dam');
-
-const litters = await getCollection('litters');
-const currentLitter = litters.find((l) => l.data.status === 'available');
+const allPuppies = await getCollection('puppies');
+const springPuppies = allPuppies
+  .filter(p => p.data.litter === 'spring-2026')
+  .sort((a, b) => {
+    if (a.data.status === b.data.status) return 0;
+    return a.data.status === 'available' ? -1 : 1;
+  });
 ---
 <Layout title="Home">
 
-  <!-- ① HERO: text left · blob-masked portrait right · floating testimonial -->
-  <!-- Hidden SVG clip-path defs — placed once, reusable anywhere on page -->
+  <!-- ─── HERO (unchanged) ─────────────────────────────────────── -->
   <svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
     <defs>
       <clipPath id="hero-blob" clipPathUnits="objectBoundingBox">
-        <!-- Slightly irregular organic circle: anchors nudged ±0.03 from a perfect circle -->
         <path d="M 0.53,0.02 C 0.79,0.00 0.99,0.22 0.97,0.52 C 0.96,0.79 0.77,0.98 0.50,0.97 C 0.23,0.96 0.02,0.77 0.03,0.50 C 0.04,0.23 0.25,0.03 0.53,0.02 Z"/>
       </clipPath>
     </defs>
   </svg>
 
   <section class="hero-section">
-    <!-- Blurred background decoration circles (cream & white sections) -->
     <div class="hero-bg" aria-hidden="true">
       <div class="bg-blob bb-mustard-tr"></div>
       <div class="bg-blob bb-pine-bl"></div>
-      <div class="bg-blob bb-mustard-br"></div>
     </div>
-
     <div class="container hero-grid">
       <div class="hero-text">
-        <p class="eyebrow">Australian Labradoodles &middot; Greensboro, NC</p>
+        <p class="eyebrow">Australian Labradoodles</p>
         <h1>Raised in Loving Homes. Ready for Yours.</h1>
         <p class="hero-copy">Every litter comes from fully health-tested parents and grows up surrounded by family, before going to yours.</p>
         <div class="hero-actions">
@@ -42,14 +36,7 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
           <a href="/our-dogs" class="btn btn-secondary">Meet the parents</a>
         </div>
       </div>
-
       <div class="hero-photo-frame">
-        <!-- Mustard ring: same blob shape, offset +12px/+9px for layered depth -->
-        <svg class="hero-ring" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M 106 4 C 158 0 198 44 194 104 C 190 158 150 198 98 194 C 46 190 2 152 4 98 C 6 46 52 2 106 4 Z"
-            fill="none" stroke="var(--color-mustard)" stroke-width="3" vector-effect="non-scaling-stroke"/>
-        </svg>
-        <!-- Photo clipped to the organic blob -->
         <div class="hero-photo-masked">
           <img
             src="/images/hero/founder-hero-portrait.jpg"
@@ -57,7 +44,6 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
             class="hero-photo-img"
           />
         </div>
-        <!-- Floating testimonial — sits below the blob, outside the clip -->
         <div class="hero-testimonial">
           <p class="ht-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle.&rdquo;</p>
           <p class="ht-attr">&mdash; Deirdre</p>
@@ -66,234 +52,210 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     </div>
   </section>
 
-  <!-- ② TRUST BAR: the one icon-based section site-wide -->
-  <section class="trust-bar-section">
-    <div class="container trust-bar-inner">
-      <div class="trust-item">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-          <path d="M9 21V12h6v9"/>
-        </svg>
-        <span class="trust-label">Raised in loving homes, not a kennel</span>
-      </div>
-      <div class="trust-item">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-          <circle cx="12" cy="15" r="1.5" fill="currentColor"/>
-        </svg>
-        <span class="trust-label">In-home visits at 6 weeks</span>
-      </div>
-      <div class="trust-item">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-          <circle cx="12" cy="13" r="4"/>
-        </svg>
-        <span class="trust-label">Weekly photo &amp; video updates</span>
-      </div>
-      <div class="trust-item">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-        <span class="trust-label">3-year health guarantee</span>
-      </div>
+  <!-- ① PUPPIES: horizontal scroll carousel -->
+  <section class="s-puppies">
+    <div class="container s-puppies-hd">
+      <h2 class="puppies-heading">Meet the May Litter.</h2>
+      <p class="puppies-sub">Every puppy is raised with structured socialization, daily handling, and constant companionship from day one.</p>
     </div>
-  </section>
-
-  <!-- ③ STATS BAND: photo background + dark overlay -->
-  <section class="stats-band">
-    <div class="stats-overlay">
-      <div class="stats-bg" aria-hidden="true">
-        <div class="sb-blob sb-mustard-tr"></div>
-        <div class="sb-blob sb-pine-bl"></div>
-        <div class="sb-blob sb-mustard-bl"></div>
-      </div>
-      <div class="container stats-band-inner">
-        <div class="stat-big">
-          <span class="stat-big-number">{stats.yearsBreeding}</span>
-          <span class="stat-big-label">Years breeding</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-big">
-          <span class="stat-big-number">{stats.littersPlaced}</span>
-          <span class="stat-big-label">Litters placed</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-big">
-          <span class="stat-big-number">{stats.happyFamilies}</span>
-          <span class="stat-big-label">Happy families</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ④ PEDIGREE STRIP: conditional, shown only when a litter is listed -->
-  {currentLitter && (
-    <section class="trust-strip">
-      <div class="container pedigree-inner">
-        <p class="eyebrow" style="margin:0; color:#D8E0D3;">This litter&rsquo;s pedigree</p>
-        <div class="pedigree-row">
-          {sire && <div class="pedigree-item"><span class="pedigree-name">Sire</span><span class="pedigree-detail">{sire.data.name}</span></div>}
-          {dam && <div class="pedigree-item"><span class="pedigree-name">Dam</span><span class="pedigree-detail">{dam.data.name}</span></div>}
-          <div class="pedigree-item">
-            <span class="pedigree-name">Ready</span>
-            <span class="pedigree-detail">{new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ⑤ FOUNDER STORY: photo left, text right, pull-quote -->
-  <section class="section founder-section" id="story">
-    <div class="container founder-inner">
-      <div class="founder-photo-col">
-        <img
-          src="/images/story/founder-story-portrait.jpg"
-          alt="Adams Farm Labradoodles — our story"
-          class="founder-photo-img"
-        />
-      </div>
-      <div class="founder-text-col">
-        <p class="eyebrow">Our story</p>
-        <h2>Our Story</h2>
-        <p class="founder-body">It started with our kids asking for a puppy. Instead of bringing home just one dog, my wife Erika and I decided to look for the right breed to build a small program around &mdash; something our family could raise puppies with for years to come. Our one non-negotiable was temperament: no aggression toward people, dogs, or other animals, ever. That search led us to Australian Labradoodles.</p>
-        <p class="founder-body">We found Mike and Pam Kirkpatrick of Legend Manor Labradoodles, and their girl Prancer. The moment we met her, Erika knew &mdash; she still calls Prancer, whom we renamed Winnie, our healing dog. Winnie had a way of approaching each of us gently, settling into whatever the room needed. For our family, at a time when we needed exactly that, she became something more than a pet.</p>
-        <p class="founder-body">Winnie&rsquo;s first two litters didn&rsquo;t take. Her third gave us eight healthy puppies &mdash; and that litter is where Adams Farm Labradoodles began.</p>
-        <blockquote class="founder-pullquote">
-          <span class="pullquote-mark">&ldquo;</span>From the day we met her, she felt like a healing dog for our family.<span class="pullquote-mark">&rdquo;</span>
-          <cite class="pullquote-attr">&mdash; Erika Campbell</cite>
-        </blockquote>
-      </div>
-    </div>
-  </section>
-
-  <!-- ⑥ PROGRAM PILLARS: alternating full-width photo/text rows (no icon grid) -->
-  <section class="pillars-section">
-    <div class="container pillars-intro">
-      <p class="eyebrow">How we raise every litter</p>
-      <h2>Our program</h2>
-    </div>
-
-    <!-- Row 1: photo left · text right -->
-    <div class="pillar-row">
-      <div class="pillar-photo">
-        <img src="/images/dogs/silas-main.jpg" alt="Silas, Adams Farm sire" />
-      </div>
-      <div class="pillar-text">
-        <p class="eyebrow">Health &amp; integrity</p>
-        <h3>Gold Paw tested before every breeding</h3>
-        <p>Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We back every puppy with a {program.healthGuarantee.length} health guarantee covering {program.healthGuarantee.covers}.</p>
-        <a href="/our-program" class="pillar-link">Our health guarantee &rarr;</a>
-      </div>
-    </div>
-
-    <!-- Row 2: text left · photo right -->
-    <div class="pillar-row pillar-row-flip">
-      <div class="pillar-text pillar-text-sand">
-        <p class="eyebrow">Purposeful raising</p>
-        <h3>Structured socialization from birth</h3>
-        <p>Every puppy goes through a structured early socialization program from birth, refined over {stats.littersPlaced} litters. The result is confident, well-adjusted puppies ready for family life.</p>
-      </div>
-      <div class="pillar-photo">
-        <img src="/images/story/julian-marieclaire-winnie.jpg" alt="Adams Farm children with Winnie" />
-      </div>
-    </div>
-
-    <!-- Row 3: photo left · text right -->
-    <div class="pillar-row">
-      <div class="pillar-photo">
-        <img src="/images/story/founder-family-close.jpg" alt="Adams Farm family" />
-      </div>
-      <div class="pillar-text">
-        <p class="eyebrow">Transparency</p>
-        <h3>You watch your puppy grow before they come home</h3>
-        <p>Families are welcome in person at {program.visitAge}, and every family receives {program.updates} from birth until go-home day.</p>
-      </div>
-    </div>
-
-    <!-- Row 4: text left · photo right -->
-    <div class="pillar-row pillar-row-flip">
-      <div class="pillar-text pillar-text-sand">
-        <p class="eyebrow">Lifetime support</p>
-        <h3>Our relationship doesn&rsquo;t end at pickup</h3>
-        <p>We&rsquo;re here for questions, guidance, and support for the life of your dog &mdash; from puppy basics through the senior years.</p>
-      </div>
-      <div class="pillar-photo">
-        <img src="/images/dogs/winnie-2.jpg" alt="Winnie, Adams Farm dam" />
-      </div>
-    </div>
-
-    <div class="container pillars-cta">
-      <a href="/our-program" class="btn btn-secondary">See the full program</a>
-    </div>
-  </section>
-
-  <!-- ⑦ AVAILABLE PUPPIES: horizontal scroll -->
-  <section class="puppies-section">
-    <div class="container puppies-header">
-      <div>
-        <p class="eyebrow">Current &amp; upcoming</p>
-        <h2>Available puppies</h2>
-      </div>
-      <a href="/puppies" class="btn btn-secondary">View all</a>
-    </div>
-    <div class="container">
-      <div class="puppies-scroll">
-        {currentLitter ? (
+    <div class="container puppies-carousel-wrap">
+      <button class="carousel-btn carousel-btn-prev" id="puppy-prev" aria-label="Scroll left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="s-scroll" id="puppy-scroll">
+        {springPuppies.map((p) => (
           <div class="puppy-card">
-            <div class="puppy-card-top">
-              <h3>{currentLitter.data.title}</h3>
-              <span class={`litter-status litter-status-${currentLitter.data.status}`}>{currentLitter.data.status}</span>
+            <div class="puppy-card-photo">
+              <img src={p.data.photo} alt={p.data.name} loading="lazy" />
             </div>
-            <p class="puppy-detail">Ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
-            {currentLitter.data.availableCount !== undefined && (
-              <p class="puppy-detail">{currentLitter.data.availableCount} of {currentLitter.data.puppyCount} available</p>
-            )}
-            <p class="puppy-desc">{currentLitter.data.description}</p>
-            <a href="/puppies" class="btn btn-primary">Learn more</a>
+            <div class="puppy-card-body">
+              <span class="puppy-name">{p.data.name}</span>
+              <div class="puppy-badges">
+                {p.data.sex && <span class="puppy-sex">{p.data.sex}</span>}
+                <span class={`litter-status litter-status-${p.data.status}`}>
+                  {p.data.status.charAt(0).toUpperCase() + p.data.status.slice(1)}
+                </span>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div class="puppy-card puppy-card-empty">
-            <p class="eyebrow" style="margin-bottom:10px;">No litters right now</p>
-            <p class="puppy-desc">We&rsquo;re not currently taking deposits, but you&rsquo;re welcome to join the waitlist to be notified when the next litter is announced.</p>
-            <a href="/contact" class="btn btn-primary">Join the waitlist</a>
-          </div>
-        )}
+        ))}
+      </div>
+      <button class="carousel-btn carousel-btn-next" id="puppy-next" aria-label="Scroll right">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <script>
+    const track = document.getElementById('puppy-scroll') as HTMLElement | null;
+    const btnPrev = document.getElementById('puppy-prev') as HTMLButtonElement | null;
+    const btnNext = document.getElementById('puppy-next') as HTMLButtonElement | null;
+
+    function updateArrows() {
+      if (!track || !btnPrev || !btnNext) return;
+      btnPrev.style.display = track.scrollLeft <= 1 ? 'none' : 'flex';
+      btnNext.style.display = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1 ? 'none' : 'flex';
+    }
+
+    function cardStep() {
+      const card = track?.querySelector('.puppy-card') as HTMLElement | null;
+      return card ? card.offsetWidth + 20 : 260;
+    }
+
+    btnPrev?.addEventListener('click', () => {
+      track?.scrollBy({ left: -cardStep(), behavior: 'smooth' });
+    });
+    btnNext?.addEventListener('click', () => {
+      track?.scrollBy({ left: cardStep(), behavior: 'smooth' });
+    });
+    track?.addEventListener('scroll', updateArrows, { passive: true });
+    updateArrows();
+  </script>
+
+  <!-- ② ABOUT ADAMS FARM: narrative text + image block -->
+  <section class="s-about section">
+    <div class="container s-about-inner">
+      <div class="ph ph-block">[About Adams Farm — narrative text]</div>
+      <div class="ph ph-tall">[About Adams Farm — image]</div>
+    </div>
+  </section>
+
+  <!-- ③ TRUST BAND: row of icon + short-label items (4–6 slots) -->
+  <section class="s-trust">
+    <div class="container s-trust-inner">
+      <div class="ph ph-trust-item">[Trust — icon + label 1]</div>
+      <div class="ph ph-trust-item">[Trust — icon + label 2]</div>
+      <div class="ph ph-trust-item">[Trust — icon + label 3]</div>
+      <div class="ph ph-trust-item">[Trust — icon + label 4]</div>
+      <div class="ph ph-trust-item">[Trust — icon + label 5]</div>
+    </div>
+  </section>
+
+  <!-- ④ TESTIMONIALS: 3-slot card grid -->
+  <section class="s-testimonials section">
+    <div class="container s-section-header">
+      <div class="ph ph-label">[Testimonials — section heading]</div>
+    </div>
+    <div class="container s-testimonials-grid">
+      <div class="ph ph-testimonial">[Testimonial card 1]</div>
+      <div class="ph ph-testimonial">[Testimonial card 2]</div>
+      <div class="ph ph-testimonial">[Testimonial card 3]</div>
+    </div>
+  </section>
+
+  <!-- ⑤ BREAK SECTION: centered full-width quote (final content) -->
+  <section class="s-break">
+    <div class="container s-break-inner">
+      <blockquote class="break-quote">
+        &ldquo;Dogs are not our whole life, but they make our lives whole.&rdquo;
+        <cite class="break-cite">&mdash; Roger Caras</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ⑥ WHY AUSTRALIAN LABRADOODLE: placeholder text block -->
+  <section class="s-why section">
+    <div class="container s-why-inner">
+      <div class="ph ph-label">[Why Australian Labradoodle — section heading]</div>
+      <div class="ph ph-block">[Why Australian Labradoodle — text block]</div>
+    </div>
+  </section>
+
+  <!-- ⑦ OUR STORY: two-column — image left, text + pull-quote right -->
+  <section class="s-story section" id="story">
+    <div class="container s-story-inner">
+      <div class="ph ph-tall">[Our story — image]</div>
+      <div class="s-story-text">
+        <div class="ph ph-block">[Our story — text block]</div>
+        <div class="ph ph-pullquote">[Our story — pull-quote]</div>
       </div>
     </div>
   </section>
 
-  <!-- ⑧ FOREVER FAMILIES: dense photo wall -->
-  <section class="families-section">
-    <div class="container families-header">
-      <p class="eyebrow eyebrow-light">Our forever families</p>
-      <h2 class="families-heading">Raised here. Loved there.</h2>
+  <!-- ⑧ OUR PROGRAM: 4 alternating rows + Guardians CTA -->
+  <section class="s-program">
+    <div class="container s-section-header">
+      <div class="ph ph-label">[Our program — section heading]</div>
     </div>
-    <div class="families-grid">
-      <img src="/images/families/founder-family-wide.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
-      <img src="/images/families/founder-family-close.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
-      <img src="/images/families/julian-marieclaire-winnie.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
-      <img src="/images/families/douglas-erika-winnie.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
-      <img src="/images/dogs/home-hero.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+
+    <div class="s-pillar-row">
+      <div class="ph ph-pillar-img">[Program — row 1 image]</div>
+      <div class="ph ph-pillar-text">[Program — row 1 text]</div>
     </div>
-    <div class="container families-cta">
-      <a href="/testimonials" class="btn families-btn">Read their stories</a>
+    <div class="s-pillar-row s-pillar-flip">
+      <div class="ph ph-pillar-text">[Program — row 2 text]</div>
+      <div class="ph ph-pillar-img">[Program — row 2 image]</div>
+    </div>
+    <div class="s-pillar-row">
+      <div class="ph ph-pillar-img">[Program — row 3 image]</div>
+      <div class="ph ph-pillar-text">[Program — row 3 text]</div>
+    </div>
+    <div class="s-pillar-row s-pillar-flip">
+      <div class="ph ph-pillar-text">[Program — row 4 text]</div>
+      <div class="ph ph-pillar-img">[Program — row 4 image]</div>
+    </div>
+
+    <div class="container s-program-cta">
+      <div class="ph ph-cta-link">[Guardians program — link / CTA]</div>
     </div>
   </section>
+
+  <!-- ⑨ CREDENTIALS & PARTNERS: row of logo tile slots -->
+  <section class="s-creds">
+    <div class="container s-creds-inner">
+      <div class="ph ph-logo">[Logo 1]</div>
+      <div class="ph ph-logo">[Logo 2]</div>
+      <div class="ph ph-logo">[Logo 3]</div>
+      <div class="ph ph-logo">[Logo 4]</div>
+      <div class="ph ph-logo">[Logo 5]</div>
+    </div>
+  </section>
+
+  <!-- ⑩ FAQ: placeholder accordion, 4–5 collapsed questions -->
+  <section class="s-faq section">
+    <div class="container s-section-header">
+      <div class="ph ph-label">[FAQ — section heading]</div>
+    </div>
+    <div class="container s-faq-list">
+      <div class="ph ph-accordion">[FAQ — question 1]</div>
+      <div class="ph ph-accordion">[FAQ — question 2]</div>
+      <div class="ph ph-accordion">[FAQ — question 3]</div>
+      <div class="ph ph-accordion">[FAQ — question 4]</div>
+      <div class="ph ph-accordion">[FAQ — question 5]</div>
+    </div>
+  </section>
+
+  <!-- ⑪ FOREVER FAMILIES: 4-slot photo grid -->
+  <section class="s-families">
+    <div class="container s-section-header s-section-header-light">
+      <div class="ph ph-label-dark">[Forever families — section heading]</div>
+    </div>
+    <div class="s-families-grid">
+      <div class="ph ph-photo">[Families — photo 1]</div>
+      <div class="ph ph-photo">[Families — photo 2]</div>
+      <div class="ph ph-photo">[Families — photo 3]</div>
+      <div class="ph ph-photo">[Families — photo 4]</div>
+    </div>
+  </section>
+
+  <!-- ⑫ APPLY NOW: CTA band with heading and button -->
+  <section class="s-apply">
+    <div class="container s-apply-inner">
+      <div class="ph ph-block">[Apply now — heading]</div>
+      <div class="ph ph-btn">[Apply now — button]</div>
+    </div>
+  </section>
+
+  <!-- ⑬ FOOTER: Footer.astro (3-column, rendered by Layout) -->
 
 </Layout>
 
 <style>
-  /* ─── HERO ───────────────────────────────────────────────── */
+  /* ─── HERO (unchanged) ──────────────────────────────────────── */
   .hero-section {
     position: relative;
     padding: 72px 0 88px;
   }
-
-  /* Background blobs — contained, don't clip the hero content */
   .hero-bg {
     position: absolute;
     inset: 0;
@@ -305,16 +267,14 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     position: absolute;
     border-radius: 50%;
   }
-  /* Mustard top-right — large */
   .bb-mustard-tr {
     width: 560px;
     height: 560px;
     background: var(--color-mustard);
     opacity: 0.06;
-    top: -80px;
-    right: -20px;
+    top: -60px;
+    right: -60px;
   }
-  /* Pine bottom-left — medium */
   .bb-pine-bl {
     width: 380px;
     height: 380px;
@@ -323,16 +283,6 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     bottom: 20px;
     left: 20px;
   }
-  /* Mustard bottom-right — smaller accent, fully inside */
-  .bb-mustard-br {
-    width: 280px;
-    height: 280px;
-    background: var(--color-mustard);
-    opacity: 0.06;
-    bottom: 40px;
-    right: 80px;
-  }
-
   .hero-grid {
     position: relative;
     z-index: 1;
@@ -353,29 +303,8 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     margin: 0 0 28px;
     line-height: 1.7;
   }
-  .hero-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  /* ─── BLOB-FRAMED PHOTO ──────────────────────────────────── */
-  .hero-photo-frame {
-    position: relative;
-    /* Extra bottom padding so the testimonial card clears the next section */
-    padding-bottom: 32px;
-  }
-  /* Mustard ring SVG: same blob path, offset right+down for layered look */
-  .hero-ring {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    transform: translate(12px, 9px);
-    z-index: 0;
-    pointer-events: none;
-  }
-  /* Square container clipped to the organic blob */
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-photo-frame { position: relative; padding-bottom: 32px; }
   .hero-photo-masked {
     position: relative;
     z-index: 1;
@@ -385,17 +314,14 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     overflow: hidden;
   }
   .hero-photo-img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     object-position: center 15%;
     display: block;
   }
-  /* Testimonial card: anchored to bottom of frame, outside the clip */
   .hero-testimonial {
     position: absolute;
-    bottom: 0;
-    left: 20px;
+    bottom: 0; left: 20px;
     max-width: 320px;
     background: var(--color-white);
     border-radius: 10px;
@@ -411,446 +337,371 @@ const currentLitter = litters.find((l) => l.data.status === 'available');
     margin: 0 0 6px;
     line-height: 1.45;
   }
-  .ht-attr {
+  .ht-attr { font-size: 0.72rem; color: var(--color-muted); margin: 0; }
+
+  /* ─── PLACEHOLDER BASE ──────────────────────────────────────── */
+  .ph {
+    background: #EDE8DF;
+    border: 1.5px dashed #B8A98A;
+    border-radius: 6px;
+    color: #7A6B52;
     font-size: 0.72rem;
-    color: var(--color-muted);
-    margin: 0;
-    letter-spacing: 0.02em;
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 16px;
+    line-height: 1.5;
   }
 
-  /* ─── TRUST BAR ──────────────────────────────────────────── */
-  .trust-bar-section {
+  /* ─── SHARED UTILITIES ──────────────────────────────────────── */
+  .section { padding: 72px 0; }
+  .s-section-header { margin-bottom: 32px; }
+  .ph-label  { min-height: 44px; }
+  .ph-tall   { min-height: 360px; }
+  .ph-block  { min-height: 180px; }
+  .ph-pullquote { min-height: 90px; }
+
+  /* ─── ① PUPPIES ─────────────────────────────────────────────── */
+  .s-puppies {
+    padding: 64px 0;
     background: var(--color-white);
-    padding: 40px 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .s-puppies-hd { margin-bottom: 32px; }
+  .puppies-heading { margin: 0 0 10px; }
+  .puppies-sub {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    max-width: 560px;
+    margin: 0;
+  }
+
+  .puppies-carousel-wrap {
+    position: relative;
+  }
+  .carousel-btn {
+    position: absolute;
+    top: calc(50% - 8px);
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-white);
+    border: 1.5px solid var(--color-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    color: var(--color-pine);
+    transition: box-shadow 0.15s, background 0.15s;
+  }
+  .carousel-btn:hover {
+    background: var(--color-cream);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.14);
+  }
+  .carousel-btn-prev { left: -22px; }
+  .carousel-btn-next { right: -22px; }
+
+  .s-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .s-scroll::-webkit-scrollbar { height: 3px; }
+  .s-scroll::-webkit-scrollbar-track { background: var(--color-border); border-radius: 2px; }
+  .s-scroll::-webkit-scrollbar-thumb { background: var(--color-pine); border-radius: 2px; }
+
+  .puppy-card {
+    background: var(--color-cream);
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 220px;
+    max-width: 240px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  .puppy-card-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--color-card);
+  }
+  .puppy-card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .puppy-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .puppy-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-charcoal);
+  }
+  .puppy-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .puppy-sex {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    background: var(--color-card);
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .litter-status {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .litter-status-available { background: #E1F5EE; color: #085041; }
+  .litter-status-reserved  { background: #FAEEDA; color: #633806; }
+
+  @media (max-width: 640px) {
+    .carousel-btn { display: none !important; }
+  }
+
+  /* ─── ② ABOUT ADAMS FARM ────────────────────────────────────── */
+  .s-about { background: var(--color-cream); }
+  .s-about-inner {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  /* ─── ③ TRUST BAND ──────────────────────────────────────────── */
+  .s-trust {
+    padding: 48px 0;
+    background: var(--color-card);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
   }
-  .trust-bar-inner {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .trust-item {
+  .s-trust-inner {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 12px;
-    color: var(--color-pine);
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .trust-label {
-    font-size: 0.83rem;
-    font-weight: 700;
-    color: var(--color-charcoal);
-    line-height: 1.4;
-    max-width: 150px;
-  }
+  .ph-trust-item { min-width: 160px; min-height: 80px; flex: 1; max-width: 200px; }
 
-  /* ─── STATS BAND ─────────────────────────────────────────── */
-  .stats-band {
-    background-image: url('/images/story/founder-story-landscape.jpg');
-    background-size: cover;
-    background-position: center 40%;
+  /* ─── ④ TESTIMONIALS ────────────────────────────────────────── */
+  .s-testimonials { background: var(--color-cream); }
+  .s-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
   }
-  .stats-overlay {
-    position: relative;
-    overflow: hidden;
-    background: rgba(34, 52, 74, 0.78);
+  .ph-testimonial { min-height: 180px; }
+
+  /* ─── ⑤ BREAK / QUOTE ───────────────────────────────────────── */
+  .s-break {
+    background: var(--color-pine);
     padding: 80px 0;
   }
-  /* Blob container — same pattern as .hero-bg */
-  .stats-bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .sb-blob {
-    position: absolute;
-    border-radius: 50%;
-  }
-  .sb-mustard-tr {
-    width: 480px;
-    height: 480px;
-    background: var(--color-mustard);
-    opacity: 0.06;
-    top: -60px;
-    right: 5%;
-  }
-  .sb-pine-bl {
-    width: 380px;
-    height: 380px;
-    background: var(--color-pine);
-    opacity: 0.06;
-    bottom: 20px;
-    left: 8%;
-  }
-  .sb-mustard-bl {
-    width: 340px;
-    height: 340px;
-    background: var(--color-mustard);
-    opacity: 0.06;
-    bottom: -40px;
-    left: 8%;
-  }
-  .stats-band-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .stat-big {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 0 64px;
-  }
-  .stat-big-number {
+  .s-break-inner { text-align: center; max-width: 680px; margin: 0 auto; }
+  .break-quote {
+    margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     color: var(--color-cream);
-    line-height: 1;
+    line-height: 1.55;
   }
-  .stat-big-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(247,242,231,0.6);
-    margin-top: 10px;
-  }
-  .stat-divider {
-    width: 1px;
-    height: 64px;
-    background: rgba(247,242,231,0.2);
-    flex-shrink: 0;
+  .break-cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: rgba(247,242,231,0.55);
+    margin-top: 20px;
   }
 
-  /* ─── PEDIGREE STRIP ─────────────────────────────────────── */
-  .pedigree-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .pedigree-row {
-    display: flex;
-    gap: 28px;
-  }
-  .pedigree-item {
+  /* ─── ⑥ WHY AUSTRALIAN LABRADOODLE ─────────────────────────── */
+  .s-why { background: var(--color-white); }
+  .s-why-inner {
     display: flex;
     flex-direction: column;
-    text-align: center;
-  }
-  .pedigree-name {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: var(--color-cream);
-  }
-  .pedigree-detail {
-    font-size: 0.7rem;
-    color: var(--color-mustard);
-    margin-top: 2px;
+    gap: 24px;
+    max-width: 760px;
+    margin: 0 auto;
   }
 
-  /* ─── FOUNDER STORY ──────────────────────────────────────── */
-  .founder-section {
-    background: var(--color-cream);
-  }
-  .founder-inner {
+  /* ─── ⑦ OUR STORY ───────────────────────────────────────────── */
+  .s-story { background: var(--color-cream); }
+  .s-story-inner {
     display: grid;
     grid-template-columns: 2fr 3fr;
     gap: 64px;
     align-items: start;
   }
-  .founder-photo-img {
-    width: 100%;
-    height: auto;
-    border-radius: 14px;
-    display: block;
-  }
-  .founder-body {
-    color: var(--color-charcoal);
-    line-height: 1.78;
-    margin: 0 0 20px;
-  }
-  .founder-pullquote {
-    margin: 32px 0 0;
-    padding: 22px 28px;
-    border-left: 3px solid var(--color-mustard);
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.18rem;
-    color: var(--color-pine);
-    line-height: 1.5;
-    background: var(--color-card);
-    border-radius: 0 10px 10px 0;
-  }
-  .pullquote-mark {
-    font-size: 1.5rem;
-    color: var(--color-mustard);
-    line-height: 0;
-    vertical-align: -0.25em;
-  }
-  .pullquote-attr {
-    display: block;
-    font-style: normal;
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    color: var(--color-muted);
-    margin-top: 10px;
-  }
+  .s-story-text { display: flex; flex-direction: column; gap: 24px; }
 
-  /* ─── PROGRAM PILLARS (alternating photo/text rows) ─────── */
-  .pillars-section {
-    background: var(--color-cream);
-    padding-bottom: 0;
-  }
-  .pillars-intro {
-    padding-top: 64px;
-    padding-bottom: 48px;
-    text-align: center;
-  }
-  .pillars-intro h2 { margin: 0; }
-
-  .pillar-row {
+  /* ─── ⑧ OUR PROGRAM ────────────────────────────────────────── */
+  .s-program { background: var(--color-cream); padding-bottom: 0; }
+  .s-section-header { padding: 0 24px; }
+  .s-program > .s-section-header { padding-top: 64px; padding-bottom: 40px; }
+  .s-pillar-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 460px;
+    min-height: 400px;
   }
-  .pillar-photo {
-    overflow: hidden;
+  .ph-pillar-img {
+    border-radius: 0;
+    min-height: 400px;
+    background: #E2D9CB;
+    border-color: #C0B49A;
   }
-  .pillar-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .ph-pillar-text {
+    border-radius: 0;
+    min-height: 400px;
+    background: #EDE8DF;
   }
-  .pillar-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 64px 72px;
-    background: var(--color-cream);
-  }
-  .pillar-text-sand {
-    background: var(--color-card);
-  }
-  .pillar-text h3 {
-    font-size: 1.4rem;
-    margin-bottom: 16px;
-  }
-  .pillar-text p {
-    color: var(--color-muted);
-    line-height: 1.75;
-    margin: 0;
-    max-width: 400px;
-  }
-  .pillar-link {
-    display: inline-block;
-    margin-top: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-pine);
-    text-decoration: none;
-    border-bottom: 1.5px solid var(--color-mustard);
-    padding-bottom: 2px;
-  }
-
-  .pillars-cta {
+  .s-program-cta {
     padding: 48px 24px;
-    text-align: center;
+    border-top: 1px solid var(--color-border);
     background: var(--color-cream);
-    border-top: 1px solid var(--color-border);
   }
+  .ph-cta-link { min-height: 48px; max-width: 320px; margin: 0 auto; }
 
-  /* ─── PUPPIES CAROUSEL ───────────────────────────────────── */
-  .puppies-section {
+  /* ─── ⑨ CREDENTIALS & PARTNERS ─────────────────────────────── */
+  .s-creds {
+    padding: 56px 0;
     background: var(--color-white);
-    padding: 64px 0;
     border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
   }
-  .puppies-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 28px;
-  }
-  .puppies-header h2 { margin: 0; }
-  .puppies-header .eyebrow { margin-bottom: 4px; }
-
-  .puppies-scroll {
+  .s-creds-inner {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-  .puppies-scroll::-webkit-scrollbar { height: 3px; }
-  .puppies-scroll::-webkit-scrollbar-track { background: var(--color-border); border-radius: 2px; }
-  .puppies-scroll::-webkit-scrollbar-thumb { background: var(--color-pine); border-radius: 2px; }
-
-  .puppy-card {
-    background: var(--color-cream);
-    border-radius: 12px;
-    padding: 24px;
-    min-width: 340px;
-    max-width: 400px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .puppy-card-empty { max-width: 480px; }
-  .puppy-card-top {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .puppy-card-top h3 { margin: 0; font-size: 1.1rem; }
-  .litter-status {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 700;
-  }
-  .litter-status-available { background: #E1F5EE; color: #085041; }
-  .litter-status-reserved  { background: #FAEEDA; color: #633806; }
-  .litter-status-planned   { background: #E6F1FB; color: #0C447C; }
-  .litter-status-past      { background: #F1EFE8; color: #444441; }
-  .puppy-detail {
-    font-size: 0.82rem;
-    color: var(--color-mustard);
-    margin: 0;
-  }
-  .puppy-desc {
-    font-size: 0.9rem;
-    color: var(--color-muted);
-    line-height: 1.6;
-    margin: 4px 0 8px;
-    flex: 1;
-  }
+  .ph-logo { width: 140px; height: 80px; flex-shrink: 0; }
 
-  /* ─── FOREVER FAMILIES ───────────────────────────────────── */
-  .families-section {
+  /* ─── ⑩ FAQ ─────────────────────────────────────────────────── */
+  .s-faq { background: var(--color-cream); }
+  .s-faq-list { display: flex; flex-direction: column; gap: 8px; }
+  .ph-accordion { min-height: 56px; border-radius: 8px; }
+
+  /* ─── ⑪ FOREVER FAMILIES ────────────────────────────────────── */
+  .s-families {
     background: var(--color-pine);
     padding-top: 64px;
+    padding-bottom: 64px;
   }
-  .families-header {
-    text-align: center;
-    padding-bottom: 40px;
-  }
-  .eyebrow-light {
+  .s-section-header-light { margin-bottom: 32px; }
+  .ph-label-dark {
+    min-height: 44px;
+    background: rgba(247,242,231,0.07);
+    border-color: rgba(247,242,231,0.2);
     color: rgba(247,242,231,0.55);
   }
-  .families-heading {
-    color: var(--color-cream);
-    margin: 0;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-  }
-  .families-grid {
+  .s-families-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 300px 240px;
+    grid-template-rows: 280px 280px;
     gap: 4px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
   }
-  .families-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .ph-photo {
+    border-radius: 0;
+    background: rgba(247,242,231,0.07);
+    border-color: rgba(247,242,231,0.2);
+    color: rgba(247,242,231,0.45);
   }
-  /* Photo 1: tall left column, spans both rows */
-  .families-photo:nth-child(1) {
-    grid-column: 1;
-    grid-row: 1 / 3;
+  .ph-photo:nth-child(1) { grid-column: 1; grid-row: 1 / 3; }
+  .ph-photo:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .ph-photo:nth-child(3) { grid-column: 3; grid-row: 1; }
+  .ph-photo:nth-child(4) { grid-column: 2 / 4; grid-row: 2; }
+
+  /* ─── ⑫ APPLY NOW ───────────────────────────────────────────── */
+  .s-apply {
+    background: var(--color-mustard);
+    padding: 72px 0;
   }
-  /* Photos 2 & 3: top-right cells */
-  .families-photo:nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .families-photo:nth-child(3) {
-    grid-column: 3;
-    grid-row: 1;
-  }
-  /* Photos 4 & 5: bottom-right cells */
-  .families-photo:nth-child(4) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  .families-photo:nth-child(5) {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  .families-cta {
-    padding: 40px 24px 56px;
+  .s-apply-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
     text-align: center;
   }
-  .families-btn {
-    background: transparent;
-    color: var(--color-cream);
-    border: 1.5px solid rgba(247,242,231,0.5);
-    padding: 12px 28px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.15s, border-color 0.15s;
+  .s-apply .ph-block {
+    max-width: 560px;
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.8);
   }
-  .families-btn:hover {
-    background: rgba(247,242,231,0.1);
-    border-color: var(--color-cream);
+  .ph-btn {
+    width: 200px;
+    min-height: 52px;
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.85);
+    border-radius: 8px;
   }
 
-  /* ─── RESPONSIVE ─────────────────────────────────────────── */
-  @media (max-width: 1024px) {
-    .pillar-text { padding: 48px 48px; }
-    .stat-big { padding: 0 40px; }
-  }
+  /* ─── RESPONSIVE ────────────────────────────────────────────── */
   @media (max-width: 900px) {
-    .trust-bar-inner { grid-template-columns: repeat(2, 1fr); gap: 28px; }
-    .pillar-row { grid-template-columns: 1fr; min-height: auto; }
-    .pillar-row-flip .pillar-photo { order: -1; }
-    .pillar-photo { height: 300px; }
-    .pillar-text { padding: 40px 32px; }
-    .pillar-text p { max-width: none; }
-    .families-grid {
+    .s-about-inner    { grid-template-columns: 1fr; }
+    .s-story-inner    { grid-template-columns: 1fr; }
+    .s-testimonials-grid { grid-template-columns: 1fr; }
+    .s-pillar-row { grid-template-columns: 1fr; min-height: auto; }
+    .s-pillar-flip .ph-pillar-img { order: -1; }
+    .ph-pillar-img, .ph-pillar-text { min-height: 260px; }
+    .s-families-grid {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 220px 220px 220px;
+      grid-template-rows: 200px 200px 200px;
     }
-    .families-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
-    .families-photo:nth-child(2) { grid-column: 1; grid-row: 2; }
-    .families-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
-    .families-photo:nth-child(4) { grid-column: 1; grid-row: 3; }
-    .families-photo:nth-child(5) { grid-column: 2; grid-row: 3; }
+    .ph-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+    .ph-photo:nth-child(2) { grid-column: 1; grid-row: 2; }
+    .ph-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
+    .ph-photo:nth-child(4) { grid-column: 1 / 3; grid-row: 3; }
   }
   @media (max-width: 640px) {
     .hero-section { padding: 48px 0 60px; }
     .hero-grid { grid-template-columns: 1fr; gap: 32px; }
     .hero-photo-frame { max-width: 360px; margin: 0 auto; }
     .hero-testimonial { left: 8px; max-width: calc(100% - 16px); }
-    .stats-overlay { padding: 56px 0; }
-    .stats-band-inner { flex-direction: column; gap: 36px; }
-    .stat-divider { width: 56px; height: 1px; }
-    .stat-big { padding: 0; }
-    .founder-inner { grid-template-columns: 1fr; gap: 32px; }
-    .trust-bar-inner { grid-template-columns: repeat(2, 1fr); }
-    .families-grid {
+    .s-trust-inner { gap: 10px; }
+    .ph-trust-item { min-width: 130px; }
+    .s-testimonials-grid { grid-template-columns: 1fr; }
+    .s-families-grid {
       grid-template-columns: 1fr;
-      grid-template-rows: repeat(5, 220px);
+      grid-template-rows: repeat(4, 180px);
     }
-    .families-photo { grid-column: 1 !important; grid-row: auto !important; }
-    .puppies-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .ph-photo { grid-column: 1 !important; grid-row: auto !important; }
+    .ph-logo { width: 100px; height: 60px; }
   }
 </style>

@@ -38,7 +38,18 @@ const litters = defineCollection({
     puppyCount: z.number().optional(),
     availableCount: z.number().optional(),
     photos: z.array(z.string()).default([]),
-    description: z.string()
+    description: z.string().optional()
+  })
+});
+
+const puppies = defineCollection({
+  type: 'content',
+  schema: z.object({
+    name: z.string(),
+    status: z.enum(['available', 'reserved']),
+    sex: z.enum(['Male', 'Female']).optional(),
+    photo: z.string(),
+    litter: z.string()
   })
 });
 
@@ -52,4 +63,4 @@ const testimonials = defineCollection({
   })
 });
 
-export const collections = { dogs, litters, testimonials };
+export const collections = { dogs, litters, puppies, testimonials };
