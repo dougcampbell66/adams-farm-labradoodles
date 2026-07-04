@@ -8,7 +8,7 @@ birthdate: "2024-07-08"
 color: "caramel"
 microchip: "956000017703575"
 parents: "Sire: Tarheel's May the Force B With U \"Chewy\" · Dam: Legend Manor's Prancer"
-photo: "/images/dogs/macy.jpg"
+photo: "/images/macy.jpg"
 description: "Macy is Adams Farm's active dam, ALAA registered as Adams Farm Macy."
 healthTests:
   - test: "OFA Hips (preliminary)"

@@ -9,6 +9,6 @@ color: "cream/apricot"
 microchip: "992000000659967"
 parents: "Sire: Shady Creek Good Luck Charlie · Dam: Legend Manor's Grace"
 coi: "0.8%"
-photo: "/images/dogs/winnie.jpg"
+photo: "/images/winnie.jpg"
 description: "Winnie (registered as Legend Manor's Prancer) is retired from breeding after producing several litters for Adams Farm."
 ---
