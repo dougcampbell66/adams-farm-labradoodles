@@ -1,0 +1,189 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const dogs = await getCollection('dogs');
+  return dogs.map((dog) => ({ params: { slug: dog.slug }, props: { dog } }));
+}
+
+const { dog } = Astro.props;
+const { data } = dog;
+---
+<Layout title={data.name} description={`Meet ${data.name}, ${data.role} at Adams Farm Labradoodles.`}>
+  <section class="section container">
+    <a href="/our-dogs" class="back-link">&larr; All dogs</a>
+
+    <div class="profile-header">
+      {data.photo && (
+        <img src={data.photo} alt={data.name} class="main-photo" />
+      )}
+      <div class="profile-meta">
+        <p class="eyebrow">{data.role} &middot; {data.status}</p>
+        <h1>{data.name}</h1>
+        {data.registeredName && (
+          <p class="reg-line">{data.registeredName} &middot; {data.regNumber}</p>
+        )}
+        {data.color && <p class="detail">Color: {data.color}</p>}
+        {data.birthdate && (
+          <p class="detail">Born: {new Date(data.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        )}
+        {data.parents && <p class="detail parents">{data.parents}</p>}
+        {data.coi && (
+          <p class="coi">
+            COI: {data.coi}
+            <span class="coi-caption">Lower COI means greater genetic diversity.</span>
+          </p>
+        )}
+        <p class="description">{data.description}</p>
+      </div>
+    </div>
+
+    {data.gallery && data.gallery.length > 0 && (
+      <div class="gallery">
+        {data.gallery.map((src) => (
+          <img src={src} alt={`${data.name} photo`} class="gallery-photo" />
+        ))}
+      </div>
+    )}
+
+    {data.healthTests && data.healthTests.length > 0 && (
+      <div class="health-section">
+        <h2 class="section-heading">Health testing</h2>
+        <table class="health-table">
+          <thead>
+            <tr>
+              <th>Test</th>
+              <th>Date</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.healthTests.map((ht) => (
+              <tr>
+                <td>{ht.test}</td>
+                <td class="date-cell">{new Date(ht.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                <td>{ht.result}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="ofa-note">Results verifiable at <a href="https://www.ofa.org" target="_blank" rel="noopener noreferrer">www.ofa.org</a> by registration number.</p>
+      </div>
+    )}
+  </section>
+</Layout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .back-link:hover { color: var(--color-pine); }
+
+  .profile-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .main-photo {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+    background: var(--color-card);
+    max-height: 480px;
+  }
+  .reg-line {
+    font-size: 0.85rem;
+    color: var(--color-mustard);
+    margin: 4px 0 12px;
+  }
+  .detail {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 4px 0;
+  }
+  .parents {
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .coi {
+    font-size: 0.82rem;
+    color: var(--color-pine);
+    margin: 10px 0 4px;
+  }
+  .coi-caption {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    margin-top: 2px;
+  }
+  .description {
+    margin-top: 14px;
+    line-height: 1.6;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .gallery-photo {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+    background: var(--color-card);
+    aspect-ratio: 4/3;
+  }
+
+  .health-section {
+    margin-top: 40px;
+  }
+  .section-heading {
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 14px;
+  }
+  .health-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .health-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    padding: 6px 8px 6px 0;
+    border-bottom: 1px solid #E4DDD0;
+  }
+  .health-table td {
+    padding: 8px 8px 8px 0;
+    border-bottom: 1px solid #F1EDE6;
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .date-cell {
+    white-space: nowrap;
+    color: var(--color-muted);
+  }
+  .ofa-note {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-top: 10px;
+  }
+  .ofa-note a { color: var(--color-pine); }
+
+  @media (max-width: 640px) {
+    .profile-header { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

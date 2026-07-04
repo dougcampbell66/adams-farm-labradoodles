@@ -2,24 +2,147 @@
 ---
 <footer>
   <div class="container footer-inner">
-    <p>&copy; {new Date().getFullYear()} Adams Farm Labradoodles &middot; Greensboro, NC</p>
-    <p>ALAA accredited breeder</p>
+
+    <div class="footer-col">
+      <p class="footer-heading">Adams Farm Labradoodles</p>
+      <nav class="footer-nav">
+        <a href="/">Home</a>
+        <a href="/our-dogs">Our dogs</a>
+        <a href="/our-program">Our program</a>
+        <a href="/puppies">Puppies</a>
+        <a href="/testimonials">Testimonials</a>
+        <a href="/faq">FAQ</a>
+      </nav>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Get a puppy</p>
+      <nav class="footer-nav">
+        <a href="/puppies">See available puppies</a>
+        <a href="/contact">Join the waitlist</a>
+        <a href="/our-dogs">Meet the parents</a>
+        <a href="/our-program">Our health guarantee</a>
+      </nav>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Contact &amp; location</p>
+      <p class="footer-detail">Greensboro, NC</p>
+      <p class="footer-detail"><a href="/contact">Send us a message</a></p>
+
+      <div class="alaa-badge-slot">
+        <!-- ALAA Gold Paw 2026–2027 badge goes here once the file is in hand.
+             Minimum clear space: badge height on all sides. Do not recolor or stretch. -->
+        <div class="alaa-placeholder">ALAA Gold Paw badge<br/>2026–2027</div>
+        <p class="alaa-note">ALAA Accredited Breeder</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>&copy; {new Date().getFullYear()} Adams Farm Labradoodles &middot; Greensboro, NC</p>
+    </div>
   </div>
 </footer>
 
 <style>
   footer {
     border-top: 1px solid var(--color-border);
-    padding: 24px 0;
-    margin-top: 48px;
+    margin-top: 0;
+    background: var(--color-card);
   }
   .footer-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 48px;
+    padding-top: 48px;
+    padding-bottom: 40px;
+  }
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-pine);
+    margin: 0 0 14px;
+    letter-spacing: 0.02em;
+  }
+  .footer-nav {
     display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer-nav a {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-nav a:hover {
+    color: var(--color-pine);
+  }
+  .footer-detail {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 0 0 6px;
+  }
+  .footer-detail a {
+    color: var(--color-muted);
+    text-decoration: underline;
+  }
+  .footer-detail a:hover {
+    color: var(--color-pine);
+  }
+  .alaa-badge-slot {
+    margin-top: 20px;
+  }
+  .alaa-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 88px;
+    height: 88px;
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+    padding: 8px;
+  }
+  .alaa-note {
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    margin: 6px 0 0;
+  }
+  .footer-bottom {
+    border-top: 1px solid var(--color-border);
+    padding: 16px 0;
+  }
+  .footer-bottom-inner {
+    font-size: 0.75rem;
     color: var(--color-muted);
   }
-  @media (max-width: 640px) {
-    .footer-inner { flex-direction: column; gap: 6px; }
+  .footer-bottom-inner p {
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .footer-col:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+    }
+    .footer-col:first-child {
+      grid-column: auto;
+    }
   }
 </style>

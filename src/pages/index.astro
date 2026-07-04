@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { stats } from '../data/stats.js';
+import { stats, program } from '../data/stats.js';
 
 const dogs = await getCollection('dogs');
 const activeDogs = dogs.filter((d) => d.data.status !== 'retired');
@@ -10,144 +10,527 @@ const dam = activeDogs.find((d) => d.data.role === 'dam');
 
 const litters = await getCollection('litters');
 const currentLitter = litters.find((l) => l.data.status === 'available');
-
-const testimonials = await getCollection('testimonials');
-const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
 ---
 <Layout title="Home">
-  <section class="section hero">
+
+  <!-- ① HERO: text left · blob-masked portrait right · floating testimonial -->
+  <!-- Hidden SVG clip-path defs — placed once, reusable anywhere on page -->
+  <svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+    <defs>
+      <clipPath id="hero-blob" clipPathUnits="objectBoundingBox">
+        <!-- Slightly irregular organic circle: anchors nudged ±0.03 from a perfect circle -->
+        <path d="M 0.53,0.02 C 0.79,0.00 0.99,0.22 0.97,0.52 C 0.96,0.79 0.77,0.98 0.50,0.97 C 0.23,0.96 0.02,0.77 0.03,0.50 C 0.04,0.23 0.25,0.03 0.53,0.02 Z"/>
+      </clipPath>
+    </defs>
+  </svg>
+
+  <section class="hero-section">
+    <!-- Blurred background decoration circles (cream & white sections) -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="bg-blob bb-mustard-tr"></div>
+      <div class="bg-blob bb-pine-bl"></div>
+      <div class="bg-blob bb-mustard-br"></div>
+    </div>
+
     <div class="container hero-grid">
-      <div>
-        <p class="eyebrow">ALAA accredited &middot; Greensboro, NC</p>
-        <h1>Health-tested Labradoodles, raised in our home</h1>
-        <p class="hero-copy">Every litter comes from fully health-tested parents and grows up in our home, surrounded by our family, before going to yours.</p>
+      <div class="hero-text">
+        <p class="eyebrow">Australian Labradoodles &middot; Greensboro, NC</p>
+        <h1>Raised in Loving Homes. Ready for Yours.</h1>
+        <p class="hero-copy">Every litter comes from fully health-tested parents and grows up surrounded by family, before going to yours.</p>
         <div class="hero-actions">
           <a href="/puppies" class="btn btn-primary">See available puppies</a>
           <a href="/our-dogs" class="btn btn-secondary">Meet the parents</a>
         </div>
       </div>
-      <img src="/images/dogs/home-hero.jpg" alt="Silas and Winnie" class="hero-photo-img" />
+
+      <div class="hero-photo-frame">
+        <!-- Mustard ring: same blob shape, offset +12px/+9px for layered depth -->
+        <svg class="hero-ring" viewBox="0 0 200 200" aria-hidden="true">
+          <path d="M 106 4 C 158 0 198 44 194 104 C 190 158 150 198 98 194 C 46 190 2 152 4 98 C 6 46 52 2 106 4 Z"
+            fill="none" stroke="var(--color-mustard)" stroke-width="3" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <!-- Photo clipped to the organic blob -->
+        <div class="hero-photo-masked">
+          <img
+            src="/images/hero/founder-hero-portrait.jpg"
+            alt="A girl holding an Adams Farm Labradoodle puppy"
+            class="hero-photo-img"
+          />
+        </div>
+        <!-- Floating testimonial — sits below the blob, outside the clip -->
+        <div class="hero-testimonial">
+          <p class="ht-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle.&rdquo;</p>
+          <p class="ht-attr">&mdash; Deirdre</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="stats-bar">
-    <div class="container stats-inner">
-      <div class="stat">
-        <span class="stat-number">{stats.yearsBreeding}</span>
-        <span class="stat-label">Years breeding</span>
+  <!-- ② TRUST BAR: the one icon-based section site-wide -->
+  <section class="trust-bar-section">
+    <div class="container trust-bar-inner">
+      <div class="trust-item">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+          <path d="M9 21V12h6v9"/>
+        </svg>
+        <span class="trust-label">Raised in loving homes, not a kennel</span>
       </div>
-      <div class="stat">
-        <span class="stat-number">{stats.littersPlaced}</span>
-        <span class="stat-label">Litters placed</span>
+      <div class="trust-item">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <circle cx="12" cy="15" r="1.5" fill="currentColor"/>
+        </svg>
+        <span class="trust-label">In-home visits at 6 weeks</span>
       </div>
-      <div class="stat">
-        <span class="stat-number">{stats.happyFamilies}</span>
-        <span class="stat-label">Happy families</span>
+      <div class="trust-item">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span class="trust-label">Weekly photo &amp; video updates</span>
+      </div>
+      <div class="trust-item">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span class="trust-label">3-year health guarantee</span>
       </div>
     </div>
   </section>
 
+  <!-- ③ STATS BAND: photo background + dark overlay -->
+  <section class="stats-band">
+    <div class="stats-overlay">
+      <div class="stats-bg" aria-hidden="true">
+        <div class="sb-blob sb-mustard-tr"></div>
+        <div class="sb-blob sb-pine-bl"></div>
+        <div class="sb-blob sb-mustard-bl"></div>
+      </div>
+      <div class="container stats-band-inner">
+        <div class="stat-big">
+          <span class="stat-big-number">{stats.yearsBreeding}</span>
+          <span class="stat-big-label">Years breeding</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-big">
+          <span class="stat-big-number">{stats.littersPlaced}</span>
+          <span class="stat-big-label">Litters placed</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-big">
+          <span class="stat-big-number">{stats.happyFamilies}</span>
+          <span class="stat-big-label">Happy families</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ PEDIGREE STRIP: conditional, shown only when a litter is listed -->
   {currentLitter && (
     <section class="trust-strip">
-      <div class="container trust-inner">
-        <p class="eyebrow" style="margin:0;">This litter's pedigree</p>
+      <div class="container pedigree-inner">
+        <p class="eyebrow" style="margin:0; color:#D8E0D3;">This litter&rsquo;s pedigree</p>
         <div class="pedigree-row">
-          {sire && (
-            <div class="pedigree-item">
-              <span class="pedigree-name">Sire</span>
-              <span class="pedigree-detail">{sire.data.hipScore}</span>
-            </div>
-          )}
-          {dam && (
-            <div class="pedigree-item">
-              <span class="pedigree-name">Dam</span>
-              <span class="pedigree-detail">{dam.data.dnaPanel}</span>
-            </div>
-          )}
+          {sire && <div class="pedigree-item"><span class="pedigree-name">Sire</span><span class="pedigree-detail">{sire.data.name}</span></div>}
+          {dam && <div class="pedigree-item"><span class="pedigree-name">Dam</span><span class="pedigree-detail">{dam.data.name}</span></div>}
           <div class="pedigree-item">
-            <span class="pedigree-name">Litter</span>
-            <span class="pedigree-detail">Ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+            <span class="pedigree-name">Ready</span>
+            <span class="pedigree-detail">{new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
           </div>
         </div>
       </div>
     </section>
   )}
 
-  {featured && (
-    <section class="section">
-      <div class="container quote-block">
-        <p class="quote">&ldquo;{featured.data.quote}&rdquo;</p>
-        <p class="quote-attr">&mdash; {featured.data.family}, {featured.data.year}</p>
+  <!-- ⑤ FOUNDER STORY: photo left, text right, pull-quote -->
+  <section class="section founder-section" id="story">
+    <div class="container founder-inner">
+      <div class="founder-photo-col">
+        <img
+          src="/images/story/founder-story-portrait.jpg"
+          alt="Adams Farm Labradoodles — our story"
+          class="founder-photo-img"
+        />
       </div>
-    </section>
-  )}
-
-  <section class="section">
-    <div class="container status-grid">
-      {currentLitter && (
-        <div class="card">
-          <p class="eyebrow" style="margin-bottom:6px;">Available now</p>
-          <p style="margin:0;">{currentLitter.data.availableCount} puppies &middot; ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
-        </div>
-      )}
-      <div class="card">
-        <p class="eyebrow" style="margin-bottom:6px;">Visits &amp; updates</p>
-        <p style="margin:0;">In-home visits at 6 weeks, plus weekly photos, videos, and live video calls until go-home day.</p>
+      <div class="founder-text-col">
+        <p class="eyebrow">Our story</p>
+        <h2>Our Story</h2>
+        <p class="founder-body">It started with our kids asking for a puppy. Instead of bringing home just one dog, my wife Erika and I decided to look for the right breed to build a small program around &mdash; something our family could raise puppies with for years to come. Our one non-negotiable was temperament: no aggression toward people, dogs, or other animals, ever. That search led us to Australian Labradoodles.</p>
+        <p class="founder-body">We found Mike and Pam Kirkpatrick of Legend Manor Labradoodles, and their girl Prancer. The moment we met her, Erika knew &mdash; she still calls Prancer, whom we renamed Winnie, our healing dog. Winnie had a way of approaching each of us gently, settling into whatever the room needed. For our family, at a time when we needed exactly that, she became something more than a pet.</p>
+        <p class="founder-body">Winnie&rsquo;s first two litters didn&rsquo;t take. Her third gave us eight healthy puppies &mdash; and that litter is where Adams Farm Labradoodles began.</p>
+        <blockquote class="founder-pullquote">
+          <span class="pullquote-mark">&ldquo;</span>From the day we met her, she felt like a healing dog for our family.<span class="pullquote-mark">&rdquo;</span>
+          <cite class="pullquote-attr">&mdash; Erika Campbell</cite>
+        </blockquote>
       </div>
     </div>
   </section>
+
+  <!-- ⑥ PROGRAM PILLARS: alternating full-width photo/text rows (no icon grid) -->
+  <section class="pillars-section">
+    <div class="container pillars-intro">
+      <p class="eyebrow">How we raise every litter</p>
+      <h2>Our program</h2>
+    </div>
+
+    <!-- Row 1: photo left · text right -->
+    <div class="pillar-row">
+      <div class="pillar-photo">
+        <img src="/images/dogs/silas-main.jpg" alt="Silas, Adams Farm sire" />
+      </div>
+      <div class="pillar-text">
+        <p class="eyebrow">Health &amp; integrity</p>
+        <h3>Gold Paw tested before every breeding</h3>
+        <p>Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We back every puppy with a {program.healthGuarantee.length} health guarantee covering {program.healthGuarantee.covers}.</p>
+        <a href="/our-program" class="pillar-link">Our health guarantee &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Row 2: text left · photo right -->
+    <div class="pillar-row pillar-row-flip">
+      <div class="pillar-text pillar-text-sand">
+        <p class="eyebrow">Purposeful raising</p>
+        <h3>Structured socialization from birth</h3>
+        <p>Every puppy goes through a structured early socialization program from birth, refined over {stats.littersPlaced} litters. The result is confident, well-adjusted puppies ready for family life.</p>
+      </div>
+      <div class="pillar-photo">
+        <img src="/images/story/julian-marieclaire-winnie.jpg" alt="Adams Farm children with Winnie" />
+      </div>
+    </div>
+
+    <!-- Row 3: photo left · text right -->
+    <div class="pillar-row">
+      <div class="pillar-photo">
+        <img src="/images/story/founder-family-close.jpg" alt="Adams Farm family" />
+      </div>
+      <div class="pillar-text">
+        <p class="eyebrow">Transparency</p>
+        <h3>You watch your puppy grow before they come home</h3>
+        <p>Families are welcome in person at {program.visitAge}, and every family receives {program.updates} from birth until go-home day.</p>
+      </div>
+    </div>
+
+    <!-- Row 4: text left · photo right -->
+    <div class="pillar-row pillar-row-flip">
+      <div class="pillar-text pillar-text-sand">
+        <p class="eyebrow">Lifetime support</p>
+        <h3>Our relationship doesn&rsquo;t end at pickup</h3>
+        <p>We&rsquo;re here for questions, guidance, and support for the life of your dog &mdash; from puppy basics through the senior years.</p>
+      </div>
+      <div class="pillar-photo">
+        <img src="/images/dogs/winnie-2.jpg" alt="Winnie, Adams Farm dam" />
+      </div>
+    </div>
+
+    <div class="container pillars-cta">
+      <a href="/our-program" class="btn btn-secondary">See the full program</a>
+    </div>
+  </section>
+
+  <!-- ⑦ AVAILABLE PUPPIES: horizontal scroll -->
+  <section class="puppies-section">
+    <div class="container puppies-header">
+      <div>
+        <p class="eyebrow">Current &amp; upcoming</p>
+        <h2>Available puppies</h2>
+      </div>
+      <a href="/puppies" class="btn btn-secondary">View all</a>
+    </div>
+    <div class="container">
+      <div class="puppies-scroll">
+        {currentLitter ? (
+          <div class="puppy-card">
+            <div class="puppy-card-top">
+              <h3>{currentLitter.data.title}</h3>
+              <span class={`litter-status litter-status-${currentLitter.data.status}`}>{currentLitter.data.status}</span>
+            </div>
+            <p class="puppy-detail">Ready {new Date(currentLitter.data.readyDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+            {currentLitter.data.availableCount !== undefined && (
+              <p class="puppy-detail">{currentLitter.data.availableCount} of {currentLitter.data.puppyCount} available</p>
+            )}
+            <p class="puppy-desc">{currentLitter.data.description}</p>
+            <a href="/puppies" class="btn btn-primary">Learn more</a>
+          </div>
+        ) : (
+          <div class="puppy-card puppy-card-empty">
+            <p class="eyebrow" style="margin-bottom:10px;">No litters right now</p>
+            <p class="puppy-desc">We&rsquo;re not currently taking deposits, but you&rsquo;re welcome to join the waitlist to be notified when the next litter is announced.</p>
+            <a href="/contact" class="btn btn-primary">Join the waitlist</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ FOREVER FAMILIES: dense photo wall -->
+  <section class="families-section">
+    <div class="container families-header">
+      <p class="eyebrow eyebrow-light">Our forever families</p>
+      <h2 class="families-heading">Raised here. Loved there.</h2>
+    </div>
+    <div class="families-grid">
+      <img src="/images/families/founder-family-wide.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+      <img src="/images/families/founder-family-close.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+      <img src="/images/families/julian-marieclaire-winnie.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+      <img src="/images/families/douglas-erika-winnie.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+      <img src="/images/dogs/home-hero.jpg" alt="Adams Farm forever family" class="families-photo" loading="lazy" />
+    </div>
+    <div class="container families-cta">
+      <a href="/testimonials" class="btn families-btn">Read their stories</a>
+    </div>
+  </section>
+
 </Layout>
 
 <style>
+  /* ─── HERO ───────────────────────────────────────────────── */
+  .hero-section {
+    position: relative;
+    padding: 72px 0 88px;
+  }
+
+  /* Background blobs — contained, don't clip the hero content */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-blob {
+    position: absolute;
+    border-radius: 50%;
+  }
+  /* Mustard top-right — large */
+  .bb-mustard-tr {
+    width: 560px;
+    height: 560px;
+    background: var(--color-mustard);
+    opacity: 0.06;
+    top: -80px;
+    right: -20px;
+  }
+  /* Pine bottom-left — medium */
+  .bb-pine-bl {
+    width: 380px;
+    height: 380px;
+    background: var(--color-pine);
+    opacity: 0.06;
+    bottom: 20px;
+    left: 20px;
+  }
+  /* Mustard bottom-right — smaller accent, fully inside */
+  .bb-mustard-br {
+    width: 280px;
+    height: 280px;
+    background: var(--color-mustard);
+    opacity: 0.06;
+    bottom: 40px;
+    right: 80px;
+  }
+
   .hero-grid {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 32px;
+    gap: 56px;
     align-items: center;
+  }
+  h1 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.15;
+    margin-bottom: 20px;
   }
   .hero-copy {
     color: var(--color-muted);
-    max-width: 420px;
-    margin: 0 0 24px;
+    font-size: 1.05rem;
+    max-width: 440px;
+    margin: 0 0 28px;
+    line-height: 1.7;
   }
   .hero-actions {
     display: flex;
     gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ─── BLOB-FRAMED PHOTO ──────────────────────────────────── */
+  .hero-photo-frame {
+    position: relative;
+    /* Extra bottom padding so the testimonial card clears the next section */
+    padding-bottom: 32px;
+  }
+  /* Mustard ring SVG: same blob path, offset right+down for layered look */
+  .hero-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: translate(12px, 9px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* Square container clipped to the organic blob */
+  .hero-photo-masked {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    clip-path: url(#hero-blob);
+    overflow: hidden;
   }
   .hero-photo-img {
-    border-radius: 12px;
     width: 100%;
-    height: 260px;
+    height: 100%;
     object-fit: cover;
+    object-position: center 15%;
+    display: block;
   }
-  .stats-bar {
-    background: var(--color-card);
-    padding: 28px 0;
+  /* Testimonial card: anchored to bottom of frame, outside the clip */
+  .hero-testimonial {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    max-width: 320px;
+    background: var(--color-white);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 6px 28px rgba(0,0,0,0.12);
+    z-index: 2;
   }
-  .stats-inner {
-    display: flex;
-    justify-content: center;
-    gap: 56px;
+  .ht-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--color-pine);
+    margin: 0 0 6px;
+    line-height: 1.45;
   }
-  .stat {
+  .ht-attr {
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── TRUST BAR ──────────────────────────────────────────── */
+  .trust-bar-section {
+    background: var(--color-white);
+    padding: 40px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .trust-bar-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .trust-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-  }
-  .stat-number {
-    font-family: var(--font-display);
-    font-size: 2rem;
+    gap: 12px;
     color: var(--color-pine);
   }
-  .stat-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-    margin-top: 4px;
+  .trust-label {
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--color-charcoal);
+    line-height: 1.4;
+    max-width: 150px;
   }
-  .trust-inner {
+
+  /* ─── STATS BAND ─────────────────────────────────────────── */
+  .stats-band {
+    background-image: url('/images/story/founder-story-landscape.jpg');
+    background-size: cover;
+    background-position: center 40%;
+  }
+  .stats-overlay {
+    position: relative;
+    overflow: hidden;
+    background: rgba(34, 52, 74, 0.78);
+    padding: 80px 0;
+  }
+  /* Blob container — same pattern as .hero-bg */
+  .stats-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .sb-blob {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .sb-mustard-tr {
+    width: 480px;
+    height: 480px;
+    background: var(--color-mustard);
+    opacity: 0.06;
+    top: -60px;
+    right: 5%;
+  }
+  .sb-pine-bl {
+    width: 380px;
+    height: 380px;
+    background: var(--color-pine);
+    opacity: 0.06;
+    bottom: 20px;
+    left: 8%;
+  }
+  .sb-mustard-bl {
+    width: 340px;
+    height: 340px;
+    background: var(--color-mustard);
+    opacity: 0.06;
+    bottom: -40px;
+    left: 8%;
+  }
+  .stats-band-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .stat-big {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 64px;
+  }
+  .stat-big-number {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 700;
+    color: var(--color-cream);
+    line-height: 1;
+  }
+  .stat-big-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,242,231,0.6);
+    margin-top: 10px;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 64px;
+    background: rgba(247,242,231,0.2);
+    flex-shrink: 0;
+  }
+
+  /* ─── PEDIGREE STRIP ─────────────────────────────────────── */
+  .pedigree-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +539,7 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
   }
   .pedigree-row {
     display: flex;
-    gap: 24px;
+    gap: 28px;
   }
   .pedigree-item {
     display: flex;
@@ -166,32 +549,308 @@ const featured = testimonials.find((t) => t.data.featured) ?? testimonials[0];
   .pedigree-name {
     font-family: var(--font-display);
     font-size: 0.9rem;
+    color: var(--color-cream);
   }
   .pedigree-detail {
     font-size: 0.7rem;
     color: var(--color-mustard);
     margin-top: 2px;
   }
-  .quote-block {
-    text-align: center;
-    max-width: 640px;
+
+  /* ─── FOUNDER STORY ──────────────────────────────────────── */
+  .founder-section {
+    background: var(--color-cream);
   }
-  .quote {
+  .founder-inner {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .founder-photo-img {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    display: block;
+  }
+  .founder-body {
+    color: var(--color-charcoal);
+    line-height: 1.78;
+    margin: 0 0 20px;
+  }
+  .founder-pullquote {
+    margin: 32px 0 0;
+    padding: 22px 28px;
+    border-left: 3px solid var(--color-mustard);
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.2rem;
+    font-size: 1.18rem;
     color: var(--color-pine);
+    line-height: 1.5;
+    background: var(--color-card);
+    border-radius: 0 10px 10px 0;
   }
-  .quote-attr {
+  .pullquote-mark {
+    font-size: 1.5rem;
+    color: var(--color-mustard);
+    line-height: 0;
+    vertical-align: -0.25em;
+  }
+  .pullquote-attr {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-body);
     font-size: 0.8rem;
-    color: var(--color-brick);
+    color: var(--color-muted);
+    margin-top: 10px;
   }
-  .status-grid {
+
+  /* ─── PROGRAM PILLARS (alternating photo/text rows) ─────── */
+  .pillars-section {
+    background: var(--color-cream);
+    padding-bottom: 0;
+  }
+  .pillars-intro {
+    padding-top: 64px;
+    padding-bottom: 48px;
+    text-align: center;
+  }
+  .pillars-intro h2 { margin: 0; }
+
+  .pillar-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    min-height: 460px;
+  }
+  .pillar-photo {
+    overflow: hidden;
+  }
+  .pillar-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pillar-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 72px;
+    background: var(--color-cream);
+  }
+  .pillar-text-sand {
+    background: var(--color-card);
+  }
+  .pillar-text h3 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+  .pillar-text p {
+    color: var(--color-muted);
+    line-height: 1.75;
+    margin: 0;
+    max-width: 400px;
+  }
+  .pillar-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-pine);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--color-mustard);
+    padding-bottom: 2px;
+  }
+
+  .pillars-cta {
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--color-cream);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* ─── PUPPIES CAROUSEL ───────────────────────────────────── */
+  .puppies-section {
+    background: var(--color-white);
+    padding: 64px 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .puppies-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+  }
+  .puppies-header h2 { margin: 0; }
+  .puppies-header .eyebrow { margin-bottom: 4px; }
+
+  .puppies-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .puppies-scroll::-webkit-scrollbar { height: 3px; }
+  .puppies-scroll::-webkit-scrollbar-track { background: var(--color-border); border-radius: 2px; }
+  .puppies-scroll::-webkit-scrollbar-thumb { background: var(--color-pine); border-radius: 2px; }
+
+  .puppy-card {
+    background: var(--color-cream);
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 340px;
+    max-width: 400px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .puppy-card-empty { max-width: 480px; }
+  .puppy-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .puppy-card-top h3 { margin: 0; font-size: 1.1rem; }
+  .litter-status {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .litter-status-available { background: #E1F5EE; color: #085041; }
+  .litter-status-reserved  { background: #FAEEDA; color: #633806; }
+  .litter-status-planned   { background: #E6F1FB; color: #0C447C; }
+  .litter-status-past      { background: #F1EFE8; color: #444441; }
+  .puppy-detail {
+    font-size: 0.82rem;
+    color: var(--color-mustard);
+    margin: 0;
+  }
+  .puppy-desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 4px 0 8px;
+    flex: 1;
+  }
+
+  /* ─── FOREVER FAMILIES ───────────────────────────────────── */
+  .families-section {
+    background: var(--color-pine);
+    padding-top: 64px;
+  }
+  .families-header {
+    text-align: center;
+    padding-bottom: 40px;
+  }
+  .eyebrow-light {
+    color: rgba(247,242,231,0.55);
+  }
+  .families-heading {
+    color: var(--color-cream);
+    margin: 0;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+  .families-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 300px 240px;
+    gap: 4px;
+  }
+  .families-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Photo 1: tall left column, spans both rows */
+  .families-photo:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+  /* Photos 2 & 3: top-right cells */
+  .families-photo:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .families-photo:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  /* Photos 4 & 5: bottom-right cells */
+  .families-photo:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .families-photo:nth-child(5) {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .families-cta {
+    padding: 40px 24px 56px;
+    text-align: center;
+  }
+  .families-btn {
+    background: transparent;
+    color: var(--color-cream);
+    border: 1.5px solid rgba(247,242,231,0.5);
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .families-btn:hover {
+    background: rgba(247,242,231,0.1);
+    border-color: var(--color-cream);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .pillar-text { padding: 48px 48px; }
+    .stat-big { padding: 0 40px; }
+  }
+  @media (max-width: 900px) {
+    .trust-bar-inner { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    .pillar-row { grid-template-columns: 1fr; min-height: auto; }
+    .pillar-row-flip .pillar-photo { order: -1; }
+    .pillar-photo { height: 300px; }
+    .pillar-text { padding: 40px 32px; }
+    .pillar-text p { max-width: none; }
+    .families-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 220px 220px 220px;
+    }
+    .families-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+    .families-photo:nth-child(2) { grid-column: 1; grid-row: 2; }
+    .families-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
+    .families-photo:nth-child(4) { grid-column: 1; grid-row: 3; }
+    .families-photo:nth-child(5) { grid-column: 2; grid-row: 3; }
   }
   @media (max-width: 640px) {
-    .hero-grid, .status-grid { grid-template-columns: 1fr; }
+    .hero-section { padding: 48px 0 60px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo-frame { max-width: 360px; margin: 0 auto; }
+    .hero-testimonial { left: 8px; max-width: calc(100% - 16px); }
+    .stats-overlay { padding: 56px 0; }
+    .stats-band-inner { flex-direction: column; gap: 36px; }
+    .stat-divider { width: 56px; height: 1px; }
+    .stat-big { padding: 0; }
+    .founder-inner { grid-template-columns: 1fr; gap: 32px; }
+    .trust-bar-inner { grid-template-columns: repeat(2, 1fr); }
+    .families-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, 220px);
+    }
+    .families-photo { grid-column: 1 !important; grid-row: auto !important; }
+    .puppies-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   }
 </style>

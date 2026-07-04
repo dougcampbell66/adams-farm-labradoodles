@@ -46,7 +46,7 @@ const testimonials = defineCollection({
   type: 'content',
   schema: z.object({
     family: z.string(),
-    year: z.string(),
+    year: z.string().nullish(),
     quote: z.string(),
     featured: z.boolean().default(false)
   })

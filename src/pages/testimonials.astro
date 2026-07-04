@@ -12,7 +12,7 @@ const testimonials = await getCollection('testimonials');
       {testimonials.map((t) => (
         <div class="card">
           <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
-          <p class="quote-attr">&mdash; {t.data.family}, {t.data.year}</p>
+          <p class="quote-attr">&mdash; {t.data.family}{t.data.year ? `, ${t.data.year}` : ''}</p>
         </div>
       ))}
     </div>

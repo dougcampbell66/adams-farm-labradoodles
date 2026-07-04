@@ -1,22 +1,91 @@
 ---
 ---
-<header>
+<header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="logo">Adams Farm Labradoodles</a>
-    <nav>
-      <a href="/our-dogs">Our dogs</a>
-      <a href="/our-program">Our program</a>
-      <a href="/puppies">Puppies</a>
-      <a href="/testimonials">Testimonials</a>
-      <a href="/faq">FAQ</a>
-      <a href="/contact">Contact</a>
+    <a href="/" class="logo">Adams Farm <em>Labradoodles</em></a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/" class="nav-link">Home</a>
+
+      <div class="nav-group">
+        <span class="nav-label">
+          About
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <div class="nav-dropdown">
+          <a href="/#story" class="nav-dropdown-link">Our Story</a>
+          <a href="/our-program" class="nav-dropdown-link">Our Program</a>
+          <a href="/our-dogs" class="nav-dropdown-link">Meet the Parents</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">
+          Puppies
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <div class="nav-dropdown">
+          <a href="/puppies" class="nav-dropdown-link">Available Puppies</a>
+          <a href="/testimonials" class="nav-dropdown-link">Testimonials</a>
+        </div>
+      </div>
+
+      <a href="/faq" class="nav-link">FAQ</a>
+      <a href="/contact" class="btn btn-primary nav-cta">Contact us</a>
     </nav>
+
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
+<div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
+  <div class="mobile-overlay-inner">
+    <a href="/">Home</a>
+    <p class="mobile-group-label">About</p>
+    <a href="/#story">Our Story</a>
+    <a href="/our-program">Our Program</a>
+    <a href="/our-dogs">Meet the Parents</a>
+    <p class="mobile-group-label">Puppies</p>
+    <a href="/puppies">Available Puppies</a>
+    <a href="/testimonials">Testimonials</a>
+    <a href="/faq">FAQ</a>
+    <a href="/contact" class="mobile-cta btn btn-primary">Contact us</a>
+  </div>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const overlay = document.getElementById('mobile-overlay');
+  hamburger?.addEventListener('click', () => {
+    const open = overlay?.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(!!open));
+    overlay?.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  overlay?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => {
+      overlay.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  });
+</script>
+
 <style>
-  header {
-    padding: 18px 0;
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-cream);
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 0;
   }
   .header-inner {
     display: flex;
@@ -25,24 +94,140 @@
   }
   .logo {
     font-family: var(--font-display);
-    font-style: italic;
     font-size: 1.1rem;
     color: var(--color-pine);
     text-decoration: none;
+    flex-shrink: 0;
   }
-  nav {
+  .logo em {
+    font-style: italic;
+    color: var(--color-mustard);
+  }
+
+  /* Desktop nav */
+  .main-nav {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    gap: 2px;
   }
-  nav a {
-    font-size: 0.85rem;
+  .nav-link {
+    font-size: 0.875rem;
     color: var(--color-muted);
     text-decoration: none;
+    padding: 7px 13px;
+    border-radius: 6px;
+    transition: color 0.12s, background 0.12s;
   }
-  nav a:hover {
-    color: var(--color-pine);
+  .nav-link:hover { color: var(--color-pine); background: var(--color-card); }
+
+  .nav-group { position: relative; }
+  .nav-label {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    padding: 7px 13px;
+    border-radius: 6px;
+    cursor: default;
+    user-select: none;
+    transition: color 0.12s, background 0.12s;
   }
-  @media (max-width: 640px) {
-    nav { display: none; }
+  .nav-group:hover .nav-label { color: var(--color-pine); background: var(--color-card); }
+  .nav-label svg { transition: transform 0.18s; }
+  .nav-group:hover .nav-label svg { transform: rotate(180deg); }
+
+  .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 6px;
+    min-width: 210px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+  }
+  .nav-group:hover .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .nav-dropdown-link {
+    display: block;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.12s, color 0.12s;
+  }
+  .nav-dropdown-link:hover { background: var(--color-card); color: var(--color-pine); }
+
+  .nav-cta { margin-left: 10px; padding: 9px 20px; font-size: 0.85rem; }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-pine);
+    border-radius: 2px;
+  }
+
+  /* Mobile overlay */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--color-cream);
+    z-index: 99;
+    overflow-y: auto;
+    padding-top: 72px;
+  }
+  .mobile-overlay.open { display: block; }
+  .mobile-overlay-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px 48px;
+  }
+  .mobile-overlay-inner a {
+    font-size: 1rem;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .mobile-group-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-mustard);
+    font-weight: 700;
+    margin: 20px 0 4px;
+  }
+  .mobile-cta {
+    border-bottom: none !important;
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .main-nav { display: none; }
+    .hamburger { display: flex; }
   }
 </style>

@@ -14,40 +14,23 @@ const retired = dogs.filter((d) => d.data.status === 'retired');
     <h2 class="section-heading">Current breeding dogs</h2>
     <div class="dog-grid">
       {active.map((dog) => (
-        <div class="card dog-card">
-          <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
-          {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
-          {dog.data.coi && (
-            <p class="coi">
-              Coefficient of inbreeding (COI): {dog.data.coi}
-              <span class="coi-caption">Lower COI means greater genetic diversity.</span>
-            </p>
+        <a href={`/dogs/${dog.slug}`} class="card dog-card">
+          {dog.data.photo && (
+            <img src={dog.data.photo} alt={dog.data.name} class="card-photo" />
           )}
-          <p>{dog.data.description}</p>
-          {dog.data.healthTests && dog.data.healthTests.length > 0 && (
-            <div class="health-tests">
-              <table class="health-table">
-                <thead>
-                  <tr>
-                    <th>Test</th>
-                    <th>Date</th>
-                    <th>Result</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dog.data.healthTests.map((ht) => (
-                    <tr>
-                      <td>{ht.test}</td>
-                      <td class="date-cell">{new Date(ht.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                      <td>{ht.result}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <p class="ofa-note">Results verifiable at <a href="https://www.ofa.org" target="_blank" rel="noopener noreferrer">www.ofa.org</a> by registration number.</p>
-            </div>
-          )}
-        </div>
+          <div class="card-body">
+            <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
+            {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
+            {dog.data.coi && (
+              <p class="coi">
+                COI: {dog.data.coi}
+                <span class="coi-caption">Lower COI means greater genetic diversity.</span>
+              </p>
+            )}
+            <p class="desc">{dog.data.description}</p>
+            <span class="profile-link">View full profile &rarr;</span>
+          </div>
+        </a>
       ))}
     </div>
 
@@ -56,40 +39,23 @@ const retired = dogs.filter((d) => d.data.status === 'retired');
         <h2 class="section-heading retired-heading">Retired</h2>
         <div class="dog-grid">
           {retired.map((dog) => (
-            <div class="card dog-card retired-card">
-              <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
-              {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
-              {dog.data.coi && (
-                <p class="coi">
-                  Coefficient of inbreeding (COI): {dog.data.coi}
-                  <span class="coi-caption">Lower COI means greater genetic diversity.</span>
-                </p>
+            <a href={`/dogs/${dog.slug}`} class="card dog-card retired-card">
+              {dog.data.photo && (
+                <img src={dog.data.photo} alt={dog.data.name} class="card-photo" />
               )}
-              <p>{dog.data.description}</p>
-              {dog.data.healthTests && dog.data.healthTests.length > 0 && (
-                <div class="health-tests">
-                  <table class="health-table">
-                    <thead>
-                      <tr>
-                        <th>Test</th>
-                        <th>Date</th>
-                        <th>Result</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dog.data.healthTests.map((ht) => (
-                        <tr>
-                          <td>{ht.test}</td>
-                          <td class="date-cell">{new Date(ht.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                          <td>{ht.result}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <p class="ofa-note">Results verifiable at <a href="https://www.ofa.org" target="_blank" rel="noopener noreferrer">www.ofa.org</a> by registration number.</p>
-                </div>
-              )}
-            </div>
+              <div class="card-body">
+                <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
+                {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
+                {dog.data.coi && (
+                  <p class="coi">
+                    COI: {dog.data.coi}
+                    <span class="coi-caption">Lower COI means greater genetic diversity.</span>
+                  </p>
+                )}
+                <p class="desc">{dog.data.description}</p>
+                <span class="profile-link">View full profile &rarr;</span>
+              </div>
+            </a>
           ))}
         </div>
       </>
@@ -114,6 +80,30 @@ const retired = dogs.filter((d) => d.data.status === 'retired');
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
+  .dog-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s;
+  }
+  .dog-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  }
+  .card-photo {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    background: var(--color-card);
+    border-radius: 8px 8px 0 0;
+    display: block;
+  }
+  .card-body {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
   .retired-card {
     opacity: 0.75;
   }
@@ -128,50 +118,27 @@ const retired = dogs.filter((d) => d.data.status === 'retired');
     margin: 4px 0;
   }
   .coi {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     margin: 6px 0 2px;
     color: var(--color-pine);
   }
   .coi-caption {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--color-muted);
     margin-top: 1px;
   }
-  .health-tests {
-    margin-top: 14px;
-  }
-  .health-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.75rem;
-  }
-  .health-table th {
-    text-align: left;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-muted);
-    padding: 4px 6px 4px 0;
-    border-bottom: 1px solid #E4DDD0;
-  }
-  .health-table td {
-    padding: 5px 6px 5px 0;
-    border-bottom: 1px solid #F1EDE6;
-    vertical-align: top;
-    line-height: 1.4;
-  }
-  .date-cell {
-    white-space: nowrap;
-    color: var(--color-muted);
-  }
-  .ofa-note {
-    font-size: 0.7rem;
-    color: var(--color-muted);
+  .desc {
+    font-size: 0.9rem;
     margin-top: 8px;
+    flex: 1;
   }
-  .ofa-note a {
+  .profile-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.8rem;
     color: var(--color-pine);
+    font-weight: 600;
   }
   @media (max-width: 640px) {
     .dog-grid { grid-template-columns: 1fr; }
