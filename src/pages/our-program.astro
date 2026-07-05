@@ -1,63 +1,211 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { stats, program } from '../data/stats.js';
+
+const pillars = [
+  {
+    num: '01',
+    title: 'Health & Integrity',
+    body: `Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We stand behind every puppy with a ${program.healthGuarantee.length} health guarantee covering debilitating congenital defects.`
+  },
+  {
+    num: '02',
+    title: 'Purposeful Raising',
+    body: `Every puppy goes through a structured early socialization program from birth, refined over ${stats.littersPlaced} litters. The result is confident, well-adjusted dogs ready for family life.`
+  },
+  {
+    num: '03',
+    title: 'Transparency',
+    body: `Families are welcome to visit in person at ${program.visitAge}. Every family receives ${program.updates} from birth until go-home day — you'll watch your puppy grow before they're home.`
+  },
+  {
+    num: '04',
+    title: 'Lifetime Support',
+    body: "Our relationship with your family doesn't end at pickup. We're here for questions, guidance, and support for the life of your dog."
+  }
+];
+
+const steps = [
+  { label: 'Apply', desc: "Fill out our contact form. We'll read it personally and reach out within 1–2 business days." },
+  { label: 'Conversation', desc: "We'll learn about your home, lifestyle, and what you're looking for — and make sure it's a great fit." },
+  { label: 'Waitlist & deposit', desc: "Once a litter is confirmed, we collect a deposit to hold your spot on the list." },
+  { label: 'Weekly updates', desc: `From birth through go-home day: ${program.updates}.` },
+  { label: 'Visit at 6 weeks', desc: "Families visit in person once puppies have had their initial vaccines. This is when we help match each puppy to the right family." },
+  { label: 'Go home at 8 weeks', desc: "Your puppy comes home with a full vet exam, vaccinations, microchip, health guarantee, and a care package." }
+];
 ---
 <Layout title="Our program" description="How Adams Farm Labradoodles raises every litter — health, transparency, and lifelong support.">
-  <section class="section container">
-    <p class="eyebrow">ALAA Gold Paw &middot; {stats.yearsBreeding} years breeding &middot; {stats.littersPlaced} litters placed</p>
-    <h1>Our program</h1>
-    <p class="intro">Four things guide every litter we raise.</p>
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">ALAA Gold Paw &middot; {stats.yearsBreeding} years breeding &middot; {stats.littersPlaced} litters placed</p>
+      <h1>Our Program</h1>
+      <p class="page-intro">Four commitments guide every litter we raise — and every family we work with.</p>
+    </div>
+  </div>
 
-    <div class="pillars">
-      <div class="pillar">
-        <h2>Health &amp; integrity</h2>
-        <p>Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We stand behind every puppy with a {program.healthGuarantee.length} health guarantee covering {program.healthGuarantee.covers}. If a covered condition is confirmed by a licensed veterinarian, we provide {program.healthGuarantee.remedy}.</p>
+  <section class="section">
+    <div class="container">
+      <div class="pillars">
+        {pillars.map(p => (
+          <div class="pillar">
+            <span class="pillar-num">{p.num}</span>
+            <h2 class="pillar-title">{p.title}</h2>
+            <p class="pillar-body">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="guarantee-band">
+    <div class="container guarantee-inner">
+      <p class="eyebrow guarantee-eyebrow">Health guarantee</p>
+      <h2 class="guarantee-heading">We stand behind every puppy</h2>
+      <p class="guarantee-body">
+        {program.healthGuarantee.length} coverage on debilitating congenital defects present from birth — including severe hip/elbow dysplasia, PRA, and severe cardiac defects.
+        If a covered condition is confirmed by a licensed veterinarian, we provide {program.healthGuarantee.remedy}.
+      </p>
+      <a href="/our-dogs" class="btn guarantee-btn">View health testing results</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">The process</p>
+      <h2 class="steps-heading">What to Expect</h2>
+      <div class="steps">
+        {steps.map((step, i) => (
+          <div class="step-item">
+            <div class="step-marker">
+              <span class="step-num">{i + 1}</span>
+              {i < steps.length - 1 && <div class="step-line" />}
+            </div>
+            <div class="step-body">
+              <p class="step-label">{step.label}</p>
+              <p class="step-desc">{step.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div class="pillar">
-        <h2>Purposeful raising</h2>
-        <p>Every puppy goes through a structured early socialization program from birth, refined over {stats.littersPlaced} litters. We don't publish the specifics of our method, but the result is confident, well-adjusted puppies ready for family life.</p>
-      </div>
-
-      <div class="pillar">
-        <h2>Transparency</h2>
-        <p>Families are welcome to visit in person at {program.visitAge}, and every family receives {program.updates} from birth until go-home day — you'll watch your puppy grow before they're home.</p>
-      </div>
-
-      <div class="pillar">
-        <h2>Lifetime support</h2>
-        <p>Our relationship with your family doesn't end at pickup. We're here for questions, guidance, and support for the life of your dog.</p>
+      <div class="program-cta">
+        <a href="/contact" class="btn btn-primary">Start your application</a>
+        <a href="/faq" class="btn btn-secondary">Read the FAQ</a>
       </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  .intro {
-    color: var(--color-muted);
-    margin-bottom: 24px;
-  }
   .pillars {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
   }
   .pillar {
-    background: var(--color-card);
-    border-radius: 10px;
-    padding: 20px;
+    background: var(--color-white);
+    padding: 32px 28px;
   }
-  .pillar h2 {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+  .pillar-num {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-mustard);
+    margin-bottom: 10px;
   }
-  .pillar p {
+  .pillar-title { font-size: 1.15rem; margin-bottom: 10px; }
+  .pillar-body {
     margin: 0;
+    font-size: 0.93rem;
     color: var(--color-charcoal);
-    font-size: 0.9rem;
-    line-height: 1.6;
+    line-height: 1.65;
   }
+
+  .guarantee-band {
+    background: var(--color-pine);
+    padding: 64px 0;
+  }
+  .guarantee-inner { max-width: 640px; }
+  .guarantee-eyebrow { color: rgba(247,242,231,0.5); margin-bottom: 8px; }
+  .guarantee-heading { color: var(--color-cream); margin: 0 0 14px; }
+  .guarantee-body {
+    color: rgba(247,242,231,0.8);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin: 0 0 24px;
+  }
+  .guarantee-btn {
+    background: var(--color-cream);
+    color: var(--color-pine);
+    border-color: transparent;
+  }
+  .guarantee-btn:hover { background: var(--color-white); }
+
+  .steps-heading { margin: 8px 0 32px; }
+  .steps {
+    display: flex;
+    flex-direction: column;
+    max-width: 580px;
+  }
+  .step-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding-bottom: 28px;
+  }
+  .step-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--color-pine);
+    color: var(--color-cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--color-border);
+    margin-top: 6px;
+  }
+  .step-body { padding-top: 4px; }
+  .step-label {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--color-pine);
+    margin: 0 0 4px;
+  }
+  .step-desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .program-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
   @media (max-width: 640px) {
     .pillars { grid-template-columns: 1fr; }
+    .program-cta { flex-direction: column; align-items: flex-start; }
   }
 </style>

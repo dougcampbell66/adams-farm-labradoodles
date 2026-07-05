@@ -2,145 +2,222 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const dogs = await getCollection('dogs');
-const active = dogs.filter((d) => d.data.status !== 'retired');
-const retired = dogs.filter((d) => d.data.status === 'retired');
+const dogs = (await getCollection('dogs')).sort((a, b) => {
+  const order: Record<string, number> = { sire: 0, dam: 1 };
+  return (order[a.data.role] ?? 2) - (order[b.data.role] ?? 2);
+});
+const active = dogs.filter(d => d.data.status !== 'retired');
+const retired = dogs.filter(d => d.data.status === 'retired');
 ---
-<Layout title="Our dogs">
-  <section class="section container">
-    <p class="eyebrow">Health tested &middot; ALAA accredited</p>
-    <h1>Our dogs</h1>
-
-    <h2 class="section-heading">Current breeding dogs</h2>
-    <div class="dog-grid">
-      {active.map((dog) => (
-        <a href={`/dogs/${dog.slug}`} class="card dog-card">
-          {dog.data.photo && (
-            <img src={dog.data.photo} alt={dog.data.name} class="card-photo" />
-          )}
-          <div class="card-body">
-            <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
-            {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
-            {dog.data.coi && (
-              <p class="coi">
-                COI: {dog.data.coi}
-                <span class="coi-caption">Lower COI means greater genetic diversity.</span>
-              </p>
-            )}
-            <p class="desc">{dog.data.description}</p>
-            <span class="profile-link">View full profile &rarr;</span>
-          </div>
-        </a>
-      ))}
+<Layout title="Our dogs" description="Meet Silas and Macy, the health-tested ALAA-registered breeding dogs at Adams Farm Labradoodles.">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Health tested &middot; ALAA accredited</p>
+      <h1>Meet the Parents</h1>
+      <p class="page-intro">Every Adams Farm puppy is born to ALAA-registered parents with full health testing on file and verifiable results at ofa.org.</p>
     </div>
+  </div>
 
-    {retired.length > 0 && (
-      <>
-        <h2 class="section-heading retired-heading">Retired</h2>
-        <div class="dog-grid">
-          {retired.map((dog) => (
-            <a href={`/dogs/${dog.slug}`} class="card dog-card retired-card">
-              {dog.data.photo && (
-                <img src={dog.data.photo} alt={dog.data.name} class="card-photo" />
+  <section class="section">
+    <div class="container">
+      <div class="dog-grid">
+        {active.map(dog => (
+          <div class="dog-card">
+            <div class="dog-photo-wrap">
+              <img
+                src={dog.data.photo}
+                alt={dog.data.name}
+                class="dog-photo"
+                onerror="this.style.opacity='0'"
+              />
+            </div>
+            <div class="dog-body">
+              <p class="eyebrow dog-role">{dog.data.role}</p>
+              <h2 class="dog-name">{dog.data.name}</h2>
+              {dog.data.registeredName && (
+                <p class="dog-reg">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>
               )}
-              <div class="card-body">
-                <h3>{dog.data.name} <span class="role">({dog.data.role})</span></h3>
-                {dog.data.registeredName && <p class="detail">{dog.data.registeredName} &middot; {dog.data.regNumber}</p>}
-                {dog.data.coi && (
-                  <p class="coi">
-                    COI: {dog.data.coi}
-                    <span class="coi-caption">Lower COI means greater genetic diversity.</span>
-                  </p>
+              <div class="dog-meta">
+                {dog.data.color && <span class="meta-tag">{dog.data.color}</span>}
+                {dog.data.coi && <span class="meta-tag">COI {dog.data.coi}</span>}
+                {dog.data.birthdate && (
+                  <span class="meta-tag">
+                    Born {new Date(dog.data.birthdate + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </span>
                 )}
-                <p class="desc">{dog.data.description}</p>
-                <span class="profile-link">View full profile &rarr;</span>
               </div>
-            </a>
-          ))}
+              {dog.data.healthTests && dog.data.healthTests.length > 0 && (
+                <p class="health-count">{dog.data.healthTests.length} health tests on file</p>
+              )}
+              <a href={`/dogs/${dog.slug}`} class="profile-link">Full profile &amp; health results &rarr;</a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {retired.length > 0 && (
+        <div class="retired-section">
+          <h2 class="section-label">Retired</h2>
+          <div class="retired-grid">
+            {retired.map(dog => (
+              <a href={`/dogs/${dog.slug}`} class="retired-card">
+                <div class="retired-photo-wrap">
+                  <img
+                    src={dog.data.photo}
+                    alt={dog.data.name}
+                    class="retired-photo"
+                    onerror="this.style.opacity='0'"
+                  />
+                </div>
+                <div class="retired-body">
+                  <p class="eyebrow dog-role">{dog.data.role}</p>
+                  <h3 class="dog-name retired-name">{dog.data.name}</h3>
+                  {dog.data.registeredName && (
+                    <p class="dog-reg">{dog.data.registeredName}</p>
+                  )}
+                  <span class="profile-link retired-link">View profile &rarr;</span>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
-      </>
-    )}
+      )}
+    </div>
+  </section>
+
+  <section class="health-strip">
+    <div class="container health-strip-inner">
+      <p class="eyebrow" style="color: rgba(247,242,231,0.5);">Transparency</p>
+      <h2 class="health-strip-heading">Full health results on every profile</h2>
+      <p class="health-strip-body">OFA hip &amp; elbow evaluations, CAER eye exams, and complete DNA panels — verifiable independently at ofa.org.</p>
+      <a href="/our-program" class="btn health-strip-btn">Our health program &rarr;</a>
+    </div>
   </section>
 </Layout>
 
 <style>
-  .section-heading {
-    margin-top: 36px;
-    margin-bottom: 16px;
-    font-size: 1.1rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
-  .retired-heading {
-    margin-top: 48px;
-  }
   .dog-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    margin-bottom: 56px;
   }
   .dog-card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow 0.15s;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
   }
-  .dog-card:hover {
-    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
-  }
-  .card-photo {
+  .dog-photo-wrap {
     width: 100%;
-    height: 220px;
-    object-fit: contain;
+    height: 300px;
     background: var(--color-card);
-    border-radius: 8px 8px 0 0;
-    display: block;
+    overflow: hidden;
   }
-  .card-body {
-    padding: 16px;
-    flex: 1;
+  .dog-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s;
+  }
+  .dog-body { padding: 22px 24px 26px; }
+  .dog-role { margin-bottom: 4px; }
+  .dog-name { margin: 0 0 4px; font-size: 1.5rem; }
+  .dog-reg { font-size: 0.8rem; color: var(--color-mustard); margin: 0 0 14px; }
+  .dog-meta {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
   }
-  .retired-card {
-    opacity: 0.75;
+  .meta-tag {
+    font-size: 0.77rem;
+    background: var(--color-cream);
+    color: var(--color-charcoal);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
   }
-  .role {
-    font-size: 0.9rem;
+  .health-count {
+    font-size: 0.83rem;
     color: var(--color-muted);
-    font-style: italic;
-  }
-  .detail {
-    color: var(--color-mustard);
-    font-size: 0.8rem;
-    margin: 4px 0;
-  }
-  .coi {
-    font-size: 0.78rem;
-    margin: 6px 0 2px;
-    color: var(--color-pine);
-  }
-  .coi-caption {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--color-muted);
-    margin-top: 1px;
-  }
-  .desc {
-    font-size: 0.9rem;
-    margin-top: 8px;
-    flex: 1;
+    margin: 0 0 14px;
   }
   .profile-link {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--color-pine);
-    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
   }
-  @media (max-width: 640px) {
+  .profile-link:hover { text-decoration: underline; }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    font-family: var(--font-body);
+    margin-bottom: 16px;
+  }
+  .retired-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .retired-card {
+    background: var(--color-card);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    display: block;
+  }
+  .retired-card:hover { opacity: 1; }
+  .retired-photo-wrap {
+    width: 100%;
+    height: 180px;
+    background: var(--color-card);
+    overflow: hidden;
+  }
+  .retired-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .retired-body { padding: 14px 16px 18px; }
+  .retired-name { font-size: 1.1rem; margin: 0 0 3px; }
+  .retired-link { font-size: 0.8rem; }
+
+  .health-strip {
+    background: var(--color-pine);
+    padding: 56px 0;
+  }
+  .health-strip-inner { max-width: 640px; }
+  .health-strip-heading { color: var(--color-cream); margin: 8px 0 0; }
+  .health-strip-body {
+    color: rgba(247,242,231,0.75);
+    font-size: 0.95rem;
+    margin: 10px 0 20px;
+    line-height: 1.65;
+  }
+  .health-strip-btn {
+    background: var(--color-cream);
+    color: var(--color-pine);
+    border-color: transparent;
+  }
+  .health-strip-btn:hover { background: var(--color-white); }
+
+  @media (max-width: 768px) {
     .dog-grid { grid-template-columns: 1fr; }
+    .retired-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .retired-grid { grid-template-columns: 1fr; }
   }
 </style>

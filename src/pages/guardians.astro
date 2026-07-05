@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Guardians" description="Adams Farm's guardian model — breeding dogs raised in loving family homes, not a kennel.">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">About our dogs</p>
+      <h1>Guardians</h1>
+      <p class="page-intro">Raised in loving homes — not a kennel.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container guardian-body">
+      <p>Adams Farm's breeding dogs don't live in a kennel. They live as members of a family — in loving homes, with people who care for them every day, while remaining part of our breeding program.</p>
+
+      <p>This is what makes the guardian model different: our dogs get to be dogs. They're loved, socialized, and part of daily life, not confined to a breeding facility. In return, guardian families give our program something a kennel never could — a dog raised the same way your puppy will be.</p>
+
+      <p>Puppies are whelped in the Campbell home, where Douglas and Erika oversee everything from birth through early development. But the sires and dams themselves — the dogs who make each litter possible — live their lives in the homes of families who love them.</p>
+
+      <p class="closing">It's a simple idea: dogs raised in love make better companions. That's true for our breeding dogs, and it's true for the puppies they bring into the world.</p>
+
+      <a href="/our-dogs" class="guardian-link">Meet our dogs &rarr;</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .guardian-body {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .guardian-body p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--color-charcoal);
+  }
+  .closing {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem !important;
+    color: var(--color-pine) !important;
+  }
+  .guardian-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-pine);
+    text-decoration: none;
+  }
+  .guardian-link:hover { text-decoration: underline; }
+</style>
