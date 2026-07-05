@@ -190,22 +190,46 @@ const springPuppies = allPuppies
     </div>
   </section>
 
-  <!-- ⑤ BREAK SECTION: centered full-width quote (final content) -->
-  <section class="s-break">
-    <div class="container s-break-inner">
-      <blockquote class="break-quote">
-        &ldquo;Dogs are not our whole life, but they make our lives whole.&rdquo;
-        <cite class="break-cite">&mdash; Roger Caras</cite>
-      </blockquote>
+  <!-- ⑤ WHY AUSTRALIAN LABRADOODLE -->
+  <section class="s-why section">
+    <div class="container s-why-inner">
+      <div class="s-why-text">
+        <p class="eyebrow">Authentic Australian Labradoodle</p>
+        <h2>Better Breed By Design</h2>
+        <p class="s-why-body">Adams Farm is an ALAA-registered breeding program, held to a real standard for lineage, health testing, and temperament. Every puppy we place is guaranteed 100% non-shedding and allergy friendly &mdash; the result of that standard, not a coincidence.</p>
+      </div>
+      <img src="/images/credentials/Better-Breed-By-Design-Badge.png" alt="Better Breed by Design" class="s-why-badge" />
+    </div>
+    <div class="container s-why-cards">
+      <div class="trust-card">
+        <h3 class="trust-card-heading">ALAA Registered &mdash; Verified Pedigree</h3>
+        <p class="trust-card-body">Every pedigree is verified against ALAA&rsquo;s official database &mdash; the only reliable way to confirm true lineage.</p>
+      </div>
+      <div class="trust-card">
+        <h3 class="trust-card-heading">Multi-Generational</h3>
+        <p class="trust-card-body">A true Australian Labradoodle has two Australian Labradoodle parents &mdash; a distinct breed, not a mixed litter.</p>
+      </div>
+      <div class="trust-card">
+        <h3 class="trust-card-heading">Non-Shedding, Allergy-Friendly Coat</h3>
+        <p class="trust-card-body">A carefully bred, low-to-no-shedding coat makes the breed allergy friendly.</p>
+      </div>
+      <div class="trust-card">
+        <h3 class="trust-card-heading">Temperament Tested</h3>
+        <p class="trust-card-body">Bred for a clever, joyful temperament that reads people &mdash; ideal for therapy and family life.</p>
+      </div>
+    </div>
+    <div class="container s-why-cta">
+      <a href="https://alaa-labradoodles.com/for-breeders/breed-standard/" target="_blank" rel="noopener noreferrer" class="trust-program-link">Learn more from ALAA &rarr;</a>
     </div>
   </section>
 
-  <!-- ⑥ WHY AUSTRALIAN LABRADOODLE: placeholder text block -->
-  <section class="s-why section">
-    <div class="container s-why-inner">
-      <img src="/images/credentials/Better-Breed-By-Design-Badge.png" alt="Better Breed by Design" class="s-why-badge" />
-      <div class="ph ph-label">[Why Australian Labradoodle — section heading]</div>
-      <div class="ph ph-block">[Why Australian Labradoodle — text block]</div>
+  <!-- ⑥ BREAK SECTION: centered full-width quote -->
+  <section class="s-break">
+    <div class="container s-break-inner">
+      <blockquote class="break-quote">
+        &ldquo;Dogs are not our whole life,<br class="break-quote-br" /> but they make our lives whole.&rdquo;
+        <cite class="break-cite">&mdash; Roger Caras</cite>
+      </blockquote>
     </div>
   </section>
 
@@ -664,7 +688,7 @@ const springPuppies = allPuppies
     margin: 0;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
     color: var(--color-cream);
     line-height: 1.55;
   }
@@ -677,16 +701,42 @@ const springPuppies = allPuppies
     color: rgba(247,242,231,0.55);
     margin-top: 20px;
   }
+  @media (max-width: 600px) {
+    .break-quote-br { display: none; }
+  }
 
-  /* ─── ⑥ WHY AUSTRALIAN LABRADOODLE ─────────────────────────── */
-  .s-why { background: var(--color-white); }
-  .s-why-badge { width: 160px; height: auto; }
+  /* ─── ⑤ WHY AUSTRALIAN LABRADOODLE ─────────────────────────── */
+  .s-why { background: var(--color-cream); }
   .s-why-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 760px;
+    display: grid;
+    grid-template-columns: 3fr 2.5fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .s-why-text { display: flex; flex-direction: column; gap: 20px; }
+  .s-why-text .eyebrow { margin-bottom: calc(var(--space-eyebrow-gap) - 20px); }
+  .s-why-text h2       { margin-bottom: calc(var(--space-heading-gap)  - 20px); }
+  .s-why-body {
+    color: var(--color-charcoal);
+    line-height: 1.78;
+    margin: 0;
+    font-size: 1rem;
+  }
+  .s-why-badge {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    display: block;
     margin: 0 auto;
+  }
+  .s-why-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .s-why-cta {
+    margin-top: 28px;
   }
 
   /* ─── ⑦ OUR STORY ───────────────────────────────────────────── */
@@ -812,6 +862,9 @@ const springPuppies = allPuppies
   /* ─── RESPONSIVE ────────────────────────────────────────────── */
   @media (max-width: 900px) {
     .s-about-inner    { grid-template-columns: 1fr; }
+    .s-why-inner      { grid-template-columns: 1fr; }
+    .s-why-badge      { max-width: 180px; margin: 0; }
+    .s-why-cards      { grid-template-columns: 1fr 1fr; }
     .s-story-inner    { grid-template-columns: 1fr; }
     .s-testimonials-grid { grid-template-columns: 1fr; }
     .s-pillar-row { grid-template-columns: 1fr; min-height: auto; }
@@ -832,6 +885,7 @@ const springPuppies = allPuppies
     .hero-photo-frame { max-width: 360px; margin: 0 auto; }
     .hero-testimonial { left: 8px; max-width: calc(100% - 16px); }
     .trust-grid { grid-template-columns: 1fr; }
+    .s-why-cards { grid-template-columns: 1fr; }
     .s-testimonials-grid { grid-template-columns: 1fr; }
     .s-families-grid {
       grid-template-columns: 1fr;
