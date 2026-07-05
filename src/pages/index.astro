@@ -233,13 +233,25 @@ const springPuppies = allPuppies
     </div>
   </section>
 
-  <!-- ⑦ OUR STORY: two-column — image left, text + pull-quote right -->
+  <!-- ⑦ OUR STORY: two-column — text left, image right -->
   <section class="s-story section" id="story">
     <div class="container s-story-inner">
-      <div class="ph ph-tall">[Our story — image]</div>
       <div class="s-story-text">
-        <div class="ph ph-block">[Our story — text block]</div>
-        <div class="ph ph-pullquote">[Our story — pull-quote]</div>
+        <p class="eyebrow">Our Story</p>
+        <h2>How Adams Farm Began</h2>
+        <p class="s-story-body">It started with our kids, Julian and Marie Claire, begging for a puppy. Instead of one, we decided to give them puppies &mdash; and set out to find the right breed. Our only real requirement was temperament: friendly, with no aggression toward people, dogs, or other animals. That search led us to Australian Labradoodles, and eventually to Mike and Pam Kirkpatrick of Legend Manor Labradoodles, and their dog Prancer &mdash; Winnie.</p>
+        <p class="s-story-body">From the moment we met her, Erika knew. Winnie approached each of us gently, and it was clear how loving she was &mdash; the kind of dog that becomes a healing presence for a family. She joined ours, and after her third litter, gave us eight healthy puppies. That&rsquo;s how Adams Farm began.</p>
+        <blockquote class="s-story-pullquote">
+          &ldquo;A great dog can be a healing presence for your whole family.&rdquo;
+          <cite class="s-story-cite">&mdash; Erika Campbell</cite>
+        </blockquote>
+      </div>
+      <div class="story-photo">
+        <img
+          src="/images/story/founder-story-portrait.jpg"
+          alt="Douglas and Erika Campbell with Winnie"
+          class="story-photo-img"
+        />
       </div>
     </div>
   </section>
@@ -595,11 +607,10 @@ const springPuppies = allPuppies
     margin: 0;
     font-size: 1rem;
   }
-  /* Blob-masked photo — reuses #hero-blob clip-path defined in the SVG defs above */
   .about-photo {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    clip-path: url(#hero-blob);
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
     overflow: hidden;
   }
   .about-photo-img {
@@ -743,11 +754,51 @@ const springPuppies = allPuppies
   .s-story { background: var(--color-cream); }
   .s-story-inner {
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 3fr 2fr;
     gap: 64px;
     align-items: start;
   }
+  .story-photo {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .story-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
   .s-story-text { display: flex; flex-direction: column; gap: 24px; }
+  .s-story-text .eyebrow { margin-bottom: calc(var(--space-eyebrow-gap) - 24px); }
+  .s-story-text h2       { margin-bottom: calc(var(--space-heading-gap)  - 24px); }
+  .s-story-body {
+    color: var(--color-charcoal);
+    line-height: 1.78;
+    margin: 0;
+    font-size: 1rem;
+  }
+  .s-story-pullquote {
+    margin: 0;
+    padding: 20px 24px;
+    border-left: 3px solid var(--color-mustard);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-pine);
+    line-height: 1.5;
+  }
+  .s-story-cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    margin-top: 10px;
+  }
 
   /* ─── ⑧ OUR PROGRAM ────────────────────────────────────────── */
   .s-program { background: var(--color-cream); padding-bottom: 0; }
