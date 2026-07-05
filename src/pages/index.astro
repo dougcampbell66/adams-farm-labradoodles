@@ -298,17 +298,39 @@ const springPuppies = allPuppies
     requestAnimationFrame(updateCredsArrows);
   </script>
 
-  <!-- ⑩ FAQ: placeholder accordion, 4–5 collapsed questions -->
+  <!-- ⑩ FAQ -->
   <section class="s-faq section">
     <div class="container s-section-header">
-      <div class="ph ph-label">[FAQ — section heading]</div>
+      <p class="eyebrow">FAQ</p>
+      <h2>Frequently Asked Questions</h2>
     </div>
     <div class="container s-faq-list">
-      <div class="ph ph-accordion">[FAQ — question 1]</div>
-      <div class="ph ph-accordion">[FAQ — question 2]</div>
-      <div class="ph ph-accordion">[FAQ — question 3]</div>
-      <div class="ph ph-accordion">[FAQ — question 4]</div>
-      <div class="ph ph-accordion">[FAQ — question 5]</div>
+
+      <details class="faq-item">
+        <summary class="faq-question">What is ALAA Gold Paw accreditation, and why does it matter?</summary>
+        <div class="faq-answer"><p>Gold Paw is our highest health-testing standard under the Australian Labradoodle Association of America &mdash; the accrediting body that verifies pedigrees and sets the breed standard. It means every breeding dog in our program is health tested and verified, not just labeled &ldquo;Australian Labradoodle.&rdquo;</p></div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">What makes an Australian Labradoodle different from other &ldquo;doodle&rdquo; breeds?</summary>
+        <div class="faq-answer"><p>A true Australian Labradoodle is a multi-generational breed with both parents being Australian Labradoodles themselves &mdash; not a first-generation Lab and Poodle mix. Only dogs registered with ALAA, ALCA, or WALA are held to that standard.</p></div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">Are Adams Farm puppies allergy friendly?</summary>
+        <div class="faq-answer"><p>Yes. Every puppy we place is guaranteed 100% non-shedding and allergy friendly. As ALAA notes, no dog is truly hypoallergenic, but a carefully bred, low-to-no-shedding coat makes the breed a strong option for allergy-sensitive families.</p></div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">What does &ldquo;raised in loving homes&rdquo; mean &mdash; do all your dogs live with you?</summary>
+        <div class="faq-answer"><p>Puppies are whelped in the Campbell home. Some of our breeding dogs live with us, and others live with trusted guardian families &mdash; but every dog in our program is raised in a loving home, never a kennel.</p></div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">What health guarantee comes with my puppy?</summary>
+        <div class="faq-answer"><p>We test breeding dogs for known congenital defects and back what can&rsquo;t be tested for with a 3-year written guarantee, so your family can adopt with real confidence.</p></div>
+      </details>
+
     </div>
   </section>
 
@@ -823,7 +845,45 @@ const springPuppies = allPuppies
   /* ─── ⑩ FAQ ─────────────────────────────────────────────────── */
   .s-faq { background: var(--color-cream); }
   .s-faq-list { display: flex; flex-direction: column; gap: 8px; }
-  .ph-accordion { min-height: 56px; border-radius: 8px; }
+  .faq-item {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .faq-question {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--color-pine);
+    line-height: 1.4;
+  }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-question::after {
+    content: '+';
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--color-mustard);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  details[open] > .faq-question::after { transform: rotate(45deg); }
+  .faq-answer {
+    padding: 0 24px 20px;
+    border-top: 1px solid var(--color-border);
+  }
+  .faq-answer p {
+    margin: 16px 0 0;
+    color: var(--color-charcoal);
+    font-size: 0.95rem;
+    line-height: 1.78;
+  }
 
   /* ─── ⑪ FOREVER FAMILIES ────────────────────────────────────── */
   .s-families {
