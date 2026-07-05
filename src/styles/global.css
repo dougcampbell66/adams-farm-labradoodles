@@ -13,6 +13,10 @@
 
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Nunito Sans', Arial, sans-serif;
+
+  --space-eyebrow-gap: 12px;  /* eyebrow → heading */
+  --space-heading-gap: 10px;  /* heading → body/subtext */
+  --space-cta-gap: 14px;      /* body/subtext → CTA text link */
 }
 
 * { box-sizing: border-box; }
@@ -51,7 +55,7 @@ a { color: var(--color-pine); }
   text-transform: uppercase;
   color: var(--color-mustard);
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-eyebrow-gap);
 }
 
 .btn {

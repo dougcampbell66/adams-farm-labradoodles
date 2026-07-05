@@ -5,10 +5,7 @@ import { getCollection } from 'astro:content';
 const allPuppies = await getCollection('puppies');
 const springPuppies = allPuppies
   .filter(p => p.data.litter === 'spring-2026')
-  .sort((a, b) => {
-    if (a.data.status === b.data.status) return 0;
-    return a.data.status === 'available' ? -1 : 1;
-  });
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 <Layout title="Home">
 
@@ -55,6 +52,7 @@ const springPuppies = allPuppies
   <!-- ① PUPPIES: horizontal scroll carousel -->
   <section class="s-puppies">
     <div class="container s-puppies-hd">
+      <p class="eyebrow">Available Puppies</p>
       <h2 class="puppies-heading">Meet Our Lilo &amp; Stitch May Litter</h2>
       <p class="puppies-sub">These practically perfect puppies come from Legend Manor&rsquo;s Holly and Tarheel&rsquo;s Knox, and are expected to mature into large minis between 20 and 25 lbs.</p>
       <a href="/our-dogs" class="puppies-parents-link">Meet the Parents &rarr;</a>
@@ -128,8 +126,10 @@ const springPuppies = allPuppies
         />
       </div>
       <div class="s-about-text">
+        <p class="eyebrow">Adams Farm Labradoodles</p>
         <h2>Where Every Puppy Grows Up Loved</h2>
         <p class="s-about-body">Adams Farm Labradoodles breeds and raises ALAA registered Australian Labradoodles. Our breeding dogs are raised in loving homes, health tested, and evaluated for therapy-dog temperament. Our puppies are raised to be calm and confident in new environments.</p>
+        <a href="/our-program" class="trust-program-link">Learn more about our program &rarr;</a>
         <div class="trust-grid">
           <div class="trust-card">
             <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -161,20 +161,32 @@ const springPuppies = allPuppies
             <p class="trust-card-body">Every puppy meets and exceeds the Rule of Sevens socialization standard during the critical 3&ndash;12 week window.</p>
           </div>
         </div>
-        <a href="/our-program" class="trust-program-link">Learn more about our program &rarr;</a>
       </div>
     </div>
   </section>
 
-  <!-- ④ TESTIMONIALS: 3-slot card grid -->
+  <!-- ④ TESTIMONIALS: featured + 2-col grid -->
   <section class="s-testimonials section">
     <div class="container s-section-header">
-      <div class="ph ph-label">[Testimonials — section heading]</div>
+      <p class="eyebrow">Testimonials</p>
+      <h2>Loved by Families</h2>
     </div>
     <div class="container s-testimonials-grid">
-      <div class="ph ph-testimonial">[Testimonial card 1]</div>
-      <div class="ph ph-testimonial">[Testimonial card 2]</div>
-      <div class="ph ph-testimonial">[Testimonial card 3]</div>
+      <div class="t-card t-card-featured">
+        <blockquote class="t-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle from Adam&rsquo;s Farm Labradoodles. Paisley is such a happy girl. She draws attention from people everywhere she goes. She adjusted seamlessly to our home, our routines, and older dog. From the beginning she showed good manners, confidence, and a loving temperament.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Deirdre</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;An amazing family operated company. We love our dog, Samson, more than words can describe. He is calm and loving &mdash; we can tell he was born into an environment of care. Doug &amp; Erika are awesome and provided us with all the information we needed as soon as we bought Samson.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Imani-Grace</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;We had just moved to the U.S. from Japan, and never expected to meet such a kind and wonderful breeder family so soon. It truly felt like fate. Thanks to Adams Farm, not only did we meet amazing people, but we also welcomed a new, loving member into our family.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Serina</p>
+      </div>
+    </div>
+    <div class="container s-testimonials-cta">
+      <a href="https://share.google/FmRRIkSGouEi3RIFT" target="_blank" rel="noopener noreferrer" class="trust-program-link">Read more reviews on Google &rarr;</a>
     </div>
   </section>
 
@@ -407,15 +419,17 @@ const springPuppies = allPuppies
     border-top: 1px solid var(--color-border);
   }
   .s-puppies-hd { margin-bottom: 32px; }
-  .puppies-heading { margin: 0 0 10px; }
+  .puppies-heading { margin: 0 0 var(--space-heading-gap); }
   .puppies-sub {
     color: var(--color-muted);
     font-size: 0.95rem;
     line-height: 1.65;
     max-width: 560px;
-    margin: 0 0 14px;
+    margin: 0 0 var(--space-cta-gap);
   }
-  .puppies-parents-link {
+  /* shared visual style for all section CTA text links */
+  .puppies-parents-link,
+  .trust-program-link {
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--color-pine);
@@ -546,6 +560,10 @@ const springPuppies = allPuppies
     align-items: start;
   }
   .s-about-text { display: flex; flex-direction: column; gap: 20px; }
+  /* flex gap (20px) is additive with margins; calc() cancels the excess to hit the shared spacing tokens */
+  .s-about-text .eyebrow        { margin-bottom: calc(var(--space-eyebrow-gap) - 20px); }
+  .s-about-text h2              { margin-bottom: calc(var(--space-heading-gap)  - 20px); }
+  .s-about-text .trust-program-link { margin-top: calc(var(--space-cta-gap)    - 20px); }
   .s-about-body {
     color: var(--color-charcoal);
     line-height: 1.78;
@@ -601,23 +619,39 @@ const springPuppies = allPuppies
   }
   .trust-program-link {
     display: inline-block;
-    margin-top: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-pine);
-    text-decoration: none;
-    border-bottom: 1.5px solid var(--color-mustard);
-    padding-bottom: 2px;
+    align-self: flex-start; /* prevents flex column from stretching the link full-width */
   }
 
   /* ─── ④ TESTIMONIALS ────────────────────────────────────────── */
-  .s-testimonials { background: var(--color-cream); }
+  .s-testimonials { background: var(--color-white); }
+  /* wider than --space-cta-gap: this link follows a card grid, not inline text */
+  .s-testimonials-cta { margin-top: 28px; }
   .s-testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
-  .ph-testimonial { min-height: 180px; }
+  .t-card {
+    background: var(--color-cream);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .t-card-featured { grid-column: 1 / -1; }
+  .t-quote {
+    margin: 0 0 16px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--color-charcoal);
+    line-height: 1.72;
+  }
+  .t-attr {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-pine);
+  }
 
   /* ─── ⑤ BREAK / QUOTE ───────────────────────────────────────── */
   .s-break {
