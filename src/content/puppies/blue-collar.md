@@ -1,5 +1,6 @@
 ---
-name: "Blue Collar"
+name: "Stitch"
+collar: "Blue Collar"
 status: "available"
 sex: "Male"
 photo: "/images/puppies/blue-collar-5-18-26.jpg"

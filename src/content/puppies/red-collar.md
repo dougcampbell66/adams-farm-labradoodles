@@ -1,5 +1,6 @@
 ---
-name: "Red Collar"
+name: "Jumba"
+collar: "Red Collar"
 status: "available"
 sex: "Male"
 photo: "/images/puppies/red-collar-5-18-26.jpg"

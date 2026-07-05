@@ -46,6 +46,7 @@ const puppies = defineCollection({
   type: 'content',
   schema: z.object({
     name: z.string(),
+    collar: z.string().optional(),
     status: z.enum(['available', 'reserved']),
     sex: z.enum(['Male', 'Female']).optional(),
     photo: z.string(),
