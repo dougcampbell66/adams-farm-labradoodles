@@ -203,6 +203,7 @@ const springPuppies = allPuppies
   <!-- ⑥ WHY AUSTRALIAN LABRADOODLE: placeholder text block -->
   <section class="s-why section">
     <div class="container s-why-inner">
+      <img src="/images/credentials/Better-Breed-By-Design-Badge.png" alt="Better Breed by Design" class="s-why-badge" />
       <div class="ph ph-label">[Why Australian Labradoodle — section heading]</div>
       <div class="ph ph-block">[Why Australian Labradoodle — text block]</div>
     </div>
@@ -250,7 +251,7 @@ const springPuppies = allPuppies
   <!-- ⑨ CREDENTIALS & PARTNERS: row of logo tile slots -->
   <section class="s-creds">
     <div class="container s-creds-inner">
-      <div class="ph ph-logo">[Logo 1]</div>
+      <img src="/images/credentials/Adams-Farm-ALAA-Logo-2026.png" alt="ALAA Member 2026" class="creds-logo" />
       <div class="ph ph-logo">[Logo 2]</div>
       <div class="ph ph-logo">[Logo 3]</div>
       <div class="ph ph-logo">[Logo 4]</div>
@@ -492,7 +493,7 @@ const springPuppies = allPuppies
   }
   .puppy-card-photo {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--color-card);
   }
@@ -679,6 +680,7 @@ const springPuppies = allPuppies
 
   /* ─── ⑥ WHY AUSTRALIAN LABRADOODLE ─────────────────────────── */
   .s-why { background: var(--color-white); }
+  .s-why-badge { width: 160px; height: auto; }
   .s-why-inner {
     display: flex;
     flex-direction: column;
@@ -739,6 +741,7 @@ const springPuppies = allPuppies
     flex-wrap: wrap;
   }
   .ph-logo { width: 140px; height: 80px; flex-shrink: 0; }
+  .creds-logo { height: 80px; width: auto; max-width: 140px; object-fit: contain; flex-shrink: 0; }
 
   /* ─── ⑩ FAQ ─────────────────────────────────────────────────── */
   .s-faq { background: var(--color-cream); }
