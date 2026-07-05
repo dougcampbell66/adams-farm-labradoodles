@@ -334,16 +334,19 @@ const springPuppies = allPuppies
     </div>
   </section>
 
-  <!-- ⑪ FOREVER FAMILIES: 4-slot photo grid -->
+  <!-- ⑪ FOREVER FAMILIES: 7-photo mosaic grid -->
   <section class="s-families">
     <div class="container s-section-header s-section-header-light">
-      <div class="ph ph-label-dark">[Forever families — section heading]</div>
+      <p class="eyebrow" style="color: rgba(247,242,231,0.65);">Forever Families</p>
+      <h2 style="color: var(--color-cream);">Dogs That Change Everything</h2>
     </div>
     <div class="s-families-grid">
-      <div class="ph ph-photo">[Families — photo 1]</div>
-      <div class="ph ph-photo">[Families — photo 2]</div>
-      <div class="ph ph-photo">[Families — photo 3]</div>
-      <div class="ph ph-photo">[Families — photo 4]</div>
+      <img src="/images/families/355x328.png"  alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
+      <img src="/images/families/Slot-2a.png"  alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
+      <img src="/images/families/Slot-3.jpg"   alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
+      <img src="/images/families/Slot-4.png"   alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
+      <img src="/images/families/Slot-5.png"   alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
+      <img src="/images/families/Slot-2b.png"  alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
     </div>
   </section>
 
@@ -900,23 +903,28 @@ const springPuppies = allPuppies
   }
   .s-families-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 280px 280px;
-    gap: 4px;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 328px 160px;
+    gap: 8px;
     max-width: 1080px;
     margin: 0 auto;
     padding: 0 24px;
   }
-  .ph-photo {
-    border-radius: 0;
-    background: rgba(247,242,231,0.07);
-    border-color: rgba(247,242,231,0.2);
-    color: rgba(247,242,231,0.45);
+  .families-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  .ph-photo:nth-child(1) { grid-column: 1; grid-row: 1 / 3; }
-  .ph-photo:nth-child(2) { grid-column: 2; grid-row: 1; }
-  .ph-photo:nth-child(3) { grid-column: 3; grid-row: 1; }
-  .ph-photo:nth-child(4) { grid-column: 2 / 4; grid-row: 2; }
+  /* 355x328 — tall left anchor, spans 2 cols × 2 rows */
+  .families-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1 / 3; }
+  /* Slot-2a — wide top right, spans 4 cols */
+  .families-photo:nth-child(2) { grid-column: 3 / 7; grid-row: 1; }
+  /* Slot-3, Slot-4, Slot-5, Slot-2b — bottom row, one col each */
+  .families-photo:nth-child(3) { grid-column: 3; grid-row: 2; object-position: center 80%; }
+  .families-photo:nth-child(4) { grid-column: 4; grid-row: 2; }
+  .families-photo:nth-child(5) { grid-column: 5; grid-row: 2; }
+  .families-photo:nth-child(6) { grid-column: 6; grid-row: 2; }
 
   /* ─── ⑫ APPLY NOW ───────────────────────────────────────────── */
   .s-apply {
@@ -956,13 +964,15 @@ const springPuppies = allPuppies
     .s-testimonials-grid { grid-template-columns: 1fr; }
 
     .s-families-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 200px 200px 200px;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 220px 140px 140px;
     }
-    .ph-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
-    .ph-photo:nth-child(2) { grid-column: 1; grid-row: 2; }
-    .ph-photo:nth-child(3) { grid-column: 2; grid-row: 2; }
-    .ph-photo:nth-child(4) { grid-column: 1 / 3; grid-row: 3; }
+    .families-photo:nth-child(1) { grid-column: 1 / 3; grid-row: 1 / 3; }
+    .families-photo:nth-child(2) { grid-column: 3; grid-row: 1; }
+    .families-photo:nth-child(3) { grid-column: 3; grid-row: 2; }
+    .families-photo:nth-child(4) { grid-column: 1; grid-row: 3; }
+    .families-photo:nth-child(5) { grid-column: 2; grid-row: 3; }
+    .families-photo:nth-child(6) { grid-column: 3; grid-row: 3; }
   }
   @media (max-width: 640px) {
     .hero-section { padding: 48px 0 60px; }
@@ -974,9 +984,9 @@ const springPuppies = allPuppies
     .s-testimonials-grid { grid-template-columns: 1fr; }
     .s-families-grid {
       grid-template-columns: 1fr;
-      grid-template-rows: repeat(4, 180px);
+      grid-template-rows: repeat(6, 200px);
     }
-    .ph-photo { grid-column: 1 !important; grid-row: auto !important; }
+    .families-photo { grid-column: 1 !important; grid-row: auto !important; }
     .ph-logo { width: 100px; height: 60px; }
   }
 </style>
