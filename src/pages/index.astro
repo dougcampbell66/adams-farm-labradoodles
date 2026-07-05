@@ -256,44 +256,47 @@ const springPuppies = allPuppies
     </div>
   </section>
 
-  <!-- ⑧ OUR PROGRAM: 4 alternating rows + Guardians CTA -->
-  <section class="s-program">
-    <div class="container s-section-header">
-      <div class="ph ph-label">[Our program — section heading]</div>
-    </div>
-
-    <div class="s-pillar-row">
-      <div class="ph ph-pillar-img">[Program — row 1 image]</div>
-      <div class="ph ph-pillar-text">[Program — row 1 text]</div>
-    </div>
-    <div class="s-pillar-row s-pillar-flip">
-      <div class="ph ph-pillar-text">[Program — row 2 text]</div>
-      <div class="ph ph-pillar-img">[Program — row 2 image]</div>
-    </div>
-    <div class="s-pillar-row">
-      <div class="ph ph-pillar-img">[Program — row 3 image]</div>
-      <div class="ph ph-pillar-text">[Program — row 3 text]</div>
-    </div>
-    <div class="s-pillar-row s-pillar-flip">
-      <div class="ph ph-pillar-text">[Program — row 4 text]</div>
-      <div class="ph ph-pillar-img">[Program — row 4 image]</div>
-    </div>
-
-    <div class="container s-program-cta">
-      <div class="ph ph-cta-link">[Guardians program — link / CTA]</div>
-    </div>
-  </section>
-
-  <!-- ⑨ CREDENTIALS & PARTNERS: row of logo tile slots -->
+  <!-- ⑧ CREDENTIALS & PARTNERS: scrollable badge carousel -->
   <section class="s-creds">
-    <div class="container s-creds-inner">
-      <img src="/images/credentials/Adams-Farm-ALAA-Logo-2026.png" alt="ALAA Member 2026" class="creds-logo" />
-      <div class="ph ph-logo">[Logo 2]</div>
-      <div class="ph ph-logo">[Logo 3]</div>
-      <div class="ph ph-logo">[Logo 4]</div>
-      <div class="ph ph-logo">[Logo 5]</div>
+    <div class="container">
+      <div class="creds-track-wrap">
+        <button class="carousel-btn carousel-btn-prev" id="creds-prev" aria-label="Scroll left">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="s-scroll" id="creds-scroll">
+          <img src="/images/credentials/akc-reunite-badge.png" alt="AKC Reunite" class="creds-logo" />
+          <img src="/images/credentials/baxter-bella.png" alt="Baxter &amp; Bella" class="creds-logo" />
+          <img src="/images/credentials/Adams-Farm-Gold-Paw-Badge-2026.png" alt="ALAA Gold Paw Breeder 2026–2027" class="creds-logo" />
+          <img src="/images/credentials/trupanion-badge.png" alt="Trupanion" class="creds-logo" />
+          <img src="/images/credentials/badass-breeder.png" alt="Badass Breeder" class="creds-logo" />
+          <img src="/images/credentials/revival-animal-health-badge.png" alt="Revival Animal Health" class="creds-logo" />
+        </div>
+        <button class="carousel-btn carousel-btn-next" id="creds-next" aria-label="Scroll right">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
     </div>
   </section>
+
+  <script>
+    const credsTrack = document.getElementById('creds-scroll') as HTMLElement | null;
+    const credsPrev  = document.getElementById('creds-prev')   as HTMLButtonElement | null;
+    const credsNext  = document.getElementById('creds-next')   as HTMLButtonElement | null;
+
+    function updateCredsArrows() {
+      if (!credsTrack || !credsPrev || !credsNext) return;
+      credsPrev.style.display = credsTrack.scrollLeft <= 1 ? 'none' : 'flex';
+      credsNext.style.display = credsTrack.scrollLeft + credsTrack.clientWidth >= credsTrack.scrollWidth - 1 ? 'none' : 'flex';
+    }
+    function credsStep() {
+      const logo = credsTrack?.querySelector('.creds-logo') as HTMLElement | null;
+      return logo ? logo.offsetWidth + 20 : 220;
+    }
+    credsPrev?.addEventListener('click', () => { credsTrack?.scrollBy({ left: -credsStep(), behavior: 'smooth' }); });
+    credsNext?.addEventListener('click', () => { credsTrack?.scrollBy({ left:  credsStep(), behavior: 'smooth' }); });
+    credsTrack?.addEventListener('scroll', updateCredsArrows, { passive: true });
+    requestAnimationFrame(updateCredsArrows);
+  </script>
 
   <!-- ⑩ FAQ: placeholder accordion, 4–5 collapsed questions -->
   <section class="s-faq section">
@@ -800,49 +803,22 @@ const springPuppies = allPuppies
     margin-top: 10px;
   }
 
-  /* ─── ⑧ OUR PROGRAM ────────────────────────────────────────── */
-  .s-program { background: var(--color-cream); padding-bottom: 0; }
   .s-section-header { padding: 0 24px; }
-  .s-program > .s-section-header { padding-top: 64px; padding-bottom: 40px; }
-  .s-pillar-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 400px;
-  }
-  .ph-pillar-img {
-    border-radius: 0;
-    min-height: 400px;
-    background: #E2D9CB;
-    border-color: #C0B49A;
-  }
-  .ph-pillar-text {
-    border-radius: 0;
-    min-height: 400px;
-    background: #EDE8DF;
-  }
-  .s-program-cta {
-    padding: 48px 24px;
-    border-top: 1px solid var(--color-border);
-    background: var(--color-cream);
-  }
-  .ph-cta-link { min-height: 48px; max-width: 320px; margin: 0 auto; }
 
-  /* ─── ⑨ CREDENTIALS & PARTNERS ─────────────────────────────── */
+  /* ─── ⑧ CREDENTIALS & PARTNERS ─────────────────────────────── */
   .s-creds {
     padding: 56px 0;
     background: var(--color-white);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
   }
-  .s-creds-inner {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+  /* 4 logos × 200px + 3 gaps × 20px = 860px — no partial 5th visible */
+  .creds-track-wrap {
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
   }
-  .ph-logo { width: 140px; height: 80px; flex-shrink: 0; }
-  .creds-logo { height: 80px; width: auto; max-width: 140px; object-fit: contain; flex-shrink: 0; }
+  .creds-logo { width: 200px; height: 200px; object-fit: contain; flex-shrink: 0; scroll-snap-align: start; }
 
   /* ─── ⑩ FAQ ─────────────────────────────────────────────────── */
   .s-faq { background: var(--color-cream); }
@@ -918,9 +894,7 @@ const springPuppies = allPuppies
     .s-why-cards      { grid-template-columns: 1fr 1fr; }
     .s-story-inner    { grid-template-columns: 1fr; }
     .s-testimonials-grid { grid-template-columns: 1fr; }
-    .s-pillar-row { grid-template-columns: 1fr; min-height: auto; }
-    .s-pillar-flip .ph-pillar-img { order: -1; }
-    .ph-pillar-img, .ph-pillar-text { min-height: 260px; }
+
     .s-families-grid {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 200px 200px 200px;
