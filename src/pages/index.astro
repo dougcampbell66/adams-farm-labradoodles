@@ -1187,6 +1187,40 @@ const springPuppies = allPuppies
   }
 
   /* ─── RESPONSIVE ────────────────────────────────────────────── */
+
+  /* puppy carousel: 3 cards visible on desktop */
+  @media (min-width: 1024px) {
+    .puppies-carousel-wrap .puppy-card {
+      width: calc((100% - 40px) / 3);
+      min-width: 0;
+      max-width: none;
+    }
+  }
+  /* puppy carousel: 2 cards visible on tablet */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .puppies-carousel-wrap .puppy-card {
+      width: calc((100% - 20px) / 2);
+      min-width: 0;
+      max-width: none;
+    }
+  }
+  /* puppy carousel: vertical stack on mobile */
+  @media (max-width: 767px) {
+    .puppies-carousel-wrap .s-scroll {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+    .puppies-carousel-wrap .puppy-card {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      flex-shrink: 1;
+      scroll-snap-align: none;
+    }
+    .puppies-carousel-wrap .carousel-btn { display: none !important; }
+  }
+
   @media (max-width: 900px) {
     .s-program-grid   { grid-template-columns: 1fr 1fr; }
     .s-about-inner    { grid-template-columns: 1fr; }
