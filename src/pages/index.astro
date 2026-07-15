@@ -25,8 +25,7 @@ const springPuppies = allPuppies
         <h1>Raised in Loving Homes. Ready for Yours.</h1>
         <p class="hero-copy">Every litter comes from fully health-tested parents and grows up surrounded by family, before going to yours.</p>
         <div class="hero-actions">
-          <a href="/puppies" class="btn btn-primary">See available puppies</a>
-          <a href="/our-dogs" class="btn btn-secondary">Meet the parents</a>
+          <a href="#puppies" class="btn btn-primary">See available puppies</a>
         </div>
       </div>
       <div class="hero-photo-frame">
@@ -46,7 +45,7 @@ const springPuppies = allPuppies
   </section>
 
   <!-- ① PUPPIES: horizontal scroll carousel -->
-  <section class="s-puppies">
+  <section class="s-puppies" id="puppies">
     <div class="container s-puppies-hd">
       <p class="eyebrow">Available Puppies</p>
       <h2 class="puppies-heading">Meet Our Lilo &amp; Stitch May Litter</h2>
@@ -449,13 +448,12 @@ const springPuppies = allPuppies
   .hero-section h1 { color: var(--color-card); }
   .hero-section .hero-copy { color: rgba(237,227,208,0.75); }
   .hero-section .btn-primary {
-    background: var(--color-card);
-    color: var(--color-pine);
+    background: var(--color-brass);
+    color: var(--color-charcoal);
     border-color: transparent;
   }
-  .hero-section .btn-secondary {
-    color: var(--color-card);
-    border-color: var(--color-card);
+  .hero-section .btn-primary:hover {
+    filter: brightness(0.9);
   }
   .hero-grid {
     display: grid;
