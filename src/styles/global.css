@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:wght@400;600;700&display=swap');
 
 :root {
-  --color-sage: #DCE5DB;
+  --color-charcoal-bg: #2A2E35;
+  --color-cream-d: #F7F2E7;
   --color-white: #FDFCF9;
   --color-pine: #22344A;
-  --color-clay: #B5714E;
+  --color-brass: #B08D57;
   --color-charcoal: #2C2A24;
   --color-muted: #6B6558;
   --color-card: #EDE3D0;
-  --color-border: #C7D4C5;
+  --color-border-dark: rgba(255, 255, 255, 0.14);
+  --color-border-light: rgba(0, 0, 0, 0.10);
 
   --color-calm-blue: #5B8DBE;
   --color-focus-green: #6FAE7F;
@@ -18,9 +20,9 @@
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Nunito Sans', Arial, sans-serif;
 
-  --space-eyebrow-gap: 12px;  /* eyebrow → heading */
-  --space-heading-gap: 10px;  /* heading → body/subtext */
-  --space-cta-gap: 14px;      /* body/subtext → CTA text link */
+  --space-eyebrow-gap: 12px;
+  --space-heading-gap: 10px;
+  --space-cta-gap: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -28,7 +30,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--color-sage);
+  background: var(--color-charcoal-bg);
   color: var(--color-charcoal);
   font-family: var(--font-body);
   line-height: 1.6;
@@ -57,7 +59,7 @@ a { color: var(--color-pine); }
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-clay);
+  color: var(--color-brass);
   font-weight: 700;
   margin-bottom: var(--space-eyebrow-gap);
 }
@@ -76,7 +78,7 @@ a { color: var(--color-pine); }
 
 .btn-primary {
   background: var(--color-pine);
-  color: var(--color-sage);
+  color: var(--color-card);
 }
 
 .btn-secondary {
@@ -93,7 +95,7 @@ a { color: var(--color-pine); }
 
 .trust-strip {
   background: var(--color-pine);
-  color: var(--color-sage);
+  color: var(--color-card);
   padding: 20px 0;
 }
 
@@ -106,9 +108,9 @@ a { color: var(--color-pine); }
 }
 
 .page-hero {
-  background: var(--color-sage);
+  background: var(--color-charcoal-bg);
   padding: 64px 0 48px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-dark);
 }
 
 .page-intro {
