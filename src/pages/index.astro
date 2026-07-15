@@ -19,12 +19,6 @@ const springPuppies = allPuppies
   </svg>
 
   <section class="hero-section">
-    <div class="hero-bg" aria-hidden="true">
-      <div class="bg-blob bb-mustard-tr"></div>
-      <div class="bg-blob bb-pine-bl"></div>
-      <div class="bg-blob bb-green-tl"></div>
-      <div class="bg-blob bb-red-br"></div>
-    </div>
     <div class="container hero-grid">
       <div class="hero-text">
         <p class="eyebrow">Australian Labradoodles</p>
@@ -65,7 +59,7 @@ const springPuppies = allPuppies
       </button>
       <div class="s-scroll" id="puppy-scroll">
         {springPuppies.map((p) => (
-          <div class="puppy-card">
+          <div class="puppy-card" data-status={p.data.status}>
             <div class="puppy-card-photo">
               <img src={p.data.photo} alt={p.data.name} loading="lazy" />
             </div>
@@ -122,14 +116,16 @@ const springPuppies = allPuppies
     <div class="container s-section-header">
       <p class="eyebrow">Our Program</p>
       <h2>The PuppyQ Developmental Framework</h2>
-      <p class="s-program-intro">Every Adams Farm litter moves through four structured developmental phases before and after going home — grounded in evidence-based practice, not guesswork.</p>
+      <p class="s-program-intro">PuppyQ &mdash; Q for Quotient &mdash; is a structured, evidence-based approach to raising puppies from birth through their first year of life. Adams Farm raises every litter using the PuppyQ framework. Temperament and resilience aren&rsquo;t left to chance: every litter follows four defined stages, each building on the one before it, so puppies arrive genuinely ready for real family life.</p>
     </div>
     <div class="container s-program-grid">
       <div class="prog-card prog-card-green" tabindex="0">
         <div class="prog-card-inner">
           <div class="prog-face prog-face-front">
-            <p class="prog-phase"><span class="prog-badge">1</span>Phase 1 · Days 3–16</p>
-            <h3 class="prog-title">Neurological Development</h3>
+            <p class="prog-phase"><span class="prog-badge">1</span>Stage 1</p>
+            <p class="prog-timeframe">Days 3–16</p>
+            <h3 class="prog-title">Neurological Q</h3>
+            <p class="prog-front-body">Building early resilience.</p>
           </div>
           <div class="prog-face prog-face-back">
             <p class="prog-back-body">The foundation stage. Before the fear response develops, we use Early Neurological Stimulation and early scent introduction to build the raw hardware for resilience and focus.</p>
@@ -139,8 +135,10 @@ const springPuppies = allPuppies
       <div class="prog-card prog-card-blue" tabindex="0">
         <div class="prog-card-inner">
           <div class="prog-face prog-face-front">
-            <p class="prog-phase"><span class="prog-badge">2</span>Phase 2 · Weeks 3–6</p>
-            <h3 class="prog-title">Emotional Resilience</h3>
+            <p class="prog-phase"><span class="prog-badge">2</span>Stage 2</p>
+            <p class="prog-timeframe">Weeks 3–6</p>
+            <h3 class="prog-title">Emotional Q</h3>
+            <p class="prog-front-body">Learning calm and regulation.</p>
           </div>
           <div class="prog-face prog-face-back">
             <p class="prog-back-body">As the socialization window opens and weaning begins, puppies learn emotional regulation through safe outings, startle-and-recovery exercises, and guided frustration tolerance as they separate from mom.</p>
@@ -150,8 +148,10 @@ const springPuppies = allPuppies
       <div class="prog-card prog-card-yellow" tabindex="0">
         <div class="prog-card-inner">
           <div class="prog-face prog-face-front">
-            <p class="prog-phase"><span class="prog-badge">3</span>Phase 3 · Weeks 6–9</p>
-            <h3 class="prog-title">Early Socialization</h3>
+            <p class="prog-phase"><span class="prog-badge">3</span>Stage 3</p>
+            <p class="prog-timeframe">Weeks 6–9</p>
+            <h3 class="prog-title">Social Q</h3>
+            <p class="prog-front-body">Meeting the world, by design.</p>
           </div>
           <div class="prog-face prog-face-back">
             <p class="prog-back-body">Focus shifts outward. Puppies work toward Dr. Ian Dunbar&rsquo;s &ldquo;100 in 12&rdquo; benchmark, typically hitting it by 9 weeks, while learning foundational manners, crate conditioning, and an informal Week 7 snapshot.</p>
@@ -161,14 +161,33 @@ const springPuppies = allPuppies
       <div class="prog-card prog-card-red" tabindex="0">
         <div class="prog-card-inner">
           <div class="prog-face prog-face-front">
-            <p class="prog-phase"><span class="prog-badge">4</span>Phase 4 · Weeks 9–12</p>
-            <h3 class="prog-title">Peak Socialization</h3>
+            <p class="prog-phase"><span class="prog-badge">4</span>Stage 4</p>
+            <p class="prog-timeframe">Months 2–12</p>
+            <h3 class="prog-title">Individual Q</h3>
+            <p class="prog-front-body">Finished by your family.</p>
           </div>
           <div class="prog-face prog-face-back">
-            <p class="prog-back-body">The puppy moves to their forever home and separates from littermates &mdash; a major transition alongside real-world exposure, bite inhibition, and new routines, tracked through logs and crate success.</p>
+            <p class="prog-back-body">The transition from puppy to adult. Started at Adams Farm and continued at home, this stage covers the real-world exposure, routines, and independence-building that shape who your dog becomes.</p>
           </div>
         </div>
       </div>
+    </div>
+    <div class="container s-program-timeline">
+      <svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:900px; height:auto; display:block; margin:2rem auto 0;">
+        <line x1="125" y1="110" x2="875" y2="110" stroke="var(--color-border)" stroke-width="3"/>
+        <circle cx="125" cy="110" r="34" fill="var(--color-focus-green)"/>
+        <circle cx="375" cy="110" r="34" fill="var(--color-calm-blue)"/>
+        <circle cx="625" cy="110" r="34" fill="var(--color-excite-yellow)"/>
+        <circle cx="875" cy="110" r="34" fill="var(--color-feelings-red)"/>
+        <text x="125" y="117" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">1</text>
+        <text x="375" y="117" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">2</text>
+        <text x="625" y="117" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">3</text>
+        <text x="875" y="117" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">4</text>
+        <text x="125" y="170" text-anchor="middle" fill="var(--color-charcoal)" font-size="15" font-weight="600">Days 3–16</text>
+        <text x="375" y="170" text-anchor="middle" fill="var(--color-charcoal)" font-size="15" font-weight="600">Weeks 3–6</text>
+        <text x="625" y="170" text-anchor="middle" fill="var(--color-charcoal)" font-size="15" font-weight="600">Weeks 6–9</text>
+        <text x="875" y="170" text-anchor="middle" fill="var(--color-charcoal)" font-size="15" font-weight="600">Months 2–12</text>
+      </svg>
     </div>
   </section>
 
@@ -224,36 +243,11 @@ const springPuppies = allPuppies
             <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
-            <h3 class="trust-card-heading">Puppy Therapy&trade; Certified</h3>
-            <p class="trust-card-body">Every puppy meets and exceeds the Rule of Sevens socialization standard during the critical 3&ndash;12 week window.</p>
+            <h3 class="trust-card-heading">Raised in Loving Homes</h3>
+            <p class="trust-card-body">Every dog in our program lives with us or with a trusted guardian family &mdash; never in a kennel.</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ④ TESTIMONIALS: featured + 2-col grid -->
-  <section class="s-testimonials section">
-    <div class="container s-section-header">
-      <p class="eyebrow">Testimonials</p>
-      <h2>Loved by Families</h2>
-    </div>
-    <div class="container s-testimonials-grid">
-      <div class="t-card t-card-featured">
-        <blockquote class="t-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle from Adam&rsquo;s Farm Labradoodles. Paisley is such a happy girl. She draws attention from people everywhere she goes. She adjusted seamlessly to our home, our routines, and older dog. From the beginning she showed good manners, confidence, and a loving temperament.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Deirdre</p>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">&ldquo;An amazing family operated company. We love our dog, Samson, more than words can describe. He is calm and loving &mdash; we can tell he was born into an environment of care. Doug &amp; Erika are awesome and provided us with all the information we needed as soon as we bought Samson.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Imani-Grace</p>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">&ldquo;We had just moved to the U.S. from Japan, and never expected to meet such a kind and wonderful breeder family so soon. It truly felt like fate. Thanks to Adams Farm, not only did we meet amazing people, but we also welcomed a new, loving member into our family.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Serina</p>
-      </div>
-    </div>
-    <div class="container s-testimonials-cta">
-      <a href="https://share.google/FmRRIkSGouEi3RIFT" target="_blank" rel="noopener noreferrer" class="trust-program-link">Read more reviews on Google &rarr;</a>
     </div>
   </section>
 
@@ -290,6 +284,31 @@ const springPuppies = allPuppies
     </div>
   </section>
 
+  <!-- ④ TESTIMONIALS: featured + 2-col grid -->
+  <section class="s-testimonials section">
+    <div class="container s-section-header">
+      <p class="eyebrow">Testimonials</p>
+      <h2>Loved by Families</h2>
+    </div>
+    <div class="container s-testimonials-grid">
+      <div class="t-card t-card-featured">
+        <blockquote class="t-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle from Adam&rsquo;s Farm Labradoodles. Paisley is such a happy girl. She draws attention from people everywhere she goes. She adjusted seamlessly to our home, our routines, and older dog. From the beginning she showed good manners, confidence, and a loving temperament.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Deirdre</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;An amazing family operated company. We love our dog, Samson, more than words can describe. He is calm and loving &mdash; we can tell he was born into an environment of care. Doug &amp; Erika are awesome and provided us with all the information we needed as soon as we bought Samson.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Imani-Grace</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;We had just moved to the U.S. from Japan, and never expected to meet such a kind and wonderful breeder family so soon. It truly felt like fate. Thanks to Adams Farm, not only did we meet amazing people, but we also welcomed a new, loving member into our family.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Serina</p>
+      </div>
+    </div>
+    <div class="container s-testimonials-cta">
+      <a href="https://share.google/FmRRIkSGouEi3RIFT" target="_blank" rel="noopener noreferrer" class="trust-program-link">Read more reviews on Google &rarr;</a>
+    </div>
+  </section>
+
   <!-- ⑥ BREAK SECTION: centered full-width quote -->
   <section class="s-break">
     <div class="container s-break-inner">
@@ -323,47 +342,36 @@ const springPuppies = allPuppies
     </div>
   </section>
 
-  <!-- ⑧ CREDENTIALS & PARTNERS: scrollable badge carousel -->
+  <!-- ⑧ CREDENTIALS & PARTNERS: static grid -->
   <section class="s-creds">
-    <div class="container">
-      <div class="creds-track-wrap">
-        <button class="carousel-btn carousel-btn-prev" id="creds-prev" aria-label="Scroll left">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <div class="s-scroll" id="creds-scroll">
-          <img src="/images/credentials/akc-reunite-badge.png" alt="AKC Reunite" class="creds-logo" />
-          <img src="/images/credentials/baxter-bella.png" alt="Baxter &amp; Bella" class="creds-logo" />
-          <img src="/images/credentials/Adams-Farm-Gold-Paw-Badge-2026.png" alt="ALAA Gold Paw Breeder 2026–2027" class="creds-logo" />
-          <img src="/images/credentials/trupanion-badge.png" alt="Trupanion" class="creds-logo" />
-          <img src="/images/credentials/badass-breeder.png" alt="Badass Breeder" class="creds-logo" />
-          <img src="/images/credentials/revival-animal-health-badge.png" alt="Revival Animal Health" class="creds-logo" />
-        </div>
-        <button class="carousel-btn carousel-btn-next" id="creds-next" aria-label="Scroll right">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
+    <div class="container s-section-header">
+      <p class="eyebrow">Trusted Partners</p>
+      <h2>Credentials &amp; Partners</h2>
+      <p class="creds-desc">Every Adams Farm puppy is backed by real accreditation and real partnerships &mdash; not just claims. From health testing standards to lifetime microchip registration to the nutrition your puppy grows up on, here&rsquo;s who stands behind our program.</p>
+    </div>
+    <div class="container creds-grid">
+      <div class="creds-card">
+        <img src="/images/credentials/sq-gold-paw.png" alt="ALAA Gold Paw Breeder 2026–2027" class="creds-logo" />
+        <p class="creds-caption"></p>
+      </div>
+      <div class="creds-card">
+        <img src="/images/credentials/sq-akc-reunite.png" alt="AKC Reunite" class="creds-logo" />
+        <p class="creds-caption"></p>
+      </div>
+      <div class="creds-card">
+        <img src="/images/credentials/sq-trupanion.png" alt="Trupanion" class="creds-logo" />
+        <p class="creds-caption"></p>
+      </div>
+      <div class="creds-card">
+        <img src="/images/credentials/sq-purina.png" alt="Purina Pro Club" class="creds-logo" />
+        <p class="creds-caption"></p>
+      </div>
+      <div class="creds-card">
+        <img src="/images/credentials/sq-puppyq.png" alt="PuppyQ" class="creds-logo" />
+        <p class="creds-caption"></p>
       </div>
     </div>
   </section>
-
-  <script>
-    const credsTrack = document.getElementById('creds-scroll') as HTMLElement | null;
-    const credsPrev  = document.getElementById('creds-prev')   as HTMLButtonElement | null;
-    const credsNext  = document.getElementById('creds-next')   as HTMLButtonElement | null;
-
-    function updateCredsArrows() {
-      if (!credsTrack || !credsPrev || !credsNext) return;
-      credsPrev.style.display = credsTrack.scrollLeft <= 1 ? 'none' : 'flex';
-      credsNext.style.display = credsTrack.scrollLeft + credsTrack.clientWidth >= credsTrack.scrollWidth - 1 ? 'none' : 'flex';
-    }
-    function credsStep() {
-      const logo = credsTrack?.querySelector('.creds-logo') as HTMLElement | null;
-      return logo ? logo.offsetWidth + 20 : 220;
-    }
-    credsPrev?.addEventListener('click', () => { credsTrack?.scrollBy({ left: -credsStep(), behavior: 'smooth' }); });
-    credsNext?.addEventListener('click', () => { credsTrack?.scrollBy({ left:  credsStep(), behavior: 'smooth' }); });
-    credsTrack?.addEventListener('scroll', updateCredsArrows, { passive: true });
-    requestAnimationFrame(updateCredsArrows);
-  </script>
 
   <!-- ⑩ FAQ -->
   <section class="s-faq section">
@@ -404,8 +412,8 @@ const springPuppies = allPuppies
   <!-- ⑪ FOREVER FAMILIES: 7-photo mosaic grid -->
   <section class="s-families">
     <div class="container s-section-header s-section-header-light">
-      <p class="eyebrow" style="color: rgba(247,242,231,0.65);">Forever Families</p>
-      <h2 style="color: var(--color-cream);">Join the Adams Farm Forever Family</h2>
+      <p class="eyebrow" style="color: rgba(220,229,219,0.65);">Forever Families</p>
+      <h2 style="color: var(--color-sage);">Join the Adams Farm Forever Family</h2>
     </div>
     <div class="s-families-grid">
       <img src="/images/families/355x328.png"  alt="Adams Farm forever family with their puppy" class="families-photo" loading="lazy" />
@@ -431,57 +439,25 @@ const springPuppies = allPuppies
 </Layout>
 
 <style>
-  /* ─── HERO (unchanged) ──────────────────────────────────────── */
+  /* ─── HERO ──────────────────────────────────────────────────── */
   .hero-section {
     position: relative;
     padding: 72px 0 88px;
+    background: var(--color-pine);
   }
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
+  .hero-section .eyebrow { color: rgba(220,229,219,0.7); }
+  .hero-section h1 { color: var(--color-sage); }
+  .hero-section .hero-copy { color: rgba(220,229,219,0.75); }
+  .hero-section .btn-primary {
+    background: var(--color-sage);
+    color: var(--color-pine);
+    border-color: transparent;
   }
-  .bg-blob {
-    position: absolute;
-    border-radius: 50%;
-  }
-  .bb-mustard-tr {
-    width: 560px;
-    height: 560px;
-    background: var(--color-excite-yellow);
-    opacity: 0.18;
-    top: -60px;
-    right: -60px;
-  }
-  .bb-pine-bl {
-    width: 380px;
-    height: 380px;
-    background: var(--color-calm-blue);
-    opacity: 0.18;
-    bottom: 20px;
-    left: 20px;
-  }
-  .bb-green-tl {
-    width: 320px;
-    height: 320px;
-    background: var(--color-focus-green);
-    opacity: 0.18;
-    top: -60px;
-    left: -60px;
-  }
-  .bb-red-br {
-    width: 300px;
-    height: 300px;
-    background: var(--color-feelings-red);
-    opacity: 0.18;
-    bottom: -30px;
-    right: -40px;
+  .hero-section .btn-secondary {
+    color: var(--color-sage);
+    border-color: var(--color-sage);
   }
   .hero-grid {
-    position: relative;
-    z-index: 1;
     display: grid;
     grid-template-columns: 0.96fr 1.04fr;
     gap: 56px;
@@ -583,7 +559,7 @@ const springPuppies = allPuppies
     font-weight: 700;
     color: var(--color-pine);
     text-decoration: none;
-    border-bottom: 1.5px solid var(--color-mustard);
+    border-bottom: 1.5px solid var(--color-clay);
     padding-bottom: 2px;
   }
   .puppies-cta {
@@ -612,7 +588,7 @@ const springPuppies = allPuppies
     transition: box-shadow 0.15s, background 0.15s;
   }
   .carousel-btn:hover {
-    background: var(--color-cream);
+    background: var(--color-sage);
     box-shadow: 0 4px 18px rgba(0,0,0,0.14);
   }
   .carousel-btn-prev { left: -22px; }
@@ -631,7 +607,7 @@ const springPuppies = allPuppies
   .s-scroll::-webkit-scrollbar-thumb { background: var(--color-pine); border-radius: 2px; }
 
   .puppy-card {
-    background: var(--color-cream);
+    background: var(--color-sage);
     border-radius: 12px;
     overflow: hidden;
     min-width: 220px;
@@ -702,9 +678,10 @@ const springPuppies = allPuppies
 
   /* ─── PROGRAM SECTION ──────────────────────────────────────── */
   .s-program {
-    background: var(--color-white);
+    background: var(--color-sage);
     border-top: 1px solid var(--color-border);
   }
+  .s-program-timeline text { font-family: var(--font-body); }
   .s-program-intro {
     color: var(--color-muted);
     font-size: 1rem;
@@ -759,7 +736,7 @@ const springPuppies = allPuppies
     box-shadow: 0 2px 16px rgba(0,0,0,0.07);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
   .prog-card-green  .prog-face-front { border-top: 4px solid var(--color-focus-green); }
   .prog-card-blue   .prog-face-front { border-top: 4px solid var(--color-calm-blue); }
@@ -826,6 +803,19 @@ const springPuppies = allPuppies
     line-height: 1.3;
     margin: 0;
   }
+  .prog-timeframe {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .prog-front-body {
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
   /* reduced motion: crossfade instead of rotate */
   @media (prefers-reduced-motion: reduce) {
     .prog-card-inner { transform: none !important; transition: none; }
@@ -841,7 +831,7 @@ const springPuppies = allPuppies
   }
 
   /* ─── ② ABOUT ADAMS FARM ────────────────────────────────────── */
-  .s-about { background: var(--color-cream); }
+  .s-about { background: var(--color-white); }
   .s-about-inner {
     display: grid;
     grid-template-columns: 2.5fr 3fr;
@@ -888,7 +878,7 @@ const springPuppies = allPuppies
     box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   }
   .trust-icon {
-    color: var(--color-mustard);
+    color: var(--color-clay);
     display: block;
     margin-bottom: 14px;
   }
@@ -911,7 +901,7 @@ const springPuppies = allPuppies
   }
 
   /* ─── ④ TESTIMONIALS ────────────────────────────────────────── */
-  .s-testimonials { background: var(--color-white); }
+  .s-testimonials { background: var(--color-sage); }
   /* wider than --space-cta-gap: this link follows a card grid, not inline text */
   .s-testimonials-cta { margin-top: 28px; }
   .s-testimonials-grid {
@@ -920,7 +910,7 @@ const springPuppies = allPuppies
     gap: 20px;
   }
   .t-card {
-    background: var(--color-cream);
+    background: var(--color-white);
     border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 32px;
@@ -952,7 +942,7 @@ const springPuppies = allPuppies
     font-family: var(--font-display);
     font-style: italic;
     font-size: clamp(1.5rem, 3vw, 2.1rem);
-    color: var(--color-cream);
+    color: var(--color-sage);
     line-height: 1.55;
   }
   .break-cite {
@@ -961,7 +951,7 @@ const springPuppies = allPuppies
     font-family: var(--font-body);
     font-size: 0.8rem;
     letter-spacing: 0.06em;
-    color: rgba(247,242,231,0.55);
+    color: rgba(220,229,219,0.55);
     margin-top: 20px;
   }
   @media (max-width: 600px) {
@@ -969,7 +959,7 @@ const springPuppies = allPuppies
   }
 
   /* ─── ⑤ WHY AUSTRALIAN LABRADOODLE ─────────────────────────── */
-  .s-why { background: var(--color-cream); }
+  .s-why { background: var(--color-white); }
   .s-why-inner {
     display: grid;
     grid-template-columns: 3fr 2.5fr;
@@ -1003,7 +993,7 @@ const springPuppies = allPuppies
   }
 
   /* ─── ⑦ OUR STORY ───────────────────────────────────────────── */
-  .s-story { background: var(--color-cream); }
+  .s-story { background: var(--color-white); }
   .s-story-inner {
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -1035,7 +1025,7 @@ const springPuppies = allPuppies
   .s-story-pullquote {
     margin: 0;
     padding: 20px 24px;
-    border-left: 3px solid var(--color-mustard);
+    border-left: 3px solid var(--color-clay);
     font-family: var(--font-display);
     font-style: italic;
     font-size: 1.1rem;
@@ -1055,22 +1045,51 @@ const springPuppies = allPuppies
   .s-section-header { padding: 0 24px; }
 
   /* ─── ⑧ CREDENTIALS & PARTNERS ─────────────────────────────── */
+  .creds-desc {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.72;
+    max-width: 680px;
+    margin: 0;
+  }
   .s-creds {
-    padding: 56px 0;
-    background: var(--color-white);
+    padding: 72px 0;
+    background: var(--color-sage);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
   }
-  /* 4 logos × 200px + 3 gaps × 20px = 860px — no partial 5th visible */
-  .creds-track-wrap {
-    position: relative;
-    max-width: 860px;
-    margin: 0 auto;
+  .creds-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 40px;
   }
-  .creds-logo { width: 200px; height: 200px; object-fit: contain; flex-shrink: 0; scroll-snap-align: start; }
+  .creds-card {
+    background: var(--color-pine);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .creds-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .creds-caption {
+    font-size: 0.825rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
 
   /* ─── ⑩ FAQ ─────────────────────────────────────────────────── */
-  .s-faq { background: var(--color-cream); }
+  .s-faq { background: var(--color-white); }
   .s-faq-list { display: flex; flex-direction: column; gap: 8px; }
   .faq-item {
     background: var(--color-white);
@@ -1096,7 +1115,7 @@ const springPuppies = allPuppies
     content: '+';
     font-size: 1.4rem;
     font-weight: 300;
-    color: var(--color-mustard);
+    color: var(--color-clay);
     flex-shrink: 0;
     transition: transform 0.2s ease;
   }
@@ -1121,9 +1140,9 @@ const springPuppies = allPuppies
   .s-section-header-light { margin-bottom: 32px; }
   .ph-label-dark {
     min-height: 44px;
-    background: rgba(247,242,231,0.07);
-    border-color: rgba(247,242,231,0.2);
-    color: rgba(247,242,231,0.55);
+    background: rgba(220,229,219,0.07);
+    border-color: rgba(220,229,219,0.2);
+    color: rgba(220,229,219,0.55);
   }
   .s-families-grid {
     display: grid;
@@ -1151,7 +1170,7 @@ const springPuppies = allPuppies
 
   /* ─── ⑫ APPLY NOW ───────────────────────────────────────────── */
   .s-apply {
-    background: var(--color-mustard);
+    background: var(--color-clay);
     padding: 80px 0;
   }
   .s-apply-inner {
@@ -1161,22 +1180,22 @@ const springPuppies = allPuppies
     text-align: center;
   }
   .s-apply-eyebrow {
-    color: rgba(247,242,231,0.65);
+    color: rgba(220,229,219,0.65);
     margin-bottom: var(--space-eyebrow-gap);
   }
   .s-apply-heading {
-    color: var(--color-cream);
+    color: var(--color-sage);
     margin-bottom: 16px;
   }
   .s-apply-body {
-    color: rgba(247,242,231,0.85);
+    color: rgba(220,229,219,0.85);
     max-width: 520px;
     margin: 0 0 36px;
     font-size: 1rem;
     line-height: 1.6;
   }
   .s-apply-btn {
-    background: var(--color-cream);
+    background: var(--color-sage);
     color: var(--color-pine);
     border-color: transparent;
     padding: 14px 36px;
@@ -1219,10 +1238,12 @@ const springPuppies = allPuppies
       scroll-snap-align: none;
     }
     .puppies-carousel-wrap .carousel-btn { display: none !important; }
+    .puppy-card:not([data-status="available"]) { display: none; }
   }
 
   @media (max-width: 900px) {
     .s-program-grid   { grid-template-columns: 1fr 1fr; }
+    .creds-grid       { grid-template-columns: repeat(3, 1fr); }
     .s-about-inner    { grid-template-columns: 1fr; }
     .s-why-inner      { grid-template-columns: 1fr; }
     .s-why-badge      { max-width: 180px; margin: 0; }
@@ -1246,6 +1267,7 @@ const springPuppies = allPuppies
     .hero-photo-frame { max-width: 360px; margin: 0 auto; }
     .hero-testimonial { left: 8px; max-width: calc(100% - 16px); }
     .s-program-grid   { grid-template-columns: 1fr; }
+    .creds-grid       { grid-template-columns: repeat(2, 1fr); }
     .trust-grid { grid-template-columns: 1fr; }
     .s-why-cards { grid-template-columns: 1fr; }
     .s-testimonials-grid { grid-template-columns: 1fr; }

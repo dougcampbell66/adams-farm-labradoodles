@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:wght@400;600;700&display=swap');
 
 :root {
-  --color-cream: #F7F2E7;
+  --color-sage: #DCE5DB;
   --color-white: #FDFCF9;
   --color-pine: #22344A;
-  --color-mustard: #A85C32;
-  --color-brick: #A85C32;
+  --color-clay: #B5714E;
   --color-charcoal: #2C2A24;
   --color-muted: #6B6558;
   --color-card: #EDE3D0;
-  --color-border: #E2DAC7;
+  --color-border: #C7D4C5;
 
   --color-calm-blue: #5B8DBE;
   --color-focus-green: #6FAE7F;
@@ -29,7 +28,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--color-cream);
+  background: var(--color-sage);
   color: var(--color-charcoal);
   font-family: var(--font-body);
   line-height: 1.6;
@@ -58,7 +57,7 @@ a { color: var(--color-pine); }
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-mustard);
+  color: var(--color-clay);
   font-weight: 700;
   margin-bottom: var(--space-eyebrow-gap);
 }
@@ -77,7 +76,7 @@ a { color: var(--color-pine); }
 
 .btn-primary {
   background: var(--color-pine);
-  color: var(--color-cream);
+  color: var(--color-sage);
 }
 
 .btn-secondary {
@@ -94,7 +93,7 @@ a { color: var(--color-pine); }
 
 .trust-strip {
   background: var(--color-pine);
-  color: var(--color-cream);
+  color: var(--color-sage);
   padding: 20px 0;
 }
 
@@ -107,7 +106,7 @@ a { color: var(--color-pine); }
 }
 
 .page-hero {
-  background: var(--color-cream);
+  background: var(--color-sage);
   padding: 64px 0 48px;
   border-bottom: 1px solid var(--color-border);
 }
