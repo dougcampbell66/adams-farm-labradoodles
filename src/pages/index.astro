@@ -36,10 +36,6 @@ const springPuppies = allPuppies
             class="hero-photo-img"
           />
         </div>
-        <div class="hero-testimonial">
-          <p class="ht-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle.&rdquo;</p>
-          <p class="ht-attr">&mdash; Deirdre</p>
-        </div>
       </div>
     </div>
   </section>
@@ -114,8 +110,8 @@ const springPuppies = allPuppies
   <section class="s-program section">
     <div class="container s-section-header">
       <p class="eyebrow">Our Program</p>
-      <h2>The PuppyQ Developmental Framework</h2>
-      <p class="s-program-intro">PuppyQ &mdash; Q for Quotient &mdash; is a structured, evidence-based approach to raising puppies from birth through their first year of life. Adams Farm raises every litter using the PuppyQ framework. Temperament and resilience aren&rsquo;t left to chance: every litter follows four defined stages, each building on the one before it, so puppies arrive genuinely ready for real family life.</p>
+      <h2>PuppyQ Raised and Certified</h2>
+      <p class="s-program-intro">PuppyQ is an evidence-based framework for raising calm, confident, and resilient puppies.<br />Q stands for Quotient, marking four stages of development from birth to one year old. Adams Farm raises each puppy with intention and tracks benchmarks in the PuppyQ framework. Every puppy goes home with its PuppyQ Certification, Scorecard, and History.</p>
     </div>
     <div class="container s-program-grid">
       <div class="prog-card prog-card-green" tabindex="0">
@@ -250,6 +246,31 @@ const springPuppies = allPuppies
     </div>
   </section>
 
+  <!-- ④ TESTIMONIALS: featured + 2-col grid -->
+  <section class="s-testimonials section">
+    <div class="container s-section-header">
+      <p class="eyebrow">Testimonials</p>
+      <h2>Loved by Families</h2>
+    </div>
+    <div class="container s-testimonials-grid">
+      <div class="t-card t-card-featured">
+        <blockquote class="t-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle from Adam&rsquo;s Farm Labradoodles. Paisley is such a happy girl. She draws attention from people everywhere she goes. She adjusted seamlessly to our home, our routines, and older dog. From the beginning she showed good manners, confidence, and a loving temperament.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Deirdre</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;An amazing family operated company. We love our dog, Samson, more than words can describe. He is calm and loving &mdash; we can tell he was born into an environment of care. Doug &amp; Erika are awesome and provided us with all the information we needed as soon as we bought Samson.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Imani-Grace</p>
+      </div>
+      <div class="t-card">
+        <blockquote class="t-quote">&ldquo;We had just moved to the U.S. from Japan, and never expected to meet such a kind and wonderful breeder family so soon. It truly felt like fate. Thanks to Adams Farm, not only did we meet amazing people, but we also welcomed a new, loving member into our family.&rdquo;</blockquote>
+        <p class="t-attr">&mdash; Serina</p>
+      </div>
+    </div>
+    <div class="container s-testimonials-cta">
+      <a href="https://share.google/FmRRIkSGouEi3RIFT" target="_blank" rel="noopener noreferrer" class="trust-program-link">Read more reviews on Google &rarr;</a>
+    </div>
+  </section>
+
   <!-- ⑤ WHY AUSTRALIAN LABRADOODLE -->
   <section class="s-why section">
     <div class="container s-why-inner">
@@ -280,31 +301,6 @@ const springPuppies = allPuppies
     </div>
     <div class="container s-why-cta">
       <a href="https://alaa-labradoodles.com/for-breeders/breed-standard/" target="_blank" rel="noopener noreferrer" class="trust-program-link">Learn more from ALAA &rarr;</a>
-    </div>
-  </section>
-
-  <!-- ④ TESTIMONIALS: featured + 2-col grid -->
-  <section class="s-testimonials section">
-    <div class="container s-section-header">
-      <p class="eyebrow">Testimonials</p>
-      <h2>Loved by Families</h2>
-    </div>
-    <div class="container s-testimonials-grid">
-      <div class="t-card t-card-featured">
-        <blockquote class="t-quote">&ldquo;We are smitten with our bright &amp; adorable Australian Labradoodle from Adam&rsquo;s Farm Labradoodles. Paisley is such a happy girl. She draws attention from people everywhere she goes. She adjusted seamlessly to our home, our routines, and older dog. From the beginning she showed good manners, confidence, and a loving temperament.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Deirdre</p>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">&ldquo;An amazing family operated company. We love our dog, Samson, more than words can describe. He is calm and loving &mdash; we can tell he was born into an environment of care. Doug &amp; Erika are awesome and provided us with all the information we needed as soon as we bought Samson.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Imani-Grace</p>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">&ldquo;We had just moved to the U.S. from Japan, and never expected to meet such a kind and wonderful breeder family so soon. It truly felt like fate. Thanks to Adams Farm, not only did we meet amazing people, but we also welcomed a new, loving member into our family.&rdquo;</blockquote>
-        <p class="t-attr">&mdash; Serina</p>
-      </div>
-    </div>
-    <div class="container s-testimonials-cta">
-      <a href="https://share.google/FmRRIkSGouEi3RIFT" target="_blank" rel="noopener noreferrer" class="trust-program-link">Read more reviews on Google &rarr;</a>
     </div>
   </section>
 
@@ -474,7 +470,7 @@ const springPuppies = allPuppies
     line-height: 1.7;
   }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-  .hero-photo-frame { position: relative; padding-bottom: 32px; }
+  .hero-photo-frame { position: relative; }
   .hero-photo-masked {
     position: relative;
     z-index: 1;
@@ -489,25 +485,6 @@ const springPuppies = allPuppies
     object-position: center 15%;
     display: block;
   }
-  .hero-testimonial {
-    position: absolute;
-    bottom: 0; left: 20px;
-    max-width: 320px;
-    background: var(--color-white);
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 6px 28px rgba(0,0,0,0.12);
-    z-index: 2;
-  }
-  .ht-quote {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 0.88rem;
-    color: var(--color-pine);
-    margin: 0 0 6px;
-    line-height: 1.45;
-  }
-  .ht-attr { font-size: 0.72rem; color: var(--color-muted); margin: 0; }
 
   /* ─── PLACEHOLDER BASE ──────────────────────────────────────── */
   .ph {
@@ -534,6 +511,8 @@ const springPuppies = allPuppies
   .ph-tall   { min-height: 360px; }
   .ph-block  { min-height: 180px; }
   .ph-pullquote { min-height: 90px; }
+
+  .s-puppies h2, .s-about h2, .s-why h2, .s-faq h2 { color: var(--color-pine); }
 
   /* ─── ① PUPPIES ─────────────────────────────────────────────── */
   .s-puppies {
@@ -997,11 +976,8 @@ const springPuppies = allPuppies
   }
 
   /* ─── ⑦ OUR STORY ───────────────────────────────────────────── */
-  .s-story { background: var(--color-charcoal-bg); }
-  .s-story h2 { color: var(--color-card); }
-  .s-story-body { color: rgba(237,227,208,0.8); }
-  .s-story-pullquote { color: var(--color-card); border-left-color: var(--color-brass); }
-  .s-story-cite { color: rgba(237,227,208,0.55); }
+  .s-story { background: var(--color-white); }
+  .s-story h2 { color: var(--color-pine); }
   .s-story-inner {
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -1037,7 +1013,7 @@ const springPuppies = allPuppies
     font-family: var(--font-display);
     font-style: italic;
     font-size: 1.1rem;
-    color: var(--color-pine);
+    color: var(--color-charcoal);
     line-height: 1.5;
   }
   .s-story-cite {
@@ -1092,7 +1068,7 @@ const springPuppies = allPuppies
   }
   .creds-caption {
     font-size: 0.825rem;
-    color: var(--color-muted);
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.6;
     margin: 0;
   }
@@ -1274,7 +1250,6 @@ const springPuppies = allPuppies
     .hero-section { padding: 48px 0 60px; }
     .hero-grid { grid-template-columns: 1fr; gap: 32px; }
     .hero-photo-frame { max-width: 360px; margin: 0 auto; }
-    .hero-testimonial { left: 8px; max-width: calc(100% - 16px); }
     .s-program-grid   { grid-template-columns: 1fr; }
     .creds-grid       { grid-template-columns: repeat(2, 1fr); }
     .trust-grid { grid-template-columns: 1fr; }
