@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Our Story" description="How Adams Farm Labradoodles began — from a search for the right family dog to Winnie and our first litter.">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Adams Farm Labradoodles</p>
+      <h1>Our Story</h1>
+      <p class="page-intro">How a search for the right family dog became Adams Farm.</p>
+    </div>
+  </div>
+
+  <section class="section s-story-page">
+    <div class="container s-story-narrow">
+      <p class="story-body">It started with our kids, Julian and Marie Claire, begging for a puppy. Instead of one, we decided to give them puppies &mdash; and set out to find the right breed. Our only real requirement was temperament: friendly, with no aggression toward people, dogs, or other animals. That search led us to Australian Labradoodles, and eventually to Mike and Pam Kirkpatrick of Legend Manor Labradoodles, and their dog Prancer &mdash; Winnie.</p>
+      <p class="story-body">From the moment we met her, Erika knew. Winnie approached each of us gently, and it was clear how loving she was &mdash; the kind of dog that becomes a healing presence for a family. She joined ours, and after her third litter, gave us eight healthy puppies. That&rsquo;s how Adams Farm began.</p>
+      <blockquote class="story-pullquote">
+        &ldquo;A great dog can be a healing presence for your whole family.&rdquo;
+        <cite class="story-cite">&mdash; Erika Campbell</cite>
+      </blockquote>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .s-story-page { background: var(--color-white); }
+  .s-story-narrow {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .story-body {
+    color: var(--color-charcoal);
+    line-height: 1.78;
+    margin: 0;
+    font-size: 1.05rem;
+  }
+  .story-pullquote {
+    margin: 8px 0 0;
+    padding: 20px 24px;
+    border-left: 3px solid var(--color-brass);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--color-charcoal);
+    line-height: 1.5;
+  }
+  .story-cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    margin-top: 10px;
+  }
+</style>
