@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Become an Ambassador" description="Help Adams Farm socialize our puppies — introducing them to new people, places, and experiences during the weeks that matter most.">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Get Involved</p>
+      <h1>Become an Ambassador</h1>
+      <p class="page-intro">Help us raise calm puppies &mdash; by helping them meet the world.</p>
+    </div>
+  </div>
+
+  <section class="section page-section">
+    <div class="container prose-narrow">
+      <p>Ambassadors help us do one of the most important things in raising a calm puppy: getting each one out into the world while they&rsquo;re young. It&rsquo;s simple, hands-on, and genuinely fun.</p>
+
+      <p>That might mean coming by to spend time with a litter, helping a puppy meet new people, or introducing them to new places, sounds, and everyday experiences. Every friendly new face and every new setting is part of how a puppy learns to take the world in stride.</p>
+
+      <p>There&rsquo;s a window early in a puppy&rsquo;s life when these experiences shape them the most, and it closes sooner than most people expect. The more good, gentle exposure a puppy gets during that time, the better &mdash; and that&rsquo;s exactly where ambassadors come in.</p>
+
+      <p class="prose-emphasis">A little puppy joy, shared early, goes a long way.</p>
+
+      <p>We&rsquo;re still shaping exactly what this looks like, so if you love puppies and would like to be part of it, we&rsquo;d love to hear from you. Reach out and we&rsquo;ll tell you more.</p>
+
+      <div class="page-cta">
+        <a href="tel:+13363388660" class="btn btn-primary">Call 336-338-8660</a>
+        <a href="/contact" class="page-cta-link">Or send us a message &rarr;</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero h1 { color: var(--color-cream-d); }
+  .page-hero .page-intro { color: rgba(247, 242, 231, 0.72); }
+
+  .page-section { background: var(--color-white); }
+  .prose-narrow {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .prose-narrow p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.78;
+    color: var(--color-charcoal);
+  }
+  .prose-emphasis {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem !important;
+    color: var(--color-pine) !important;
+  }
+  .page-cta {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .page-cta-link {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-pine);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--color-brass);
+    padding-bottom: 2px;
+  }
+</style>

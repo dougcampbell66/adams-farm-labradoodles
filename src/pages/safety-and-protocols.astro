@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Safety & Protocols" description="How Adams Farm socializes puppies safely during the critical early window — grounded in current veterinary behavior science.">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Our Approach</p>
+      <h1>Safety &amp; Protocols</h1>
+      <p class="page-intro">Early socialization, done responsibly &mdash; and why waiting carries a greater risk.</p>
+    </div>
+  </div>
+
+  <section class="section page-section">
+    <div class="container prose-narrow">
+      <p>One of the most common questions we hear is about taking puppies out into the world before their full vaccine series is finished. It&rsquo;s a fair question, and it deserves a straight answer grounded in what the science actually says.</p>
+
+      <h2 class="prose-h2">The window doesn&rsquo;t wait</h2>
+      <p>A puppy&rsquo;s socialization window opens early and closes at around 12 to 14 weeks &mdash; well before the standard vaccine schedule is complete. That creates a real tension: the weeks that matter most for a dog&rsquo;s lifelong temperament overlap with the weeks before full immunity. Waiting for the vaccine series to finish doesn&rsquo;t sidestep the risk &mdash; it means missing the window entirely.</p>
+    </div>
+  </section>
+
+  <section class="s-standout">
+    <div class="container prose-narrow">
+      <h2 class="standout-h2">What the veterinary science says</h2>
+      <p class="standout-body">The American Veterinary Society of Animal Behavior has taken a clear position: for most puppies, thoughtful early socialization should begin well before the vaccine series is complete. In their view, the behavioral fallout of under-socialization &mdash; the fear and reactivity that lead so many dogs to be given up or put down &mdash; is a greater threat to a dog&rsquo;s life than the disease risk of responsible early exposure. Under-socialization, statistically, is the more dangerous path.</p>
+    </div>
+  </section>
+
+  <section class="section page-section">
+    <div class="container prose-narrow">
+      <h2 class="prose-h2">What &ldquo;responsible&rdquo; means in practice</h2>
+      <p>Responsible early exposure isn&rsquo;t the dog park. It means:</p>
+      <ul class="protocol-list">
+        <li>Controlled, chosen settings &mdash; not places where dogs of unknown vaccination status may have been.</li>
+        <li>Healthy, known dogs only &mdash; never unfamiliar dogs whose history we can&rsquo;t verify.</li>
+        <li>Avoiding high-risk surfaces where disease tends to linger.</li>
+        <li>Following our veterinarian&rsquo;s guidance on the partial protection a puppy already carries during this period.</li>
+      </ul>
+      <p>Done this way, the world becomes a classroom without becoming a hazard.</p>
+
+      <p class="prose-emphasis">This is the heart of how we raise calm puppies: not by keeping them sheltered until it&rsquo;s convenient, but by bringing them into the world carefully, at the age when it does the most good.</p>
+
+      <div class="page-cta">
+        <a href="/our-program" class="btn btn-primary">See the full PuppyQ approach &rarr;</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero h1 { color: var(--color-cream-d); }
+  .page-hero .page-intro { color: rgba(247, 242, 231, 0.72); }
+
+  .page-section { background: var(--color-white); }
+  .prose-narrow {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .prose-narrow p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.78;
+    color: var(--color-charcoal);
+  }
+  .prose-h2 {
+    font-size: 1.3rem;
+    color: var(--color-pine);
+    margin: 12px 0 0;
+  }
+  .protocol-list {
+    margin: 0;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--color-charcoal);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+  .prose-emphasis {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem !important;
+    color: var(--color-pine) !important;
+  }
+
+  /* AVSAB standout band — pine, matching the homepage's standout sections */
+  .s-standout {
+    background: var(--color-pine);
+    padding: 56px 0;
+  }
+  .standout-h2 {
+    color: var(--color-card);
+    font-size: 1.3rem;
+    margin: 0 0 14px;
+  }
+  .standout-body {
+    color: rgba(220, 229, 219, 0.85);
+    font-size: 1.05rem;
+    line-height: 1.78;
+    margin: 0;
+  }
+
+  .page-cta {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+</style>

@@ -307,49 +307,46 @@ const springPuppies = allPuppies
     <div class="container creds-grid">
       <div class="creds-card">
         <img src="/images/credentials/sq-gold-paw.png" alt="ALAA Gold Paw Breeder 2026–2027" class="creds-logo" />
-        <p class="creds-caption"></p>
       </div>
       <div class="creds-card">
         <img src="/images/credentials/sq-akc-reunite.png" alt="AKC Reunite" class="creds-logo" />
-        <p class="creds-caption"></p>
       </div>
       <div class="creds-card">
         <img src="/images/credentials/sq-trupanion.png" alt="Trupanion" class="creds-logo" />
-        <p class="creds-caption"></p>
       </div>
       <div class="creds-card">
         <img src="/images/credentials/sq-purina.png" alt="Purina Pro Club" class="creds-logo" />
-        <p class="creds-caption"></p>
       </div>
       <div class="creds-card">
         <img src="/images/credentials/sq-puppyq.png" alt="PuppyQ" class="creds-logo" />
-        <p class="creds-caption"></p>
       </div>
+      <div class="creds-card">
+        <img src="/images/credentials/baxter-and-bella-logo.png" alt="Baxter &amp; Bella" class="creds-logo" />
+      </div>
+      <div class="creds-card creds-card-placeholder"></div>
+      <div class="creds-card creds-card-placeholder"></div>
     </div>
   </section>
 
-  <!-- ⑩ JOIN US: three ways to get involved -->
+  <!-- ⑩ JOIN US: two ways to get involved -->
   <section class="s-join">
     <div class="container s-section-header s-section-header-light">
       <p class="eyebrow s-join-eyebrow">Get Involved</p>
       <h2 class="s-join-heading">Join Us</h2>
-      <p class="s-join-intro">There&rsquo;s more than one way to be part of Adams Farm.</p>
+      <p class="s-join-intro">We breed to do something really meaningful in the lives of people, puppies, and dogs. In our brief time as a breeder, we&rsquo;ve touched over 15,000 total lives. Would you like to help us in our mission?</p>
     </div>
     <div class="container s-join-grid">
       <div class="join-col">
-        <h3 class="join-heading">Adopt a Puppy</h3>
-        <p class="join-body">Bring home a puppy and join our Forever Families &mdash; a lifetime of love, starting on day one.</p>
-        <a href="#puppies" class="join-link">See Available Puppies &rarr;</a>
-      </div>
-      <div class="join-col">
+        <span class="join-badge">1</span>
         <h3 class="join-heading">Become a Guardian</h3>
         <p class="join-body">Provide a loving home for one of our breeding dogs, while we handle the rest.</p>
         <a href="/guardians" class="join-link">Learn About Guardians &rarr;</a>
       </div>
       <div class="join-col">
-        <h3 class="join-heading">Volunteer</h3>
+        <span class="join-badge">2</span>
+        <h3 class="join-heading">Become an Ambassador</h3>
         <p class="join-body">Help us socialize our puppies and spread a little puppy joy.</p>
-        <a href="tel:+13363388660" class="join-link">Get in Touch &rarr;</a>
+        <a href="/ambassadors" class="join-link">Learn About Ambassadors &rarr;</a>
       </div>
     </div>
   </section>
@@ -982,7 +979,7 @@ const springPuppies = allPuppies
   .s-creds h2 { color: var(--color-pine); }
   .creds-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-top: 40px;
   }
@@ -1007,6 +1004,22 @@ const springPuppies = allPuppies
     font-size: 0.825rem;
     color: rgba(255, 255, 255, 0.75);
     line-height: 1.6;
+    margin: 0;
+  }
+  /* blank "coming soon" cards — dashed outline, no logo */
+  .creds-card-placeholder {
+    background: transparent;
+    border: 1.5px dashed rgba(0, 0, 0, 0.18);
+    box-shadow: none;
+    justify-content: center;
+  }
+  .creds-placeholder-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -1064,6 +1077,7 @@ const springPuppies = allPuppies
     color: rgba(220,229,219,0.8);
     font-size: 1rem;
     line-height: 1.6;
+    max-width: 640px;
     margin: 12px 0 0;
   }
   .s-section-header-light { margin-bottom: 32px; }
@@ -1075,9 +1089,34 @@ const springPuppies = allPuppies
   }
   .s-join-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 32px;
     margin-top: 8px;
+    max-width: 720px;
+  }
+  .join-col {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 12px;
+    padding: 32px;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .join-col:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  .join-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--color-brass);
+    color: var(--color-charcoal);
+    margin-bottom: 14px;
   }
   .join-heading {
     font-family: var(--font-display);
@@ -1095,10 +1134,14 @@ const springPuppies = allPuppies
   .join-link {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--color-card);
+    color: var(--color-brass);
     text-decoration: none;
-    border-bottom: 1.5px solid var(--color-brass);
-    padding-bottom: 2px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .join-link:hover {
+    color: var(--color-brass);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   /* ─── ⑫ APPLY NOW ───────────────────────────────────────────── */
@@ -1176,7 +1219,7 @@ const springPuppies = allPuppies
 
   @media (max-width: 900px) {
     .s-program-grid   { grid-template-columns: 1fr 1fr; }
-    .creds-grid       { grid-template-columns: repeat(3, 1fr); }
+    .creds-grid       { grid-template-columns: repeat(2, 1fr); }
     .s-about-inner    { grid-template-columns: 1fr; }
     .s-why-inner      { grid-template-columns: 1fr; }
     .s-why-badge      { max-width: 180px; margin: 0; }
@@ -1187,7 +1230,7 @@ const springPuppies = allPuppies
     .hero-grid { grid-template-columns: 1fr; gap: 32px; }
     .hero-photo-frame { max-width: 360px; margin: 0 auto; }
     .s-program-grid   { grid-template-columns: 1fr; }
-    .creds-grid       { grid-template-columns: repeat(2, 1fr); }
+    .creds-grid       { grid-template-columns: 1fr; }
     .s-about-pillars { grid-template-columns: 1fr; }
     .s-why-cards { grid-template-columns: 1fr; }
     .s-join-grid { grid-template-columns: 1fr; }

@@ -1,56 +1,73 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Guardians" description="Adams Farm's guardian model — breeding dogs raised in loving family homes, not a kennel.">
+<Layout title="Become a Guardian" description="Adams Farm's guardian model — our breeding dogs live in loving family homes, not a kennel.">
   <div class="page-hero">
     <div class="container">
-      <p class="eyebrow">About our dogs</p>
-      <h1>Guardians</h1>
-      <p class="page-intro">Raised in loving homes — not a kennel.</p>
+      <p class="eyebrow">Get Involved</p>
+      <h1>Become a Guardian</h1>
+      <p class="page-intro">Give one of our breeding dogs a loving, permanent home — and we handle the rest.</p>
     </div>
   </div>
 
-  <section class="section">
-    <div class="container guardian-body">
-      <p>Adams Farm's breeding dogs don't live in a kennel. They live as members of a family — in loving homes, with people who care for them every day, while remaining part of our breeding program.</p>
+  <section class="section page-section">
+    <div class="container prose-narrow">
+      <p>Adams Farm&rsquo;s breeding dogs don&rsquo;t live in a kennel. They live as members of a family &mdash; in loving homes, with people who care for them every day, while remaining part of our breeding program.</p>
 
-      <p>This is what makes the guardian model different: our dogs get to be dogs. They're loved, socialized, and part of daily life, not confined to a breeding facility. In return, guardian families give our program something a kennel never could — a dog raised the same way your puppy will be.</p>
+      <p>This is what makes the guardian model different: our dogs get to be dogs. They&rsquo;re loved, socialized, and part of daily life, not confined to a breeding facility. In return, guardian families give our program something a kennel never could &mdash; a dog raised the same way your puppy will be.</p>
 
-      <p>Puppies are whelped in the Campbell home, where Douglas and Erika oversee everything from birth through early development. But the sires and dams themselves — the dogs who make each litter possible — live their lives in the homes of families who love them.</p>
+      <p>Here&rsquo;s the idea in plain terms: a guardian family provides the everyday home &mdash; the walks, the couch, the belly rubs &mdash; and the dog lives with them full-time as a family pet. Adams Farm handles what&rsquo;s needed for the dog&rsquo;s role in the breeding program, and the dog only comes back to us briefly, for breeding or whelping, before returning home to its family.</p>
 
-      <p class="closing">It's a simple idea: dogs raised in love make better companions. That's true for our breeding dogs, and it's true for the puppies they bring into the world.</p>
+      <p>Puppies are whelped in the Campbell home, where Douglas and Erika oversee everything from birth through early development. But the sires and dams themselves &mdash; the dogs who make each litter possible &mdash; live their lives in the homes of families who love them.</p>
 
-      <a href="/our-dogs" class="guardian-link">Meet our dogs &rarr;</a>
+      <p class="prose-emphasis">It&rsquo;s a simple idea: dogs raised in love make better companions. That&rsquo;s true for our breeding dogs, and it&rsquo;s true for the puppies they bring into the world.</p>
+
+      <p>Every guardianship is a little different, and the specifics &mdash; what&rsquo;s involved, how it works, and what to expect &mdash; are things we walk through personally with each family. If the idea appeals to you, the best next step is simply to reach out and talk with us directly.</p>
+
+      <div class="page-cta">
+        <a href="tel:+13363388660" class="btn btn-primary">Call 336-338-8660</a>
+        <a href="/contact" class="page-cta-link">Or send us a message &rarr;</a>
+      </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  .guardian-body {
+  .page-hero h1 { color: var(--color-cream-d); }
+  .page-hero .page-intro { color: rgba(247, 242, 231, 0.72); }
+
+  .page-section { background: var(--color-white); }
+  .prose-narrow {
     max-width: 680px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
-  .guardian-body p {
+  .prose-narrow p {
     margin: 0;
     font-size: 1.05rem;
-    line-height: 1.75;
+    line-height: 1.78;
     color: var(--color-charcoal);
   }
-  .closing {
+  .prose-emphasis {
     font-family: var(--font-display);
     font-style: italic;
     font-size: 1.15rem !important;
     color: var(--color-pine) !important;
   }
-  .guardian-link {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 0.88rem;
+  .page-cta {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .page-cta-link {
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-pine);
     text-decoration: none;
+    border-bottom: 1.5px solid var(--color-brass);
+    padding-bottom: 2px;
   }
-  .guardian-link:hover { text-decoration: underline; }
 </style>
