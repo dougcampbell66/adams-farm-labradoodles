@@ -116,9 +116,11 @@ a { color: var(--color-pine); }
   padding: 64px 0 48px;
   border-bottom: 1px solid var(--color-border-dark);
 }
+/* page-hero sits on the dark charcoal bg — headings/intro must be light */
+.page-hero h1 { color: var(--color-cream-d); }
 
 .page-intro {
-  color: var(--color-muted);
+  color: rgba(247, 242, 231, 0.72);
   max-width: 600px;
   margin: 12px 0 0;
   font-size: 1.05rem;

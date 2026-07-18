@@ -217,11 +217,12 @@
   }
   .mobile-overlay-inner a {
     font-size: 1rem;
-    color: var(--color-charcoal);
+    color: var(--color-cream-d);
     text-decoration: none;
     padding: 13px 0;
     border-bottom: 1px solid var(--color-border-dark);
   }
+  .mobile-overlay-inner a:active { color: var(--color-brass); }
   .mobile-group-label {
     font-size: 0.68rem;
     letter-spacing: 0.1em;
@@ -230,10 +231,12 @@
     font-weight: 700;
     margin: 20px 0 4px;
   }
-  .mobile-cta {
+  .mobile-overlay-inner a.mobile-cta {
     border-bottom: none !important;
     text-align: center;
     margin-top: 16px;
+    background: var(--color-brass);
+    color: var(--color-charcoal);
   }
 
   @media (max-width: 768px) {
