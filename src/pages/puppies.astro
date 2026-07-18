@@ -36,9 +36,9 @@ const pastLitters = [
 <Layout title="Puppies" description="Current, planned, and past Australian Labradoodle litters from Adams Farm Labradoodles in Greensboro, NC.">
   <div class="page-hero">
     <div class="container">
-      <p class="eyebrow">Our Puppies</p>
+      <p class="eyebrow">Our Litters</p>
       <h1>Puppies</h1>
-      <p class="page-intro">Our current litter, what&rsquo;s ahead, and the track record behind them.</p>
+      <p class="page-intro">Our current litter, upcoming plans, and every litter we&rsquo;ve raised &mdash; not just the puppies available today.</p>
     </div>
   </div>
 
@@ -115,9 +115,6 @@ const pastLitters = [
               <span class="past-litter-date">{litter.date}</span>
             </div>
             <p class="past-litter-puppies">{litter.puppies.join(', ')}</p>
-            {litter.retained > 0 && (
-              <p class="past-litter-retained">&#43; {litter.retained} {litter.retained === 1 ? 'puppy' : 'puppies'} retained for breeding</p>
-            )}
           </div>
         ))}
       </div>
@@ -288,12 +285,6 @@ const pastLitters = [
     color: var(--color-charcoal);
     line-height: 1.7;
     margin: 0;
-  }
-  .past-litter-retained {
-    font-size: 0.85rem;
-    font-style: italic;
-    color: var(--color-muted);
-    margin: 6px 0 0;
   }
 
   /* Waitlist band */
