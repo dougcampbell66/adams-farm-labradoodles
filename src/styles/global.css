@@ -32,7 +32,9 @@ html { scroll-behavior: smooth; }
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--color-charcoal-bg);
+  /* light page background — content sections without their own bg (contact,
+     our-dogs, dog profiles) sit on this; dark sections set their own bg */
+  background: var(--color-cream-d);
   color: var(--color-charcoal);
   font-family: var(--font-body);
   line-height: 1.6;
