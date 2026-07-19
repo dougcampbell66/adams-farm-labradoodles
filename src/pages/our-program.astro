@@ -5,30 +5,30 @@ const stages = [
   {
     color: 'green',
     num: '1',
-    stage: 'Stage 1',
-    timeframe: 'Day 0&ndash;21',
-    body: 'The earliest days. Every puppy is weighed and gently handled, one on one, every single day.'
+    stage: 'Neonatal',
+    timeframe: 'Day 0&ndash;14',
+    body: 'Born blind and deaf. Every puppy is weighed and gently handled, one on one, every single day.'
   },
   {
     color: 'blue',
     num: '2',
-    stage: 'Stage 2',
-    timeframe: 'Week 3&ndash;6',
-    body: 'The socialization window opens. Puppies start exploring &mdash; new textures, sounds, and surfaces, at their own pace.'
+    stage: 'Transition',
+    timeframe: 'Day 14&ndash;21',
+    body: 'Eyes and ears open. The puppy comes online. Handling stays calm and quiet as the world starts coming into focus.'
   },
   {
     color: 'yellow',
     num: '3',
-    stage: 'Stage 3',
-    timeframe: 'Week 6&ndash;Go-Home',
-    body: 'Meeting the world, on purpose. Puppies leave the property to meet people, see new places, and greet friendly dogs.'
+    stage: 'Socialization',
+    timeframe: 'Week 3&ndash;12',
+    body: 'The most important window, and it crosses go-home. Puppies meet people, places, and friendly dogs. You receive your puppy partway through, around week eight or nine, and the exposure work continues in your hands.'
   },
   {
     color: 'red',
     num: '4',
-    stage: 'Stage 4',
-    timeframe: 'Go-Home&ndash;12 Months',
-    body: 'Your stage. The window closes at 12&ndash;14 weeks, so what you do right after go-home matters most.'
+    stage: 'Juvenile',
+    timeframe: 'Week 12 to sexual maturity',
+    body: 'Adolescence. Your puppy keeps growing into who they&rsquo;ll be, with you, and the foundation already in place.'
   }
 ];
 
@@ -101,8 +101,8 @@ const included = [
   <!-- FOUR STAGES -->
   <section class="section s-pq-stages">
     <div class="container">
-      <h2>Four stages, birth to one year</h2>
-      <p class="s-pq-stages-intro">PuppyQ organizes a puppy&rsquo;s first year into four developmental stages. Each stage is a window of time when specific, purposeful work happens.</p>
+      <h2>Four periods, birth to adulthood</h2>
+      <p class="s-pq-stages-intro">PuppyQ organizes development into four periods. Each is a window of time when specific work happens.</p>
       <div class="s-pq-stages-grid">
         {stages.map(s => (
           <div class={`pq-stage pq-stage-${s.color}`}>
