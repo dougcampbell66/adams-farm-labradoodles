@@ -1,37 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const stages = [
-  {
-    color: 'green',
-    num: '1',
-    stage: 'Neonatal Period',
-    timeframe: 'Day 0&ndash;14',
-    body: 'Born blind and deaf. Every puppy is weighed and gently handled, one on one, every single day.'
-  },
-  {
-    color: 'blue',
-    num: '2',
-    stage: 'Transition Period',
-    timeframe: 'Day 14&ndash;21',
-    body: 'Eyes and ears open. The puppy comes online. Handling stays calm and quiet as the world starts coming into focus.'
-  },
-  {
-    color: 'yellow',
-    num: '3',
-    stage: 'Socialization Period',
-    timeframe: 'Week 3&ndash;12',
-    body: 'The most important window, and it crosses go-home. Puppies meet people, places, and friendly dogs. You receive your puppy partway through, around week eight or nine, and the exposure work continues in your hands.'
-  },
-  {
-    color: 'red',
-    num: '4',
-    stage: 'Juvenile Period',
-    timeframe: 'Week 12 to sexual maturity',
-    body: 'Adolescence. Your puppy keeps growing into who they&rsquo;ll be, with you, and the foundation already in place.'
-  }
-];
-
 const included = [
   {
     title: 'PuppyQ Certification',
@@ -47,38 +16,103 @@ const included = [
   }
 ];
 ---
-<Layout title="Our Program" description="The PuppyQ Framework &mdash; an evidence-based approach to raising healthy, calm, well-socialized Australian Labradoodle puppies.">
+<Layout title="Our Program" description="The PuppyQ Framework &mdash; an evidence-based approach to raising calm, well-socialized Australian Labradoodle puppies.">
 
-  <!-- HERO / INTRO -->
+  <!-- HERO — AVSAB LEAD -->
   <div class="page-hero pq-hero">
     <div class="container">
-      <p class="eyebrow">Our Program</p>
-      <h1>The PuppyQ Framework</h1>
-      <p class="pq-hero-body">PuppyQ is an evidence-based framework for raising healthy and successful puppies. Adams Farm raises each puppy following PuppyQ protocols and provides a PuppyQ Scorecard and History.</p>
+      <h1 class="pq-lead">A puppy&rsquo;s most important weeks for meeting the world are its first three months. That&rsquo;s what we build around.</h1>
+      <blockquote class="pq-hero-quote">&ldquo;The primary and most important time for puppy socialization is the first three months of life. During this time puppies should be exposed to as many new people, animals, stimuli and environments as can be achieved safely and without causing overstimulation.&rdquo;</blockquote>
+      <p class="pq-hero-attr">&mdash; American Veterinary Society of Animal Behavior (AVSAB)</p>
+      <a href="https://avsab.org/wp-content/uploads/2018/03/Puppy_Socialization_Position_Statement_Download_-_10-3-14.pdf" target="_blank" rel="noopener noreferrer" class="pq-hero-link">Read the full AVSAB position statement &rarr;</a>
     </div>
   </div>
+
+  <!-- THE PUPPYQ FRAMEWORK -->
+  <section class="section pq-sec-white">
+    <div class="container pq-narrow">
+      <h2>The PuppyQ Framework</h2>
+      <p>PuppyQ is an evidence-based framework for raising calm, well-socialized puppies. Adams Farm raises each puppy following PuppyQ protocols and provides a PuppyQ Scorecard and History.</p>
+    </div>
+  </section>
+
+  <!-- FOUR PERIODS -->
+  <section class="section s-pq-stages">
+    <div class="container">
+      <h2>Four periods, birth to adulthood</h2>
+      <p class="s-pq-stages-intro">PuppyQ organizes development into four periods. Each is a window of time when specific work happens.</p>
+      <div class="s-pq-stages-grid">
+        <div class="prog-card prog-card-green" tabindex="0">
+          <div class="prog-card-inner">
+            <div class="prog-face prog-face-front">
+              <p class="prog-phase"><span class="prog-badge">1</span>Neonatal Period</p>
+              <p class="prog-timeframe">Day 0–14</p>
+              <p class="prog-front-body">Puppies are born blind and deaf, their brains not yet ready to learn.</p>
+            </div>
+            <div class="prog-face prog-face-back">
+              <p class="prog-back-body">Every puppy is weighed and gently handled, one on one, every single day.</p>
+            </div>
+          </div>
+        </div>
+        <div class="prog-card prog-card-blue" tabindex="0">
+          <div class="prog-card-inner">
+            <div class="prog-face prog-face-front">
+              <p class="prog-phase"><span class="prog-badge">2</span>Transition Period</p>
+              <p class="prog-timeframe">Day 14–21</p>
+              <p class="prog-front-body">Eyes and ears open and the puppy comes online for the first time.</p>
+            </div>
+            <div class="prog-face prog-face-back">
+              <p class="prog-back-body">Handling stays calm and quiet while first impressions form.</p>
+            </div>
+          </div>
+        </div>
+        <div class="prog-card prog-card-yellow" tabindex="0">
+          <div class="prog-card-inner">
+            <div class="prog-face prog-face-front">
+              <p class="prog-phase"><span class="prog-badge">3</span>Socialization Period</p>
+              <p class="prog-timeframe">Week 3–12</p>
+              <p class="prog-front-body">The critical window for meeting the world &mdash; and it stays open after your puppy comes home.</p>
+            </div>
+            <div class="prog-face prog-face-back">
+              <p class="prog-back-body">Puppies meet people, places, and friendly dogs through steady, everyday exposure.</p>
+            </div>
+          </div>
+        </div>
+        <div class="prog-card prog-card-red" tabindex="0">
+          <div class="prog-card-inner">
+            <div class="prog-face prog-face-front">
+              <p class="prog-phase"><span class="prog-badge">4</span>Juvenile Period</p>
+              <p class="prog-timeframe">Week 12 to sexual maturity</p>
+              <p class="prog-front-body">The socialization window has closed and your growing puppy enters adolescence.</p>
+            </div>
+            <div class="prog-face prog-face-back">
+              <p class="prog-back-body">Keep up the outings and routines that carry the foundation forward.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.prog-card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (window.matchMedia('(hover: none)').matches) {
+          card.classList.toggle('is-flipped');
+        }
+      });
+    });
+  </script>
 
   <!-- EVIDENCE-BASED EARLY SOCIALIZATION -->
   <section class="section pq-sec-white">
     <div class="container pq-narrow">
       <h2>Evidence-based early socialization</h2>
-      <p>PuppyQ Protocols follows the guidelines of the American Veterinary Society of Animal Behavior (AVSAB), which is supported and endorsed by the American Veterinary Medical Association (AVMA). The AVSAB writes:</p>
-      <blockquote class="pq-quote">&ldquo;The primary and most important time for puppy socialization is the first three months of life. During this time puppies should be exposed to as many new people, animals, stimuli and environments as can be achieved safely and without causing overstimulation.&rdquo;</blockquote>
-      <a href="https://avsab.org/wp-content/uploads/2018/03/Puppy_Socialization_Position_Statement_Download_-_10-3-14.pdf" target="_blank" rel="noopener noreferrer" class="pq-link">Read the full AVSAB position statement &rarr;</a>
+      <p>PuppyQ Protocols follows the guidelines of the American Veterinary Society of Animal Behavior (AVSAB), which is supported and endorsed by the American Veterinary Medical Association (AVMA).</p>
     </div>
   </section>
 
-  <!-- WHAT "Q" MEANS -->
-  <section class="section pq-sec-dark">
-    <div class="container pq-narrow">
-      <h2>PuppyQ &ndash; Q is for Quotient</h2>
-      <p>Q stands for Quotient. We track thirteen of them, using C-BARQ &mdash; a validated behavior assessment from the University of Pennsylvania. It measures things like trainability, energy, and how your puppy responds to new people, dogs, and situations.</p>
-      <p>C-BARQ &mdash; the Canine Behavioral Assessment and Research Questionnaire &mdash; was developed at the University of Pennsylvania by Dr. James Serpell and Dr. Yuying Hsu in 2003, to give owners and researchers a standardized way to measure real canine behavior. It&rsquo;s since been used in tens of thousands of evaluations worldwide. PuppyQ provides this evaluation to all forever families to help measure and improve its protocols.</p>
-      <p>In conjunction with C-BARQ, PuppyQ has also developed its own Q Assessment, given to puppies at seven weeks by our certified ambassadors, before the puppy goes to its forever home. The Q Assessment is not used as a predictor of behavior, but as a look at the puppy&rsquo;s early traits and temperament.</p>
-    </div>
-  </section>
-
-  <!-- SOCIALIZATION GOAL -->
+  <!-- PUPPYQ SOCIALIZATION BENCHMARKS -->
   <section class="section pq-sec-cream">
     <div class="container pq-narrow">
       <h2>PuppyQ Socialization Benchmarks</h2>
@@ -98,22 +132,13 @@ const included = [
     </div>
   </section>
 
-  <!-- FOUR STAGES -->
-  <section class="section s-pq-stages">
-    <div class="container">
-      <h2>Four periods, birth to adulthood</h2>
-      <p class="s-pq-stages-intro">PuppyQ organizes development into four periods. Each is a window of time when specific work happens.</p>
-      <div class="s-pq-stages-grid">
-        {stages.map(s => (
-          <div class={`pq-stage pq-stage-${s.color}`}>
-            <p class="pq-stage-label">
-              <span class="pq-stage-badge">{s.num}</span>{s.stage}
-            </p>
-            <p class="pq-stage-time" set:html={s.timeframe} />
-            <p class="pq-stage-body" set:html={s.body} />
-          </div>
-        ))}
-      </div>
+  <!-- Q IS FOR QUOTIENT -->
+  <section class="section pq-sec-dark">
+    <div class="container pq-narrow">
+      <h2>PuppyQ &ndash; Q is for Quotient</h2>
+      <p>Q stands for Quotient. We track thirteen of them, using C-BARQ &mdash; a validated behavior assessment from the University of Pennsylvania. It measures things like trainability, energy, and how your puppy responds to new people, dogs, and situations.</p>
+      <p>C-BARQ &mdash; the Canine Behavioral Assessment and Research Questionnaire &mdash; was developed at the University of Pennsylvania by Dr. James Serpell and Dr. Yuying Hsu in 2003, to give owners and researchers a standardized way to measure real canine behavior. It&rsquo;s since been used in tens of thousands of evaluations worldwide. PuppyQ provides this evaluation to all forever families to help measure and improve its protocols.</p>
+      <p>In conjunction with C-BARQ, PuppyQ has also developed its own Q Assessment, given to puppies at seven weeks by our certified ambassadors, before the puppy goes to its forever home. The Q Assessment is not used as a predictor of behavior, but as a look at the puppy&rsquo;s early traits and temperament.</p>
     </div>
   </section>
 
@@ -145,12 +170,38 @@ const included = [
 
 <style>
   /* ─── HERO ───────────────────────────────────────────────────── */
-  .pq-hero-body {
-    color: rgba(237, 227, 208, 0.75);
-    max-width: 640px;
+  .pq-lead {
+    font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+    font-weight: 400;
+    line-height: 1.35;
+    max-width: 720px;
+    margin: 0;
+  }
+  .pq-hero-quote {
+    margin: 28px 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.55rem, 3.2vw, 2.25rem);
+    line-height: 1.4;
+    color: var(--color-card);
+    max-width: 820px;
+  }
+  .pq-hero-attr {
+    margin: 16px 0 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(220, 229, 219, 0.6);
+  }
+  .pq-hero-link {
+    display: inline-block;
     margin: 20px 0 0;
-    font-size: 1rem;
-    line-height: 1.72;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-brass);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--color-brass);
+    padding-bottom: 2px;
   }
 
   /* ─── PROSE SECTIONS ─────────────────────────────────────────── */
@@ -219,7 +270,7 @@ const included = [
   .pq-sec-dark .pq-quote { color: var(--color-card); }
   .pq-sec-dark .pq-link { color: var(--color-brass); }
 
-  /* ─── FOUR STAGES ────────────────────────────────────────────── */
+  /* ─── FOUR PERIODS ───────────────────────────────────────────── */
   .s-pq-stages {
     background: var(--color-charcoal-bg);
     border-top: 1px solid var(--color-border-dark);
@@ -237,22 +288,70 @@ const included = [
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
   }
-  .pq-stage {
+  /* flip cards (copied from the home page PuppyQ section) */
+  .prog-card {
+    perspective: 1000px;
+    height: 260px;
+    cursor: pointer;
+    outline: none;
+  }
+  .prog-card:focus-visible {
+    border-radius: 12px;
+    outline: 2px solid var(--color-pine);
+    outline-offset: 3px;
+  }
+  .prog-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+  .prog-card:hover .prog-card-inner,
+  .prog-card:focus .prog-card-inner,
+  .prog-card.is-flipped .prog-card-inner {
+    transform: rotateY(180deg);
+  }
+  .prog-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    padding: 28px;
+    overflow: hidden;
+  }
+  .prog-face-front {
     background: var(--color-white);
     border: 1px solid var(--color-border-light);
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
-    padding: 28px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 10px;
   }
-  .pq-stage-green  { border-top: 4px solid var(--color-focus-green); }
-  .pq-stage-blue   { border-top: 4px solid var(--color-calm-blue); }
-  .pq-stage-yellow { border-top: 4px solid var(--color-excite-yellow); }
-  .pq-stage-red    { border-top: 4px solid var(--color-feelings-red); }
-
-  .pq-stage-label {
+  .prog-card-green  .prog-face-front { border-top: 4px solid var(--color-focus-green); }
+  .prog-card-blue   .prog-face-front { border-top: 4px solid var(--color-calm-blue); }
+  .prog-card-yellow .prog-face-front { border-top: 4px solid var(--color-excite-yellow); }
+  .prog-card-red    .prog-face-front { border-top: 4px solid var(--color-feelings-red); }
+  .prog-face-back {
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .prog-card-green  .prog-face-back { background: var(--color-focus-green); }
+  .prog-card-blue   .prog-face-back { background: var(--color-calm-blue); }
+  .prog-card-yellow .prog-face-back { background: var(--color-excite-yellow); }
+  .prog-card-red    .prog-face-back { background: var(--color-feelings-red); }
+  .prog-back-body {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin: 0;
+    color: #fff;
+  }
+  .prog-card-yellow .prog-back-body { color: var(--color-pine); }
+  .prog-phase {
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -262,12 +361,11 @@ const included = [
     gap: 8px;
     margin: 0;
   }
-  .pq-stage-green  .pq-stage-label { color: var(--color-focus-green); }
-  .pq-stage-blue   .pq-stage-label { color: var(--color-calm-blue); }
-  .pq-stage-yellow .pq-stage-label { color: #B8921E; }
-  .pq-stage-red    .pq-stage-label { color: var(--color-feelings-red); }
-
-  .pq-stage-badge {
+  .prog-card-green  .prog-phase { color: var(--color-focus-green); }
+  .prog-card-blue   .prog-phase { color: var(--color-calm-blue); }
+  .prog-card-yellow .prog-phase { color: #B8921E; }
+  .prog-card-red    .prog-phase { color: var(--color-feelings-red); }
+  .prog-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -281,23 +379,34 @@ const included = [
     text-transform: none;
     letter-spacing: 0;
   }
-  .pq-stage-green  .pq-stage-badge { background: var(--color-focus-green); }
-  .pq-stage-blue   .pq-stage-badge { background: var(--color-calm-blue); }
-  .pq-stage-yellow .pq-stage-badge { background: var(--color-excite-yellow); color: var(--color-pine); }
-  .pq-stage-red    .pq-stage-badge { background: var(--color-feelings-red); }
-
-  .pq-stage-time {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    color: var(--color-pine);
-    line-height: 1.3;
+  .prog-card-green  .prog-badge { background: var(--color-focus-green); }
+  .prog-card-blue   .prog-badge { background: var(--color-calm-blue); }
+  .prog-card-yellow .prog-badge { background: var(--color-excite-yellow); color: var(--color-pine); }
+  .prog-card-red    .prog-badge { background: var(--color-feelings-red); }
+  .prog-timeframe {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
     margin: 0;
   }
-  .pq-stage-body {
-    font-size: 0.875rem;
+  .prog-front-body {
+    font-size: 0.78rem;
     color: var(--color-muted);
-    line-height: 1.72;
+    line-height: 1.6;
     margin: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .prog-card-inner { transform: none !important; transition: none; }
+    .prog-face { backface-visibility: visible; }
+    .prog-face-front { transition: opacity 0.3s; z-index: 1; }
+    .prog-face-back  { transform: none; opacity: 0; transition: opacity 0.3s; z-index: 2; }
+    .prog-card:hover .prog-face-front,
+    .prog-card:focus  .prog-face-front,
+    .prog-card.is-flipped .prog-face-front { opacity: 0; }
+    .prog-card:hover .prog-face-back,
+    .prog-card:focus  .prog-face-back,
+    .prog-card.is-flipped .prog-face-back  { opacity: 1; }
   }
 
   /* ─── WHAT EVERY PUPPY GOES HOME WITH ──────────────────────────── */
