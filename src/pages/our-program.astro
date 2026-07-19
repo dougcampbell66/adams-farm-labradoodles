@@ -7,43 +7,43 @@ const stages = [
     num: '1',
     stage: 'Stage 1',
     timeframe: 'Day 0&ndash;21',
-    body: 'The earliest days. We weigh every puppy every day to make sure each one is thriving, and we give every puppy gentle, individual handling each day. Research shows that early, consistent handling is the meaningful ingredient in these first weeks &mdash; so that&rsquo;s exactly where we put our attention.'
+    body: 'The earliest days. Every puppy is weighed and gently handled, one on one, every single day.'
   },
   {
     color: 'blue',
     num: '2',
     stage: 'Stage 2',
     timeframe: 'Week 3&ndash;6',
-    body: 'The socialization period opens. Puppies&rsquo; eyes and ears are working, they&rsquo;re beginning to explore, and they start meeting the world at their own pace &mdash; novel objects, varied surfaces, new sounds, gentle new experiences.'
+    body: 'The socialization window opens. Puppies start exploring &mdash; new textures, sounds, and surfaces, at their own pace.'
   },
   {
     color: 'yellow',
     num: '3',
     stage: 'Stage 3',
     timeframe: 'Week 6&ndash;Go-Home',
-    body: 'The heart of early socialization. Puppies begin leaving the property to meet people, see new places, and encounter friendly, healthy adult dogs.'
+    body: 'Meeting the world, on purpose. Puppies leave the property to meet people, see new places, and greet friendly dogs.'
   },
   {
     color: 'red',
     num: '4',
     stage: 'Stage 4',
     timeframe: 'Go-Home&ndash;12 Months',
-    body: 'Your stage. This is where you carry the momentum forward, and it contains the single most important window of all &mdash; one that closes around 12 to 14 weeks, just a few weeks after your puppy comes home. We give every family clear guidance for making the most of it.'
+    body: 'Your stage. The window closes at 12&ndash;14 weeks, so what you do right after go-home matters most.'
   }
 ];
 
 const included = [
   {
     title: 'PuppyQ Certification',
-    body: 'Proof your puppy met the full socialization standard.'
+    body: 'Proof your puppy met the full standard: 10 events, 10 locations, 100 people.'
   },
   {
     title: 'PuppyQ Scorecard',
-    body: 'Your puppy&rsquo;s seven-week snapshot, and later the eight-month follow-up.'
+    body: 'Your puppy&rsquo;s seven-week snapshot, plus the eight-month follow-up that shows real growth.'
   },
   {
     title: 'PuppyQ History',
-    body: 'The complete record of everything your puppy experienced along the way: the people, the places, and the milestones that shaped their start in life.'
+    body: 'A full record of your puppy&rsquo;s first weeks &mdash; every person, place, and milestone.'
   }
 ];
 ---
@@ -88,6 +88,16 @@ const included = [
     </div>
   </section>
 
+  <!-- PULL-QUOTE BREAK -->
+  <section class="s-break">
+    <div class="container s-break-inner">
+      <blockquote class="break-quote">
+        &ldquo;Prevention is better than intervention.&rdquo;
+        <cite class="break-cite">&mdash; Dr. Ian Dunbar</cite>
+      </blockquote>
+    </div>
+  </section>
+
   <!-- FOUR STAGES -->
   <section class="section s-pq-stages">
     <div class="container">
@@ -104,24 +114,6 @@ const included = [
           </div>
         ))}
       </div>
-    </div>
-  </section>
-
-  <!-- THE WEEK 7 EVALUATION -->
-  <section class="section pq-sec-white">
-    <div class="container pq-narrow">
-      <h2>The Week 7 evaluation</h2>
-      <p>At around seven weeks, we conduct a structured behavioral evaluation of each puppy &mdash; a careful snapshot of how that puppy is behaving on that day.</p>
-      <p>We&rsquo;re careful about what this evaluation is and isn&rsquo;t. It&rsquo;s an honest snapshot in time, not a prediction of the adult dog. Research consistently shows that puppy assessments don&rsquo;t predict adult temperament &mdash; because so much of who your dog becomes depends on what happens next, with you. That&rsquo;s the truth, and we&rsquo;d rather tell it to you than oversell a test.</p>
-    </div>
-  </section>
-
-  <!-- WE MEASURE HOW IT TURNS OUT -->
-  <section class="section pq-sec-cream">
-    <div class="container pq-narrow">
-      <h2>We measure how it turns out</h2>
-      <p>Here&rsquo;s what sets PuppyQ apart: we don&rsquo;t stop at the day your puppy goes home. At eight months, we follow up with the full C-BARQ assessment to learn how our puppies are actually doing in their new lives.</p>
-      <p>This gives us something rare &mdash; a real measure of outcomes, not just a record of the work we did. It lets us keep learning, keep improving, and keep raising better puppies with every litter.</p>
     </div>
   </section>
 
@@ -193,6 +185,30 @@ const included = [
     border-bottom: 1.5px solid var(--color-brass);
     padding-bottom: 2px;
   }
+  /* pull-quote break (mirrors the homepage's .s-break) */
+  .s-break {
+    background: var(--color-pine);
+    padding: 80px 0;
+  }
+  .s-break-inner { text-align: center; max-width: 680px; margin: 0 auto; }
+  .break-quote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    color: var(--color-card);
+    line-height: 1.55;
+  }
+  .break-cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: rgba(220, 229, 219, 0.55);
+    margin-top: 20px;
+  }
+
   /* dark-background prose variant (light text on charcoal) */
   .pq-sec-dark {
     background: var(--color-charcoal-bg);
