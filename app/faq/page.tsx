@@ -67,7 +67,7 @@ export default function FAQPage() {
               <details key={q} className="group py-1">
                 <summary className="flex items-center justify-between gap-4 py-5 cursor-pointer list-none font-heading font-semibold text-[1.05rem] text-navy select-none">
                   {q}
-                  <span className="shrink-0 text-[1.5rem] font-light text-excite-yellow leading-none group-open:rotate-45 transition-transform duration-200">
+                  <span className="shrink-0 text-[1.5rem] font-light text-coral leading-none group-open:rotate-45 transition-transform duration-200">
                     +
                   </span>
                 </summary>
@@ -87,7 +87,7 @@ export default function FAQPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-navy text-cream font-extrabold py-[12px] px-6 rounded-lg text-[0.9rem] hover:bg-[#253b5a] transition-colors"
+            className="inline-block bg-coral text-white font-extrabold py-[12px] px-6 rounded-lg text-[0.9rem] hover:bg-coral-dark transition-colors"
           >
             Send us a message
           </Link>

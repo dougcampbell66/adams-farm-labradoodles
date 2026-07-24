@@ -270,7 +270,7 @@ export default function OurDogsPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-navy text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#253b5a] transition-colors"
+            className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
             Schedule a Visit
           </Link>

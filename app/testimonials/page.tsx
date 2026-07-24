@@ -29,7 +29,7 @@ export default function TestimonialsPage() {
               <blockquote className="font-heading font-semibold text-[1.15rem] text-cream leading-relaxed mb-5 italic">
                 &ldquo;{featured.quote}&rdquo;
               </blockquote>
-              <p className="font-extrabold text-[0.85rem] text-excite-yellow">
+              <p className="font-extrabold text-[0.85rem] text-coral">
                 — {featured.family}
                 {featured.year && `, ${featured.year}`}
               </p>
@@ -63,7 +63,7 @@ export default function TestimonialsPage() {
               href="https://share.google/FmRRIkSGouEi3RIFT"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-navy text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#253b5a] transition-colors"
+              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               View Google Reviews →
             </a>
@@ -82,7 +82,7 @@ export default function TestimonialsPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-navy text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#253b5a] transition-colors"
+            className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
             Apply Now
           </Link>

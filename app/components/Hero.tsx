@@ -48,7 +48,7 @@ export default function Hero() {
         </p>
         <Link
           href="/puppies"
-          className="inline-block bg-cream text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#F0E8D8] transition-colors"
+          className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
         >
           Meet the Puppies
         </Link>

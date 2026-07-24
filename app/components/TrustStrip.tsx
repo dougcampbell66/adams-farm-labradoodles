@@ -14,7 +14,7 @@ export default function TrustStrip() {
           key={label}
           className="text-center font-extrabold text-[0.85rem] text-cream max-w-[160px]"
         >
-          <span className="block font-heading font-bold text-[1.6rem]">{num}</span>
+          <span className="block font-heading font-bold text-[1.6rem] text-coral">{num}</span>
           {label}
         </div>
       ))}

@@ -40,7 +40,7 @@ export default function GuardiansPage() {
             their lives in the homes of families who love them.
           </p>
 
-          <blockquote className="font-heading font-semibold italic text-[1.15rem] text-navy leading-relaxed border-l-4 border-excite-yellow pl-5 py-1">
+          <blockquote className="font-heading font-semibold italic text-[1.15rem] text-navy leading-relaxed border-l-4 border-coral pl-5 py-1">
             It&apos;s a simple idea: dogs raised in love make better companions.
             That&apos;s true for our breeding dogs, and it&apos;s true for the
             puppies they bring into the world.
@@ -48,7 +48,7 @@ export default function GuardiansPage() {
 
           <Link
             href="/our-dogs"
-            className="self-start text-[0.88rem] font-extrabold text-navy border-b-2 border-excite-yellow pb-[2px] hover:text-[#253b5a] transition-colors"
+            className="self-start text-[0.88rem] font-extrabold text-coral border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
           >
             Meet our dogs →
           </Link>

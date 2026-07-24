@@ -95,7 +95,7 @@ export default function OurProgramPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[2px] bg-warm-border rounded-[14px] overflow-hidden border border-warm-border">
             {pillars.map((p) => (
               <div key={p.num} className="bg-cream p-8">
-                <span className="block font-extrabold text-[0.7rem] tracking-[0.12em] uppercase text-excite-yellow mb-2">
+                <span className="block font-extrabold text-[0.7rem] tracking-[0.12em] uppercase text-coral mb-2">
                   {p.num}
                 </span>
                 <h2 className="font-heading font-semibold text-navy text-[1.15rem] mb-3">
@@ -160,7 +160,7 @@ export default function OurProgramPage() {
           </p>
           <Link
             href="/our-dogs"
-            className="inline-block bg-cream text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-white transition-colors"
+            className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
             View health testing results
           </Link>
@@ -170,7 +170,7 @@ export default function OurProgramPage() {
       {/* 6-step process */}
       <section className="py-16 px-6 bg-cream">
         <div className="max-w-[1080px] mx-auto">
-          <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-navy mb-3">
+          <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-coral mb-3">
             The process
           </span>
           <h2 className="font-heading font-semibold text-[1.9rem] text-navy mb-10">
@@ -202,13 +202,13 @@ export default function OurProgramPage() {
           <div className="flex gap-3 flex-wrap mt-4">
             <Link
               href="/contact"
-              className="inline-block bg-navy text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#253b5a] transition-colors"
+              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               Start your application
             </Link>
             <Link
               href="/faq"
-              className="inline-block border-2 border-navy text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-navy hover:text-cream transition-colors"
+              className="inline-block border-2 border-coral text-coral font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral hover:text-white transition-colors"
             >
               Read the FAQ
             </Link>
