@@ -1,6 +1,7 @@
 /* ============================================================
    Adams Farm Labradoodles — DEFAULT color tokens
    ------------------------------------------------------------
+   Option B — Blue & Red: collegiate, confident, athletic.
    Single source of truth for every color used across the site.
    These live in a Tailwind v4 @theme block, so each token also
    generates matching utilities (bg-*, text-*, border-*, fill-*,
@@ -14,36 +15,36 @@
 
 @theme {
   /* ── Core palette ─────────────────────────────────────────── */
-  --color-navy: #1B2A41;        /* header/hero background, dark sections */
-  --color-navy-deep: #142033;   /* slightly deeper navy for layering */
-  --color-navy-hover: #253B5A;  /* lightened navy for link hover */
-  --color-cream: #FAF7F0;       /* page body background */
-  --color-cream-panel: #F3EEE2; /* warm sand panel background */
-  --color-cream-soft: #F7F2E7;  /* soft cream text on dark (SVG labels) */
-  --color-charcoal: #2C2A24;    /* body text */
-  --color-muted: #6B6558;       /* muted body copy */
-  --color-body-soft: #4A4A4A;   /* neutral gray body copy */
-  --color-tan: #8A7C5C;         /* muted tan — citations, separators */
-  --color-placeholder-muted: #A0998B; /* form field placeholder text */
+  --color-navy: #10224A;        /* Adams Blue — header/hero, nav, dark sections */
+  --color-navy-deep: #1B2F5C;   /* Slate Blue — hero overlay / layering */
+  --color-navy-hover: #0d1c3e;  /* darker blue hover state */
+  --color-cream: #FCFCFD;       /* Paper — page body background */
+  --color-cream-panel: #EEF1F7; /* Cool Mist — section fill background */
+  --color-cream-soft: #EEF1F7;  /* soft light text on dark (SVG labels) */
+  --color-charcoal: #1a1a2e;    /* body text */
+  --color-muted: #5A6274;       /* muted blue-gray body copy */
+  --color-body-soft: #44464F;   /* neutral gray body copy */
+  --color-tan: #6B7488;         /* muted slate — citations, separators */
+  --color-placeholder-muted: #9AA1B0; /* form field placeholder text */
 
-  /* ── Bold red — primary CTA / accent ──────────────────────── */
-  --color-coral: #D94F3D;       /* true bold red */
-  --color-coral-dark: #B23A2A;  /* hover / pressed */
-  --color-coral-tint: #FBE9E5;  /* soft red wash for dropdowns/hovers */
+  /* ── Adams Red — primary CTA / accent ─────────────────────── */
+  --color-coral: #C2181D;       /* Adams Red — buttons, CTAs */
+  --color-coral-dark: #a01318;  /* darker red — hover / pressed */
+  --color-coral-tint: #F7E3E4;  /* soft red wash for dropdowns/hovers */
 
   /* ── PuppyQ accent dots ───────────────────────────────────── */
-  --color-calm-blue: #5B8DBE;
+  --color-calm-blue: #3E6BA8;
   --color-focus-green: #6FAE7F;
   --color-excite-yellow: #F2C14E;
   --color-excite-yellow-dark: #B8921E; /* legible gold on light surfaces */
-  --color-feelings-red: #D94F3D;
+  --color-feelings-red: #C2181D;
 
-  /* ── Warm neutrals / surfaces ─────────────────────────────── */
-  --color-warm-sand: #F3EEE2;
-  --color-warm-border: #E2DAC7;
-  --color-line: rgba(0, 0, 0, 0.10);
-  --color-photo-placeholder: #EDE8DF; /* image placeholder background */
-  --color-sand-deep: #D8CBA8;         /* thumbnail placeholder background */
+  /* ── Cool neutrals / surfaces ─────────────────────────────── */
+  --color-warm-sand: #EEF1F7;
+  --color-warm-border: #D9E0EC;
+  --color-line: rgba(16, 34, 74, 0.10);
+  --color-photo-placeholder: #E4E9F2; /* image placeholder background */
+  --color-sand-deep: #C9D3E4;         /* thumbnail placeholder background */
 
   /* ── "Available" badge ────────────────────────────────────── */
   --color-avail-bg: #E1F5EE;
