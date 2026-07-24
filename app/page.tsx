@@ -190,7 +190,7 @@ export default function Home() {
                     <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                       {p.sex}
                     </span>
-                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-[#E1F5EE] text-[#085041]">
+                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-avail-bg text-avail-text">
                       Available
                     </span>
                   </div>
@@ -236,19 +236,19 @@ export default function Home() {
               xmlns="http://www.w3.org/2000/svg"
               className="w-full max-w-[900px] h-auto block mx-auto"
             >
-              <line x1="125" y1="110" x2="875" y2="110" stroke="rgba(255,255,255,0.2)" strokeWidth="3" />
-              <circle cx="125" cy="110" r="34" fill="#6FAE7F" />
-              <circle cx="375" cy="110" r="34" fill="#5B8DBE" />
-              <circle cx="625" cy="110" r="34" fill="#F2C14E" />
-              <circle cx="875" cy="110" r="34" fill="#D94F3D" />
-              <text x="125" y="117" textAnchor="middle" fill="#fff" fontSize="22" fontWeight="700">1</text>
-              <text x="375" y="117" textAnchor="middle" fill="#fff" fontSize="22" fontWeight="700">2</text>
-              <text x="625" y="117" textAnchor="middle" fill="#1B2A41" fontSize="22" fontWeight="700">3</text>
-              <text x="875" y="117" textAnchor="middle" fill="#fff" fontSize="22" fontWeight="700">4</text>
-              <text x="125" y="170" textAnchor="middle" fill="#F7F2E7" fontSize="15" fontWeight="600">Day 0–14</text>
-              <text x="375" y="170" textAnchor="middle" fill="#F7F2E7" fontSize="15" fontWeight="600">Day 14–21</text>
-              <text x="625" y="170" textAnchor="middle" fill="#F7F2E7" fontSize="15" fontWeight="600">Week 3–12</text>
-              <text x="875" y="170" textAnchor="middle" fill="#F7F2E7" fontSize="15" fontWeight="600">Week 12–maturity</text>
+              <line x1="125" y1="110" x2="875" y2="110" className="stroke-white/20" strokeWidth="3" />
+              <circle cx="125" cy="110" r="34" className="fill-focus-green" />
+              <circle cx="375" cy="110" r="34" className="fill-calm-blue" />
+              <circle cx="625" cy="110" r="34" className="fill-excite-yellow" />
+              <circle cx="875" cy="110" r="34" className="fill-feelings-red" />
+              <text x="125" y="117" textAnchor="middle" className="fill-white" fontSize="22" fontWeight="700">1</text>
+              <text x="375" y="117" textAnchor="middle" className="fill-white" fontSize="22" fontWeight="700">2</text>
+              <text x="625" y="117" textAnchor="middle" className="fill-navy" fontSize="22" fontWeight="700">3</text>
+              <text x="875" y="117" textAnchor="middle" className="fill-white" fontSize="22" fontWeight="700">4</text>
+              <text x="125" y="170" textAnchor="middle" className="fill-cream-soft" fontSize="15" fontWeight="600">Day 0–14</text>
+              <text x="375" y="170" textAnchor="middle" className="fill-cream-soft" fontSize="15" fontWeight="600">Day 14–21</text>
+              <text x="625" y="170" textAnchor="middle" className="fill-cream-soft" fontSize="15" fontWeight="600">Week 3–12</text>
+              <text x="875" y="170" textAnchor="middle" className="fill-cream-soft" fontSize="15" fontWeight="600">Week 12–maturity</text>
             </svg>
           </div>
         </div>

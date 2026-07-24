@@ -40,7 +40,7 @@ export default function OurStoryPage() {
           <blockquote className="font-heading font-semibold italic text-[1.25rem] text-navy leading-[1.5] border-l-4 border-coral pl-6 py-2">
             &ldquo;A great dog can be a healing presence for your whole
             family.&rdquo;
-            <cite className="block not-italic font-body text-[0.8rem] tracking-[0.06em] text-[#8a7c5c] mt-2.5">
+            <cite className="block not-italic font-body text-[0.8rem] tracking-[0.06em] text-tan mt-2.5">
               — Erika Campbell
             </cite>
           </blockquote>

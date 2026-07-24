@@ -82,7 +82,7 @@ export default function PuppiesPage() {
                       <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                         {p.sex}
                       </span>
-                      <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-[#E1F5EE] text-[#085041]">
+                      <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-avail-bg text-avail-text">
                         Available
                       </span>
                     </div>

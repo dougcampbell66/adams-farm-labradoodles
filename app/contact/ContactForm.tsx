@@ -5,7 +5,7 @@ import { useState } from "react";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-[10px] border border-warm-border bg-white text-charcoal text-[0.95rem] placeholder:text-[#a0998b] focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy transition-colors";
+  "w-full px-4 py-3 rounded-[10px] border border-warm-border bg-white text-charcoal text-[0.95rem] placeholder:text-placeholder-muted focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy transition-colors";
 
 const labelClass =
   "block font-extrabold text-[0.78rem] uppercase tracking-[0.08em] text-navy mb-1.5";
@@ -42,7 +42,7 @@ export default function ContactForm() {
         <h3 className="font-heading font-semibold text-navy text-[1.3rem] mb-2">
           Message received!
         </h3>
-        <p className="text-[0.95rem] text-[#4A4A4A]">
+        <p className="text-[0.95rem] text-body-soft">
           Thank you for reaching out. We&apos;ll read your message personally and
           get back to you within 1–2 business days.
         </p>

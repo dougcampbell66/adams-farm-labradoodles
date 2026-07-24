@@ -1,0 +1,52 @@
+/* ============================================================
+   Adams Farm Labradoodles — WARM palette (red-forward)
+   ------------------------------------------------------------
+   HOW TO ACTIVATE:
+   In app/globals.css, replace the default tokens import
+       @import "../src/styles/tokens.css";
+   with this file:
+       @import "../src/styles/tokens-warm.css";
+   Then restart / rebuild the dev server. Only ONE tokens file
+   should be imported at a time — each redefines the same names.
+
+   This variant warms the neutrals (sand/terracotta undertones)
+   and pushes the accents toward red for a cozier, warmer feel.
+   ============================================================ */
+
+@theme {
+  /* ── Core palette ─────────────────────────────────────────── */
+  --color-navy: #33241E;        /* warm espresso-brown replacing cool navy */
+  --color-navy-deep: #241713;   /* deeper warm brown for layering */
+  --color-navy-hover: #4A342B;  /* lightened warm brown for link hover */
+  --color-cream: #FCF4EA;       /* warmer page background */
+  --color-cream-panel: #F6E7D6; /* warmer sand panel background */
+  --color-cream-soft: #FBEEDD;  /* soft warm cream text on dark */
+  --color-charcoal: #33251E;    /* warm-brown body text */
+  --color-muted: #7A6252;       /* warm muted body copy */
+  --color-body-soft: #5A463C;   /* warm neutral body copy */
+  --color-tan: #9A7B57;         /* richer tan — citations, separators */
+  --color-placeholder-muted: #B29A86; /* warm placeholder text */
+
+  /* ── Bold red — primary CTA / accent ──────────────────────── */
+  --color-coral: #E23B22;       /* hotter, redder CTA */
+  --color-coral-dark: #B92A16;  /* hover / pressed */
+  --color-coral-tint: #FCE3DB;  /* warm red wash for dropdowns/hovers */
+
+  /* ── PuppyQ accent dots ───────────────────────────────────── */
+  --color-calm-blue: #6E86A8;   /* muted, warmed blue */
+  --color-focus-green: #7BA46A; /* warmer, earthier green */
+  --color-excite-yellow: #F4B43C; /* warmer amber */
+  --color-excite-yellow-dark: #A8781A; /* legible amber on light surfaces */
+  --color-feelings-red: #E23B22;
+
+  /* ── Warm neutrals / surfaces ─────────────────────────────── */
+  --color-warm-sand: #F6E7D6;
+  --color-warm-border: #E7D3B8;
+  --color-line: rgba(51, 30, 20, 0.12);
+  --color-photo-placeholder: #F0E2D0; /* image placeholder background */
+  --color-sand-deep: #DCC29A;         /* thumbnail placeholder background */
+
+  /* ── "Available" badge ────────────────────────────────────── */
+  --color-avail-bg: #F6E4CE;
+  --color-avail-text: #8A4A1E;
+}

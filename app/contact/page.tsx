@@ -40,7 +40,7 @@ export default function ContactPage() {
                   </span>
                   <a
                     href="tel:3363388660"
-                    className="text-navy font-extrabold hover:text-[#253b5a] transition-colors"
+                    className="text-navy font-extrabold hover:text-navy-hover transition-colors"
                   >
                     336-338-8660
                   </a>
@@ -64,7 +64,7 @@ export default function ContactPage() {
               <h3 className="font-heading font-semibold text-navy text-[1.1rem] mb-3">
                 What happens next
               </h3>
-              <ol className="flex flex-col gap-2 text-[0.88rem] text-[#4A4A4A]">
+              <ol className="flex flex-col gap-2 text-[0.88rem] text-body-soft">
                 {[
                   "We read every message personally",
                   "We'll reach out within 1–2 business days",

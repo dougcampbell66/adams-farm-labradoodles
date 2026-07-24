@@ -1,0 +1,51 @@
+/* ============================================================
+   Adams Farm Labradoodles — DEFAULT color tokens
+   ------------------------------------------------------------
+   Single source of truth for every color used across the site.
+   These live in a Tailwind v4 @theme block, so each token also
+   generates matching utilities (bg-*, text-*, border-*, fill-*,
+   stroke-*, ring-*).
+
+   To switch palettes, swap the import in app/globals.css:
+     @import "../src/styles/tokens.css";        <- default (this file)
+     @import "../src/styles/tokens-warm.css";   <- warmer / red-forward
+     @import "../src/styles/tokens-bold.css";   <- darker / high-contrast
+   ============================================================ */
+
+@theme {
+  /* ── Core palette ─────────────────────────────────────────── */
+  --color-navy: #1B2A41;        /* header/hero background, dark sections */
+  --color-navy-deep: #142033;   /* slightly deeper navy for layering */
+  --color-navy-hover: #253B5A;  /* lightened navy for link hover */
+  --color-cream: #FAF7F0;       /* page body background */
+  --color-cream-panel: #F3EEE2; /* warm sand panel background */
+  --color-cream-soft: #F7F2E7;  /* soft cream text on dark (SVG labels) */
+  --color-charcoal: #2C2A24;    /* body text */
+  --color-muted: #6B6558;       /* muted body copy */
+  --color-body-soft: #4A4A4A;   /* neutral gray body copy */
+  --color-tan: #8A7C5C;         /* muted tan — citations, separators */
+  --color-placeholder-muted: #A0998B; /* form field placeholder text */
+
+  /* ── Bold red — primary CTA / accent ──────────────────────── */
+  --color-coral: #D94F3D;       /* true bold red */
+  --color-coral-dark: #B23A2A;  /* hover / pressed */
+  --color-coral-tint: #FBE9E5;  /* soft red wash for dropdowns/hovers */
+
+  /* ── PuppyQ accent dots ───────────────────────────────────── */
+  --color-calm-blue: #5B8DBE;
+  --color-focus-green: #6FAE7F;
+  --color-excite-yellow: #F2C14E;
+  --color-excite-yellow-dark: #B8921E; /* legible gold on light surfaces */
+  --color-feelings-red: #D94F3D;
+
+  /* ── Warm neutrals / surfaces ─────────────────────────────── */
+  --color-warm-sand: #F3EEE2;
+  --color-warm-border: #E2DAC7;
+  --color-line: rgba(0, 0, 0, 0.10);
+  --color-photo-placeholder: #EDE8DF; /* image placeholder background */
+  --color-sand-deep: #D8CBA8;         /* thumbnail placeholder background */
+
+  /* ── "Available" badge ────────────────────────────────────── */
+  --color-avail-bg: #E1F5EE;
+  --color-avail-text: #085041;
+}

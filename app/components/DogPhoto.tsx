@@ -13,8 +13,8 @@ export default function DogPhoto({ src, alt }: DogPhotoProps) {
 
   if (error) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-[#EDE8DF] rounded-[14px]">
-        <p className="text-[#8a7c5c] text-[0.75rem] font-bold text-center px-4 leading-relaxed">
+      <div className="w-full h-full flex items-center justify-center bg-photo-placeholder rounded-[14px]">
+        <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
           Photo
           <br />
           coming soon

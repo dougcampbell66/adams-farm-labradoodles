@@ -1,0 +1,52 @@
+/* ============================================================
+   Adams Farm Labradoodles — BOLD palette (dark / high-contrast)
+   ------------------------------------------------------------
+   HOW TO ACTIVATE:
+   In app/globals.css, replace the default tokens import
+       @import "../src/styles/tokens.css";
+   with this file:
+       @import "../src/styles/tokens-bold.css";
+   Then restart / rebuild the dev server. Only ONE tokens file
+   should be imported at a time — each redefines the same names.
+
+   This variant deepens the darks, brightens the page surfaces,
+   and saturates the accents for maximum contrast and punch.
+   ============================================================ */
+
+@theme {
+  /* ── Core palette ─────────────────────────────────────────── */
+  --color-navy: #0C1626;        /* near-black navy for strong contrast */
+  --color-navy-deep: #060D18;   /* deepest navy for layering */
+  --color-navy-hover: #1E3557;  /* lightened navy for link hover */
+  --color-cream: #FFFDF8;       /* crisp near-white page background */
+  --color-cream-panel: #EFE9DB; /* cooler, cleaner panel background */
+  --color-cream-soft: #F4EFE4;  /* soft cream text on dark (SVG labels) */
+  --color-charcoal: #14120E;    /* near-black body text */
+  --color-muted: #4E4A40;       /* darker muted body copy */
+  --color-body-soft: #2C2C2C;   /* strong gray body copy */
+  --color-tan: #6E6144;         /* deeper tan — citations, separators */
+  --color-placeholder-muted: #857D6E; /* form placeholder text */
+
+  /* ── Bold red — primary CTA / accent ──────────────────────── */
+  --color-coral: #C42A16;       /* deep, saturated red */
+  --color-coral-dark: #8F1D0D;  /* hover / pressed */
+  --color-coral-tint: #F7D9D2;  /* soft red wash for dropdowns/hovers */
+
+  /* ── PuppyQ accent dots ───────────────────────────────────── */
+  --color-calm-blue: #3D6FA3;   /* deeper, more saturated blue */
+  --color-focus-green: #3E8C57; /* deeper, more saturated green */
+  --color-excite-yellow: #E9A81F; /* saturated gold */
+  --color-excite-yellow-dark: #916A0E; /* legible gold on light surfaces */
+  --color-feelings-red: #C42A16;
+
+  /* ── Warm neutrals / surfaces ─────────────────────────────── */
+  --color-warm-sand: #EFE9DB;
+  --color-warm-border: #CFC5AC;
+  --color-line: rgba(0, 0, 0, 0.20);
+  --color-photo-placeholder: #E1DACC; /* image placeholder background */
+  --color-sand-deep: #C6B48A;         /* thumbnail placeholder background */
+
+  /* ── "Available" badge ────────────────────────────────────── */
+  --color-avail-bg: #CBEDDD;
+  --color-avail-text: #05402F;
+}

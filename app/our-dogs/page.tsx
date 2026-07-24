@@ -44,7 +44,7 @@ export default function OurDogsPage() {
                 className="bg-warm-sand rounded-[18px] p-8 flex gap-8 flex-wrap md:flex-nowrap"
               >
                 {/* Photo */}
-                <div className="relative w-full md:w-[260px] h-[320px] shrink-0 rounded-[14px] overflow-hidden bg-[#EDE8DF]">
+                <div className="relative w-full md:w-[260px] h-[320px] shrink-0 rounded-[14px] overflow-hidden bg-photo-placeholder">
                   <DogPhoto
                     src={dog.photo}
                     alt={`${dog.name} — ${dog.registeredName}`}
@@ -57,7 +57,7 @@ export default function OurDogsPage() {
                     <h2 className="font-heading font-semibold text-navy text-[1.7rem] leading-tight">
                       {dog.name}
                     </h2>
-                    <p className="text-[0.85rem] text-[#4A4A4A] mt-1">
+                    <p className="text-[0.85rem] text-body-soft mt-1">
                       {dog.registeredName} · {dog.regNumber}
                     </p>
                   </div>
@@ -119,11 +119,11 @@ export default function OurDogsPage() {
                                 <span className="font-extrabold text-navy">
                                   {ht.test}
                                 </span>
-                                <span className="text-[#8a7c5c] mx-2">·</span>
-                                <span className="text-[#4A4A4A]">
+                                <span className="text-tan mx-2">·</span>
+                                <span className="text-body-soft">
                                   {formatDate(ht.date)}
                                 </span>
-                                <p className="text-[#4A4A4A] mt-0.5 leading-snug">
+                                <p className="text-body-soft mt-0.5 leading-snug">
                                   {ht.result}
                                 </p>
                               </div>
@@ -131,7 +131,7 @@ export default function OurDogsPage() {
                           </div>
                         ))}
                       </div>
-                      <p className="text-[0.78rem] text-[#8a7c5c] mt-3">
+                      <p className="text-[0.78rem] text-tan mt-3">
                         OFA results can be independently verified at{" "}
                         <a
                           href="https://ofa.org"
@@ -152,7 +152,7 @@ export default function OurDogsPage() {
                       {dog.gallery.map((src, i) => (
                         <div
                           key={i}
-                          className="relative w-16 h-16 rounded-[8px] overflow-hidden bg-[#D8CBA8]"
+                          className="relative w-16 h-16 rounded-[8px] overflow-hidden bg-sand-deep"
                         >
                           <Image
                             src={src}
@@ -186,7 +186,7 @@ export default function OurDogsPage() {
                   key={dog.id}
                   className="bg-cream rounded-[18px] p-8 flex gap-8 flex-wrap md:flex-nowrap items-start"
                 >
-                  <div className="relative w-full md:w-[200px] h-[240px] shrink-0 rounded-[14px] overflow-hidden bg-[#EDE8DF]">
+                  <div className="relative w-full md:w-[200px] h-[240px] shrink-0 rounded-[14px] overflow-hidden bg-photo-placeholder">
                     <Image
                       src={dog.photo}
                       alt={`${dog.name} — ${dog.registeredName}`}
@@ -199,9 +199,9 @@ export default function OurDogsPage() {
                     <h2 className="font-heading font-semibold text-navy text-[1.5rem] mb-1">
                       {dog.name}
                     </h2>
-                    <p className="text-[0.85rem] text-[#4A4A4A] mb-4">
+                    <p className="text-[0.85rem] text-body-soft mb-4">
                       {dog.registeredName} · {dog.regNumber} ·{" "}
-                      <span className="font-extrabold text-[#8a7c5c]">Retired</span>
+                      <span className="font-extrabold text-tan">Retired</span>
                     </p>
                     <p className="text-[0.95rem] text-charcoal leading-relaxed mb-4">
                       {dog.description}
@@ -233,7 +233,7 @@ export default function OurDogsPage() {
                         {dog.gallery.map((src, i) => (
                           <div
                             key={i}
-                            className="relative w-14 h-14 rounded-[8px] overflow-hidden bg-[#D8CBA8]"
+                            className="relative w-14 h-14 rounded-[8px] overflow-hidden bg-sand-deep"
                           >
                             <Image
                               src={src}
