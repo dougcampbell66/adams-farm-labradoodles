@@ -87,8 +87,8 @@ export default function Home() {
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="bg-navy">
-        <div className="max-w-[1160px] mx-auto px-6 py-16 md:py-20 grid md:grid-cols-[0.96fr_1.04fr] gap-12 items-center">
-          <div>
+        <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[3fr_2fr] gap-10 md:gap-14 items-stretch">
+          <div className="py-16 md:py-20 flex flex-col justify-center">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
               Australian Labradoodles
             </p>
@@ -101,26 +101,21 @@ export default function Home() {
             </p>
             <Link
               href="#puppies"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="self-start inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               See available puppies
             </Link>
           </div>
-          <div className="relative mx-auto w-full max-w-[440px]">
-            <div
-              className="relative aspect-square overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)]"
-              style={{ borderRadius: "42% 58% 58% 42% / 48% 42% 58% 52%" }}
-            >
-              <Image
-                src="/images/hero/founder-hero-portrait.jpg"
-                alt="A girl holding an Adams Farm Labradoodle puppy"
-                fill
-                priority
-                sizes="(max-width: 768px) 90vw, 440px"
-                className="object-cover"
-                style={{ objectPosition: "center 15%" }}
-              />
-            </div>
+          <div className="relative min-h-[420px] md:min-h-[540px]">
+            <Image
+              src="/images/hero/founder-hero-portrait.jpg"
+              alt="A girl holding an Adams Farm Labradoodle puppy"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 40vw"
+              className="object-cover"
+              style={{ objectPosition: "center 15%" }}
+            />
           </div>
         </div>
       </section>
