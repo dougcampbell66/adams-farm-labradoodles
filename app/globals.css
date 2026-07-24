@@ -2,7 +2,7 @@
 
 /* Color tokens — swap this line for tokens-warm.css or tokens-bold.css
    to change the entire site palette. See each file's header for details. */
-@import "../src/styles/tokens.css";
+@import "../src/styles/tokens-warm.css";
 
 @theme {
   --font-heading: var(--font-playfair);
