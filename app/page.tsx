@@ -524,13 +524,13 @@ export default function Home() {
       {/* ── APPLY NOW (red band) ────────────────────────────── */}
       <section className="bg-coral py-20">
         <div className="max-w-[1160px] mx-auto px-6 flex flex-col items-center text-center">
-          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-white/70 mb-3">
+          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-navy/70 mb-3">
             Get Started
           </p>
-          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,2rem)] text-white mb-4">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,2rem)] text-navy mb-4">
             Reserve Your Adams Farm Puppy
           </h2>
-          <p className="text-[1rem] text-white/90 leading-[1.6] max-w-[520px] mb-9">
+          <p className="text-[1rem] text-navy/90 leading-[1.6] max-w-[520px] mb-9">
             Our litters are small and spots fill quickly. Fill out a short application
             and we’ll reach out to discuss your perfect match.
           </p>

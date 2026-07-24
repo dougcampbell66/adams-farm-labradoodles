@@ -26,7 +26,7 @@ export default function SafetyAndProtocolsPage() {
             science actually says.
           </p>
 
-          <h2 className="font-heading font-semibold text-[1.3rem] text-coral mt-3">
+          <h2 className="font-heading font-semibold text-[1.3rem] text-coral-dark mt-3">
             The window doesn&rsquo;t wait
           </h2>
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
@@ -60,7 +60,7 @@ export default function SafetyAndProtocolsPage() {
 
       <section className="py-16 px-6 bg-cream">
         <div className="max-w-[680px] mx-auto flex flex-col gap-5">
-          <h2 className="font-heading font-semibold text-[1.3rem] text-coral">
+          <h2 className="font-heading font-semibold text-[1.3rem] text-coral-dark">
             What &ldquo;responsible&rdquo; means in practice
           </h2>
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
