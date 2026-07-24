@@ -145,7 +145,7 @@ export default function Home() {
       <section id="puppies" className="bg-white border-b border-line py-16">
         <div className="max-w-[1160px] mx-auto px-6">
           <div className="mb-8 max-w-[620px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
+            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Available Puppies
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
@@ -267,7 +267,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
+            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
               ALAA Gold Paw Accredited
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4">
@@ -343,7 +343,7 @@ export default function Home() {
         <div className="max-w-[1160px] mx-auto px-6">
           <div className="grid md:grid-cols-[3fr_2.5fr] gap-12 items-center">
             <div>
-              <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
+              <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
                 Better Breed by Design
               </p>
               <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4 leading-tight">
@@ -410,7 +410,7 @@ export default function Home() {
       {/* ── TRUSTED PARTNERS ────────────────────────────────── */}
       <section className="bg-white py-16 md:py-[72px] border-t border-b border-line">
         <div className="max-w-[1160px] mx-auto px-6">
-          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
+          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
             Trusted Partners
           </p>
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-3">
@@ -497,7 +497,7 @@ export default function Home() {
       {/* ── FAQ ─────────────────────────────────────────────── */}
       <section id="faq" className="bg-white py-16 md:py-[72px]">
         <div className="max-w-[1160px] mx-auto px-6">
-          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
+          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
             FAQ
           </p>
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-8">

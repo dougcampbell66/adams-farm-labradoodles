@@ -39,7 +39,7 @@ export default function PuppiesPage() {
       <section id="current-litter" className="bg-white py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
+            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Current Litter
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2">
@@ -115,7 +115,7 @@ export default function PuppiesPage() {
       <section id="planned" className="bg-cream-panel py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
+            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Planned Litters
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy">
@@ -138,7 +138,7 @@ export default function PuppiesPage() {
       <section id="past-litters" className="bg-white py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
+            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Past Litters
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2">
@@ -158,7 +158,7 @@ export default function PuppiesPage() {
                   <h3 className="font-heading font-semibold text-[1.1rem] text-navy">
                     {litter.sire} × {litter.dam}
                   </h3>
-                  <span className="text-[0.72rem] font-extrabold tracking-[0.06em] uppercase text-coral whitespace-nowrap">
+                  <span className="text-[0.72rem] font-extrabold tracking-[0.06em] uppercase text-coral-dark whitespace-nowrap">
                     {litter.date}
                   </span>
                 </div>
