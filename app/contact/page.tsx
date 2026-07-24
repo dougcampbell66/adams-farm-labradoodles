@@ -13,8 +13,8 @@ export default function ContactPage() {
     <main>
       <PageHero
         eyebrow="Get in touch"
-        title="Contact Us"
-        intro="Fill out the form and we'll read it personally and get back to you within 1–2 business days."
+        title="Contact Adams Farm"
+        intro="Questions about an available puppy, the waitlist, or our program? Send us a message — we respond within 1–2 business days."
       />
 
       <section className="py-16 px-6 bg-cream">

@@ -1,218 +1,209 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHero from "@/app/components/PageHero";
-import { stats, program } from "@/src/data/stats";
+import PuppyQCards from "@/app/components/PuppyQCards";
 
 export const metadata: Metadata = {
   title: "Our Program",
   description:
-    "How Adams Farm raises every litter — health integrity, purposeful socialization, transparency, and lifetime support.",
+    "The PuppyQ Framework — an evidence-based approach to raising calm, well-socialized Australian Labradoodle puppies.",
 };
 
-const pillars = [
+const included = [
   {
-    num: "01",
-    title: "Health & Integrity",
-    body: `Every breeding dog is health tested to ALAA Gold Paw standards before being bred. We stand behind every puppy with a ${program.healthGuarantee.length} health guarantee covering debilitating congenital defects.`,
+    title: "PuppyQ Certification",
+    body: "Proof your puppy met the full standard: 10 events, 10 locations, 100 people.",
   },
   {
-    num: "02",
-    title: "Purposeful Raising",
-    body: `Every puppy goes through a structured early socialization program from birth, refined over ${stats.littersPlaced} litters. The result is confident, well-adjusted dogs ready for family life.`,
+    title: "PuppyQ Scorecard",
+    body: "Your puppy’s seven-week snapshot, plus the eight-month follow-up that shows real growth.",
   },
   {
-    num: "03",
-    title: "Transparency",
-    body: `Families are welcome to visit in person at ${program.visitAge}. Every family receives ${program.updates} from birth until go-home day — you'll watch your puppy grow before they're home.`,
-  },
-  {
-    num: "04",
-    title: "Lifetime Support",
-    body: "Our relationship with your family doesn't end at pickup. We're here for questions, guidance, and support for the life of your dog.",
-  },
-];
-
-const steps = [
-  {
-    label: "Apply",
-    desc: "Fill out our contact form. We'll read it personally and reach out within 1–2 business days.",
-  },
-  {
-    label: "Conversation",
-    desc: "We'll learn about your home, lifestyle, and what you're looking for — and make sure it's a great fit.",
-  },
-  {
-    label: "Waitlist & deposit",
-    desc: "Once a litter is confirmed, we collect a deposit to hold your spot on the list.",
-  },
-  {
-    label: "Weekly updates",
-    desc: `From birth through go-home day: ${program.updates}.`,
-  },
-  {
-    label: "Visit at 6 weeks",
-    desc: "Families visit in person once puppies have had their initial vaccines. This is when we help match each puppy to the right family.",
-  },
-  {
-    label: "Go home at 8 weeks",
-    desc: "Your puppy comes home with a full vet exam, vaccinations, microchip, health guarantee, and a care package.",
-  },
-];
-
-const programCards = [
-  {
-    title: "ENS / Super Dog Program",
-    body: "A structured neurological stimulation protocol applied from day three, based on the U.S. military's original Bio Sensor research.",
-    stat: "Starts Day 3",
-    borderColor: "border-calm-blue",
-  },
-  {
-    title: "Advanced Socialization",
-    body: "Real-world exposure to a wide range of people, sounds, surfaces, and environments — not just time in the whelping room.",
-    stat: "30–40 Hours",
-    borderColor: "border-focus-green",
-  },
-  {
-    title: "Early Crate Training",
-    body: "Puppies begin crate training before they leave, so your first nights home start from a foundation, not square one.",
-    stat: "Begins Before Placement",
-    borderColor: "border-excite-yellow",
+    title: "PuppyQ History",
+    body: "A full record of your puppy’s first weeks — every person, place, and milestone.",
   },
 ];
 
 export default function OurProgramPage() {
   return (
     <main>
-      <PageHero
-        eyebrow={`ALAA Gold Paw · ${stats.yearsBreeding} years breeding · ${stats.littersPlaced} litters placed`}
-        title="Our Program"
-        intro="Four commitments guide every litter we raise — and every family we work with."
-      />
-
-      {/* Four pillars */}
-      <section className="py-16 px-6 bg-cream">
-        <div className="max-w-[1080px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[2px] bg-warm-border rounded-[14px] overflow-hidden border border-warm-border">
-            {pillars.map((p) => (
-              <div key={p.num} className="bg-cream p-8">
-                <span className="block font-extrabold text-[0.7rem] tracking-[0.12em] uppercase text-coral mb-2">
-                  {p.num}
-                </span>
-                <h2 className="font-heading font-semibold text-navy text-[1.15rem] mb-3">
-                  {p.title}
-                </h2>
-                <p className="text-[0.93rem] text-[#4A4A4A] leading-relaxed">
-                  {p.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Early development cards */}
-      <div className="bg-navy text-cream py-[72px] px-6">
-        <div className="max-w-[1080px] mx-auto">
-          <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-excite-yellow mb-[14px]">
-            Early Development
-          </span>
-          <h2 className="font-heading font-semibold text-[2.1rem] text-cream mb-4 max-w-[640px]">
-            Two programs most breeders skip.
-          </h2>
-          <p className="text-[1.02rem] opacity-90 max-w-[620px] mb-11 leading-relaxed">
-            Every Adams Farm puppy goes through a structured developmental program
-            before they ever meet you — not vague &ldquo;well-socialized&rdquo; marketing
-            language, but a specific, repeatable process.
+      {/* ── HERO — AVSAB LEAD ─────────────────────────────── */}
+      <div className="bg-navy py-16 md:py-20 px-6 border-b border-white/12">
+        <div className="max-w-[1160px] mx-auto">
+          <h1 className="font-heading font-bold text-[clamp(1.5rem,2.6vw,1.9rem)] leading-[1.3] text-cream max-w-[760px]">
+            A puppy’s most important weeks for meeting the world are its first three
+            months. That’s what we build around.
+          </h1>
+          <blockquote className="mt-7 font-heading italic font-medium text-[clamp(1.4rem,3.2vw,2.1rem)] leading-[1.4] text-cream max-w-[820px]">
+            “The primary and most important time for puppy socialization is the first
+            three months of life. During this time puppies should be exposed to as many
+            new people, animals, stimuli and environments as can be achieved safely and
+            without causing overstimulation.”
+          </blockquote>
+          <p className="mt-4 text-[0.85rem] font-extrabold tracking-[0.04em] text-cream/60">
+            — American Veterinary Society of Animal Behavior (AVSAB)
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {programCards.map(({ title, body, stat, borderColor }) => (
-              <div
-                key={title}
-                className={`bg-[rgba(255,255,255,0.06)] rounded-[14px] p-[26px] border-t-4 ${borderColor}`}
-              >
-                <h3 className="font-heading font-semibold text-[1.15rem] text-cream mb-[10px]">
-                  {title}
-                </h3>
-                <p className="text-[0.9rem] leading-relaxed opacity-85">{body}</p>
-                <span className="block font-extrabold text-excite-yellow text-[0.85rem] mt-3">
-                  {stat}
-                </span>
-              </div>
-            ))}
-          </div>
+          <a
+            href="https://avsab.org/wp-content/uploads/2018/03/Puppy_Socialization_Position_Statement_Download_-_10-3-14.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-5 text-[0.9rem] font-extrabold text-coral border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
+          >
+            Read the full AVSAB position statement →
+          </a>
         </div>
       </div>
 
-      {/* Health guarantee */}
-      <section className="bg-navy py-16 px-6 border-t border-white/10">
-        <div className="max-w-[1080px] mx-auto max-w-[640px]">
-          <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-cream/50 mb-3">
-            Health guarantee
-          </span>
-          <h2 className="font-heading font-semibold text-[1.9rem] text-cream mb-4">
-            We stand behind every puppy
+      {/* ── THE PUPPYQ FRAMEWORK ──────────────────────────── */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-[720px] mx-auto">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4">
+            The PuppyQ Framework
           </h2>
-          <p className="text-[0.95rem] text-cream/80 leading-relaxed mb-6 max-w-[580px]">
-            {program.healthGuarantee.length} coverage on debilitating congenital
-            defects present from birth — including severe hip/elbow dysplasia, PRA,
-            and severe cardiac defects. If a covered condition is confirmed by a
-            licensed veterinarian, we provide {program.healthGuarantee.remedy}.
+          <p className="text-[1rem] text-charcoal leading-[1.78]">
+            PuppyQ is an evidence-based framework for raising calm, well-socialized
+            puppies. Adams Farm raises each puppy following PuppyQ protocols and provides
+            a PuppyQ Scorecard and History.
           </p>
-          <Link
-            href="/our-dogs"
-            className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
-          >
-            View health testing results
-          </Link>
         </div>
       </section>
 
-      {/* 6-step process */}
-      <section className="py-16 px-6 bg-cream">
-        <div className="max-w-[1080px] mx-auto">
-          <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-coral mb-3">
-            The process
-          </span>
-          <h2 className="font-heading font-semibold text-[1.9rem] text-navy mb-10">
-            What to Expect
+      {/* ── FOUR PERIODS ──────────────────────────────────── */}
+      <section className="bg-navy py-16 px-6 border-t border-white/12">
+        <div className="max-w-[1160px] mx-auto">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-cream mb-3">
+            Four periods, birth to adulthood
           </h2>
-          <div className="flex flex-col max-w-[580px]">
-            {steps.map((step, i) => (
-              <div key={step.label} className="grid grid-cols-[44px_1fr] gap-4 pb-7">
-                <div className="flex flex-col items-center">
-                  <div className="w-8 h-8 rounded-full bg-navy flex items-center justify-center text-cream text-[0.78rem] font-extrabold shrink-0">
-                    {i + 1}
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div className="w-[2px] flex-1 bg-warm-border mt-1.5" />
-                  )}
-                </div>
-                <div className="pt-1">
-                  <p className="font-heading font-semibold text-navy text-[1rem] mb-1">
-                    {step.label}
-                  </p>
-                  <p className="text-[0.9rem] text-[#4A4A4A] leading-relaxed">
-                    {step.desc}
-                  </p>
-                </div>
+          <p className="text-[1rem] text-cream/75 leading-[1.72] max-w-[620px] mb-10">
+            PuppyQ organizes development into four periods. Each is a window of time when
+            specific work happens.
+          </p>
+          <PuppyQCards />
+        </div>
+      </section>
+
+      {/* ── EVIDENCE-BASED EARLY SOCIALIZATION ────────────── */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-[720px] mx-auto">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4">
+            Evidence-based early socialization
+          </h2>
+          <p className="text-[1rem] text-charcoal leading-[1.78]">
+            PuppyQ Protocols follows the guidelines of the American Veterinary Society of
+            Animal Behavior (AVSAB), which is supported and endorsed by the American
+            Veterinary Medical Association (AVMA).
+          </p>
+        </div>
+      </section>
+
+      {/* ── SOCIALIZATION BENCHMARKS ──────────────────────── */}
+      <section className="bg-cream-panel py-16 px-6">
+        <div className="max-w-[720px] mx-auto flex flex-col gap-4">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-1">
+            PuppyQ Socialization Benchmarks
+          </h2>
+          <p className="text-[1rem] text-charcoal leading-[1.78]">
+            Dr. Ian Dunbar is a veterinarian and animal behaviorist who holds a veterinary
+            degree from the Royal Veterinary College in London and a doctorate in animal
+            behavior from UC Berkeley. In 1982, he founded SIRIUS® Puppy Training, the
+            world’s first off-leash puppy socialization program, and went on to found the
+            Association of Professional Dog Trainers, now the largest dog trainer
+            organization in the world. His socialization benchmark is one of the most
+            widely cited in the field — not because it’s official policy from any single
+            body, but because decades of trainers, behaviorists, and veterinarians have
+            converged on it independently.
+          </p>
+          <p className="text-[1rem] text-charcoal leading-[1.78]">
+            Our socialization goal follows his two-part benchmark: 100 people by 8 weeks
+            with us, and 100 more in the first month home with you. It’s a shared effort —
+            we lay the foundation during your puppy’s first weeks, and you carry it forward
+            through the most formative days of their life.
+          </p>
+          <p className="text-[1rem] text-charcoal leading-[1.78]">
+            To earn PuppyQ Certification, each puppy meets a clear standard by 8 weeks: 10
+            events, 10 locations, and 100 people. It’s a floor we hold ourselves to for
+            every single puppy.
+          </p>
+        </div>
+      </section>
+
+      {/* ── PULL-QUOTE BREAK ──────────────────────────────── */}
+      <section className="bg-navy py-20 px-6">
+        <div className="max-w-[680px] mx-auto text-center">
+          <blockquote className="font-heading italic font-medium text-[clamp(1.5rem,3vw,2.1rem)] text-cream leading-[1.55]">
+            “Prevention is better than intervention.”
+            <cite className="block not-italic font-body text-[0.8rem] tracking-[0.06em] text-cream/55 mt-5">
+              — Dr. Ian Dunbar
+            </cite>
+          </blockquote>
+        </div>
+      </section>
+
+      {/* ── Q IS FOR QUOTIENT ─────────────────────────────── */}
+      <section className="bg-navy-deep py-16 px-6 border-t border-white/12">
+        <div className="max-w-[720px] mx-auto flex flex-col gap-4">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-cream mb-1">
+            PuppyQ – Q is for Quotient
+          </h2>
+          <p className="text-[1rem] text-cream/80 leading-[1.78]">
+            Q stands for Quotient. We track thirteen of them, using C-BARQ — a validated
+            behavior assessment from the University of Pennsylvania. It measures things like
+            trainability, energy, and how your puppy responds to new people, dogs, and
+            situations.
+          </p>
+          <p className="text-[1rem] text-cream/80 leading-[1.78]">
+            C-BARQ — the Canine Behavioral Assessment and Research Questionnaire — was
+            developed at the University of Pennsylvania by Dr. James Serpell and Dr. Yuying
+            Hsu in 2003, to give owners and researchers a standardized way to measure real
+            canine behavior. It’s since been used in tens of thousands of evaluations
+            worldwide. PuppyQ provides this evaluation to all forever families to help
+            measure and improve its protocols.
+          </p>
+          <p className="text-[1rem] text-cream/80 leading-[1.78]">
+            In conjunction with C-BARQ, PuppyQ has also developed its own Q Assessment,
+            given to puppies at seven weeks by our certified ambassadors, before the puppy
+            goes to its forever home. The Q Assessment is not used as a predictor of
+            behavior, but as a look at the puppy’s early traits and temperament.
+          </p>
+        </div>
+      </section>
+
+      {/* ── WHAT EVERY PUPPY GOES HOME WITH ───────────────── */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-[1160px] mx-auto">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-3.5">
+            What every puppy goes home with
+          </h2>
+          <p className="text-[1rem] text-charcoal leading-[1.78] max-w-[640px] mb-7">
+            Every Adams Farm puppy comes home with three things:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {included.map((item) => (
+              <div
+                key={item.title}
+                className="bg-white border border-line rounded-xl p-7 shadow-[0_2px_16px_rgba(0,0,0,0.07)]"
+              >
+                <h3 className="font-heading font-semibold text-[1.1rem] text-navy mb-2.5">
+                  {item.title}
+                </h3>
+                <p className="text-[0.9rem] text-muted leading-[1.72]">{item.body}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="flex gap-3 flex-wrap mt-4">
-            <Link
-              href="/contact"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
-            >
-              Start your application
-            </Link>
-            <Link
-              href="/faq"
-              className="inline-block border-2 border-coral text-coral font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral hover:text-white transition-colors"
-            >
-              Read the FAQ
-            </Link>
-          </div>
+      {/* ── CLOSING CTA ───────────────────────────────────── */}
+      <section className="bg-navy py-[72px] px-6 border-t border-white/12">
+        <div className="max-w-[1160px] mx-auto flex flex-col items-center text-center gap-6">
+          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-cream">
+            See our current puppies
+          </h2>
+          <Link
+            href="/puppies"
+            className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+          >
+            See available puppies
+          </Link>
         </div>
       </section>
     </main>

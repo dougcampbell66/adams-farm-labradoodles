@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito_Sans } from "next/font/google";
+import { Playfair_Display, Nunito_Sans } from "next/font/google";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import "./globals.css";
 
-const fredoka = Fredoka({
-  weight: ["500", "600", "700"],
+const playfair = Playfair_Display({
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-fredoka",
+  variable: "--font-playfair",
+  display: "swap",
 });
 
 const nunitoSans = Nunito_Sans({
-  weight: ["400", "600", "800"],
+  weight: ["400", "600", "700", "800"],
   subsets: ["latin"],
   variable: "--font-nunito-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Adams Farm Labradoodles",
   },
   description:
-    "ALAA Gold Paw accredited Australian Labradoodle breeder in Greensboro, NC. Raised in loving homes with 30–40 hours of socialization and ENS programming.",
+    "ALAA Gold Paw accredited Australian Labradoodle breeder in Greensboro, NC. Every litter comes from fully health-tested parents and is raised in loving homes.",
 };
 
 export default function RootLayout({
@@ -31,7 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${nunitoSans.variable}`}>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${nunitoSans.variable}`}
+    >
       <body>
         <Nav />
         {children}

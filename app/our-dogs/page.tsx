@@ -26,9 +26,9 @@ export default function OurDogsPage() {
   return (
     <main>
       <PageHero
-        eyebrow="Our Dogs"
-        title="Meet the Breeding Pair"
-        intro="Health testing applies to our breeding dogs — not to litters. Before any breeding, both Silas and Macy complete OFA evaluations, CAER eye exams, and full DNA panels through Orivet."
+        eyebrow="Health tested · ALAA accredited"
+        title="Meet the Parents"
+        intro="Every Adams Farm puppy is born to ALAA-registered parents with full health testing on file and verifiable results at ofa.org."
       />
 
       {/* Active breeding dogs */}
@@ -170,13 +170,6 @@ export default function OurDogsPage() {
             ))}
           </div>
 
-          <div className="mt-8 bg-navy/5 border border-warm-border rounded-[14px] px-6 py-5 text-[0.88rem] text-[#4A4A4A] leading-relaxed">
-            <strong className="text-navy">Note on health testing:</strong> Health
-            tests are performed on Adams Farm&apos;s breeding dogs before each
-            breeding. Test results inform pairing decisions and are not a guarantee
-            of any individual puppy&apos;s health. Our 3-year health guarantee covers
-            debilitating congenital defects present from birth.
-          </div>
         </div>
       </section>
 
@@ -261,18 +254,24 @@ export default function OurDogsPage() {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="py-12 px-6 bg-cream border-t border-warm-border text-center">
-        <div className="max-w-[560px] mx-auto">
-          <p className="text-[1rem] text-[#4A4A4A] mb-5">
-            Want to meet Silas and Macy in person before making any commitment?
-            We encourage it.
+      {/* Health transparency strip */}
+      <section className="py-14 px-6 bg-navy border-t border-white/12">
+        <div className="max-w-[640px] mx-auto">
+          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-cream/50 mb-2">
+            Transparency
+          </p>
+          <h2 className="font-heading font-bold text-[clamp(1.5rem,3vw,1.9rem)] text-cream mb-2.5">
+            Full health results on every profile
+          </h2>
+          <p className="text-[0.95rem] text-cream/75 leading-[1.65] mb-5">
+            OFA hip &amp; elbow evaluations, CAER eye exams, and complete DNA panels —
+            verifiable independently at ofa.org.
           </p>
           <Link
-            href="/contact"
+            href="/our-program"
             className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
-            Schedule a Visit
+            Our health program →
           </Link>
         </div>
       </section>

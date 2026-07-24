@@ -6,16 +6,16 @@ type PageHeroProps = {
 
 export default function PageHero({ eyebrow, title, intro }: PageHeroProps) {
   return (
-    <div className="bg-cream py-16 px-6 border-b border-warm-border">
-      <div className="max-w-[1080px] mx-auto">
+    <div className="bg-navy py-16 px-6 border-b border-white/12">
+      <div className="max-w-[1160px] mx-auto">
         <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-coral mb-3">
           {eyebrow}
         </span>
-        <h1 className="font-heading font-semibold text-[2.4rem] leading-[1.15] text-navy mb-4">
+        <h1 className="font-heading font-bold text-[clamp(2rem,4vw,2.6rem)] leading-[1.15] text-cream mb-4">
           {title}
         </h1>
         {intro && (
-          <p className="text-[1.05rem] max-w-[620px] text-[#4A4A4A] leading-relaxed">
+          <p className="text-[1.05rem] max-w-[620px] text-cream/75 leading-[1.65]">
             {intro}
           </p>
         )}
