@@ -103,7 +103,7 @@ export default function PuppiesPage() {
           <div className="mt-7">
             <Link
               href="/contact"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               Reserve a Puppy
             </Link>

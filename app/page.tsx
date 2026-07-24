@@ -101,7 +101,7 @@ export default function Home() {
             </p>
             <Link
               href="#puppies"
-              className="self-start inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="self-start inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               See available puppies
             </Link>
@@ -156,7 +156,7 @@ export default function Home() {
             </p>
             <Link
               href="/our-dogs"
-              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral transition-colors"
+              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
             >
               Meet the Parents →
             </Link>
@@ -197,7 +197,7 @@ export default function Home() {
           <div className="mt-8">
             <Link
               href="/contact"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               Reserve a Puppy
             </Link>
@@ -382,7 +382,7 @@ export default function Home() {
               href="https://alaa-labradoodles.com/for-breeders/breed-standard/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral transition-colors"
+              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
             >
               Learn more from ALAA →
             </a>
@@ -468,7 +468,7 @@ export default function Home() {
                 key={c.n}
                 className="bg-white/[0.06] border border-white/12 rounded-xl p-8 hover:bg-white/[0.1] hover:-translate-y-0.5 transition-all"
               >
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[0.68rem] font-extrabold bg-coral text-white mb-3.5">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[0.68rem] font-extrabold bg-coral text-navy mb-3.5">
                   {c.n}
                 </span>
                 <h3 className="font-heading font-semibold text-[1.15rem] text-cream mb-2.5">
@@ -506,7 +506,7 @@ export default function Home() {
               >
                 <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none font-heading font-semibold text-[1rem] text-navy leading-snug">
                   {q}
-                  <span className="shrink-0 text-[1.4rem] font-light text-coral leading-none group-open:rotate-45 transition-transform duration-200">
+                  <span className="shrink-0 text-[1.4rem] font-light text-coral-dark leading-none group-open:rotate-45 transition-transform duration-200">
                     +
                   </span>
                 </summary>

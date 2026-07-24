@@ -63,13 +63,13 @@ export default function GuardiansPage() {
           <div className="mt-3 flex items-center gap-5 flex-wrap">
             <a
               href="tel:+13363388660"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               Call 336-338-8660
             </a>
             <Link
               href="/contact"
-              className="text-[0.9rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral transition-colors"
+              className="text-[0.9rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
             >
               Or send us a message →
             </Link>

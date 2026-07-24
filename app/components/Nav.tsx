@@ -107,7 +107,7 @@ export default function Nav() {
 
           <a
             href="tel:+13363388660"
-            className="ml-2.5 inline-flex items-center bg-coral text-white font-extrabold py-2.5 px-5 rounded-lg text-[0.85rem] hover:bg-coral-dark transition-colors"
+            className="ml-2.5 inline-flex items-center bg-coral text-navy font-extrabold py-2.5 px-5 rounded-lg text-[0.85rem] hover:bg-coral-dark transition-colors"
           >
             <PhoneIcon />
             336-338-8660
@@ -162,7 +162,7 @@ export default function Nav() {
             </Link>
             <a
               href="tel:+13363388660"
-              className="mt-4 inline-flex items-center justify-center bg-coral text-white font-extrabold py-3 px-5 rounded-lg text-[0.9rem] hover:bg-coral-dark transition-colors"
+              className="mt-4 inline-flex items-center justify-center bg-coral text-navy font-extrabold py-3 px-5 rounded-lg text-[0.9rem] hover:bg-coral-dark transition-colors"
             >
               <PhoneIcon />
               336-338-8660

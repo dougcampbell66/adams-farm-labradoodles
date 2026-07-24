@@ -85,7 +85,7 @@ export default function SafetyAndProtocolsPage() {
             Done this way, the world becomes a classroom without becoming a hazard.
           </p>
 
-          <p className="font-heading font-semibold italic text-[1.15rem] text-coral leading-[1.5] border-l-4 border-coral pl-6 py-1">
+          <p className="font-heading font-semibold italic text-[1.15rem] text-coral-dark leading-[1.5] border-l-4 border-coral pl-6 py-1">
             This is the heart of how we raise calm puppies: not by keeping them
             sheltered until it&rsquo;s convenient, but by bringing them into the
             world carefully, at the age when it does the most good.
@@ -93,7 +93,7 @@ export default function SafetyAndProtocolsPage() {
 
           <Link
             href="/our-program"
-            className="self-start mt-2 inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+            className="self-start mt-2 inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
             See the full PuppyQ approach →
           </Link>

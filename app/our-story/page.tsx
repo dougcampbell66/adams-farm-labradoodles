@@ -47,7 +47,7 @@ export default function OurStoryPage() {
 
           <Link
             href="/our-dogs"
-            className="self-start text-[0.88rem] font-extrabold text-coral border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
+            className="self-start text-[0.88rem] font-extrabold text-coral-dark border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
           >
             Meet our dogs →
           </Link>

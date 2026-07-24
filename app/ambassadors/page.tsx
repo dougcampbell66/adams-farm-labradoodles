@@ -39,7 +39,7 @@ export default function AmbassadorsPage() {
             the better — and that&rsquo;s exactly where ambassadors come in.
           </p>
 
-          <p className="font-heading font-semibold italic text-[1.15rem] text-coral leading-[1.5] border-l-4 border-coral pl-6 py-1">
+          <p className="font-heading font-semibold italic text-[1.15rem] text-coral-dark leading-[1.5] border-l-4 border-coral pl-6 py-1">
             A little puppy joy, shared early, goes a long way.
           </p>
 
@@ -52,13 +52,13 @@ export default function AmbassadorsPage() {
           <div className="mt-3 flex items-center gap-5 flex-wrap">
             <a
               href="tel:+13363388660"
-              className="inline-block bg-coral text-white font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               Call 336-338-8660
             </a>
             <Link
               href="/contact"
-              className="text-[0.9rem] font-extrabold text-coral border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
+              className="text-[0.9rem] font-extrabold text-coral-dark border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
             >
               Or send us a message →
             </Link>
