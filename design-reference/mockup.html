@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adams Farm Labradoodles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1B2A41;
+    --cream: #FAF7F0;
+    --charcoal: #22201C;
+    --calm-blue: #5B8DBE;
+    --focus-green: #6FAE7F;
+    --excite-yellow: #F2C14E;
+    --feelings-red: #E4634F;
+  }
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px; border-bottom: 1px solid #E2DAC7;
+  }
+  .logo { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.3rem; color: var(--navy); }
+  .navlinks { display: flex; gap: 28px; font-weight: 700; font-size: 0.9rem; }
+  .navlinks a { color: var(--charcoal); text-decoration: none; }
+
+  /* HERO */
+  .hero {
+    padding: 72px 24px 64px;
+    text-align: center;
+  }
+  .dots-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .eyebrow {
+    font-weight: 800; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--navy); display: block; margin-bottom: 14px;
+  }
+  .hero h1 { font-size: 2.6rem; line-height: 1.15; color: var(--navy); margin-bottom: 18px; }
+  .hero p { font-size: 1.05rem; max-width: 560px; margin: 0 auto 28px; color: #4A4A4A; }
+  .btn-primary {
+    display: inline-block; background: var(--navy); color: var(--cream);
+    font-weight: 800; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 0.95rem;
+  }
+
+  /* TRUST STRIP */
+  .trust {
+    background: #F2E9D8; padding: 28px 24px; display: flex; justify-content: center;
+    gap: 40px; flex-wrap: wrap; border-top: 1px solid #E2DAC7; border-bottom: 1px solid #E2DAC7;
+  }
+  .trust-item { text-align: center; font-weight: 800; font-size: 0.85rem; color: var(--navy); max-width: 160px; }
+  .trust-item .num { display: block; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 700; }
+
+  /* PROGRAM SECTION - navy full bleed */
+  .program {
+    background: var(--navy); color: var(--cream); padding: 72px 24px;
+  }
+  .program .eyebrow { color: var(--excite-yellow); }
+  .program h2 { font-size: 2.1rem; margin-bottom: 16px; max-width: 640px; }
+  .program-intro { max-width: 620px; font-size: 1.02rem; opacity: 0.9; margin-bottom: 44px; line-height: 1.6; }
+  .program-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .program-card {
+    background: rgba(255,255,255,0.06); border-radius: 14px; padding: 26px;
+    border-top: 4px solid var(--calm-blue);
+  }
+  .program-card:nth-child(2) { border-top-color: var(--focus-green); }
+  .program-card:nth-child(3) { border-top-color: var(--excite-yellow); }
+  .program-card h3 { font-size: 1.15rem; margin-bottom: 10px; color: var(--cream); }
+  .program-card p { font-size: 0.9rem; line-height: 1.5; opacity: 0.85; }
+  .stat-line { font-weight: 800; color: var(--excite-yellow); font-size: 0.85rem; margin-top: 12px; display: block; }
+
+  /* SECTION generic */
+  section.light { padding: 64px 24px; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .section-head .eyebrow { color: var(--navy); }
+  .section-head h2 { font-size: 1.9rem; color: var(--navy); }
+
+  .litter-card {
+    display: flex; gap: 28px; align-items: center; background: #F2E9D8;
+    border-radius: 18px; padding: 32px; flex-wrap: wrap;
+  }
+  .litter-photo {
+    width: 220px; height: 220px; border-radius: 14px; background: #D8CBA8;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    color: #8a7c5c; font-size: 0.8rem; font-weight: 700;
+  }
+  .litter-info h3 { color: var(--navy); font-size: 1.4rem; margin-bottom: 8px; }
+  .litter-info p { font-size: 0.92rem; color: #4A4A4A; margin-bottom: 14px; }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .badge { font-size: 0.72rem; font-weight: 800; padding: 5px 12px; border-radius: 999px; color: var(--navy); }
+
+  footer {
+    background: var(--charcoal); color: var(--cream); padding: 40px 24px; text-align: center; font-size: 0.85rem;
+  }
+  footer .dots-row { margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Adams Farm Labradoodles</div>
+  <div class="navlinks">
+    <a href="#">Puppies</a>
+    <a href="#">Our Program</a>
+    <a href="#">Our Dogs</a>
+    <a href="#">FAQ</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="dots-row">
+    <div class="dot" style="background:var(--calm-blue);"></div>
+    <div class="dot" style="background:var(--focus-green);"></div>
+    <div class="dot" style="background:var(--excite-yellow);"></div>
+    <div class="dot" style="background:var(--feelings-red);"></div>
+  </div>
+  <span class="eyebrow">ALAA Gold Paw Accredited · Greensboro, NC</span>
+  <h1>Raised in Loving Homes.<br>Ready for Yours.</h1>
+  <p>30–40 hours of hands-on socialization, structured early neurological stimulation, and a program built the way good preschools are — intentional, from day three.</p>
+  <a href="#" class="btn-primary">Meet the Puppies</a>
+</div>
+
+<div class="trust">
+  <div class="trust-item"><span class="num">3</span>Years Breeding</div>
+  <div class="trust-item"><span class="num">7</span>Litters Placed</div>
+  <div class="trust-item"><span class="num">35</span>Families</div>
+  <div class="trust-item"><span class="num">3-Yr</span>Health Guarantee</div>
+</div>
+
+<div class="program">
+  <div class="wrap">
+    <span class="eyebrow">Our Program</span>
+    <h2>Two programs most breeders skip.</h2>
+    <p class="program-intro">Every Adams Farm puppy goes through a structured developmental program before they ever meet you — not vague "well-socialized" marketing language, but a specific, repeatable process.</p>
+    <div class="program-grid">
+      <div class="program-card">
+        <h3>ENS / Super Dog Program</h3>
+        <p>A structured neurological stimulation protocol applied from day three, based on the U.S. military's original Bio Sensor research.</p>
+        <span class="stat-line">Starts Day 3</span>
+      </div>
+      <div class="program-card">
+        <h3>Advanced Socialization</h3>
+        <p>Real-world exposure to a wide range of people, sounds, surfaces, and environments — not just time in the whelping room.</p>
+        <span class="stat-line">30–40 Hours</span>
+      </div>
+      <div class="program-card">
+        <h3>Early Crate Training</h3>
+        <p>Puppies begin crate training before they leave, so your first nights home start from a foundation, not square one.</p>
+        <span class="stat-line">Begins Before Placement</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="light">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Available Now</span>
+      <h2>Meet the Spring Litter</h2>
+    </div>
+    <div class="litter-card">
+      <div class="litter-photo">Litter Photo</div>
+      <div class="litter-info">
+        <div class="badge-row">
+          <span class="badge" style="background:#DCEAF6;">2 Available</span>
+          <span class="badge" style="background:#E4EFE6;">4 Reserved</span>
+        </div>
+        <h3>Jumba, Stitch, David, Lilo, Tutu &amp; Angel</h3>
+        <p>Sire: Tarheel's Knox · Dam: Legend Manor's Holly · Expected adult size: large mini, 20–25 lbs</p>
+        <a href="#" class="btn-primary" style="padding:10px 20px;font-size:0.85rem;">Meet the Litter →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="dots-row" style="display:flex;justify-content:center;gap:8px;">
+    <div class="dot" style="background:var(--calm-blue);width:9px;height:9px;"></div>
+    <div class="dot" style="background:var(--focus-green);width:9px;height:9px;"></div>
+    <div class="dot" style="background:var(--excite-yellow);width:9px;height:9px;"></div>
+    <div class="dot" style="background:var(--feelings-red);width:9px;height:9px;"></div>
+  </div>
+  Adams Farm Labradoodles · Greensboro, NC · ALAA Gold Paw Accredited
+</footer>
+
+</body>
+</html>
