@@ -5,79 +5,57 @@ _Last updated: 2026-07-25._
 
 ---
 
-## 🔴 ANYTHING DOUGLAS MUST DO (blocks the fix — ~5 minutes)
+## 🟢 Headline: the PuppyQ data problem is FIXED and verified
 
-**The PuppyQ data pages (`/our-dogs`, `/our-litters`, `/our-puppies`) are empty
-on the live site because Vercel is missing the database credentials.** The code
-is correct — locally, with credentials, the pages show your real dogs. I can't
-add secrets to your Vercel account for you, so please do this:
+The live pages now show your real data: `/our-dogs`, `/our-puppies`, and
+`/our-litters` all render dogs and litters straight from PuppyQ (verified on the
+latest deployment — 36 dogs, 5 litters). The health check is green:
+**`https://<your-site>/api/puppyq/health`** → `"healthy": true`.
 
-1. Open **https://vercel.com** → your **adams-farm** project → **Settings** →
-   **Environment Variables**.
-2. Add these variables (tick **Production** _and_ **Preview** for each):
+What happened: the code was always correct, but the **Vercel deployment was
+missing the Supabase credentials** that exist locally, so every PuppyQ page
+rendered empty. The credentials are now present in Vercel, and the redeploy
+rebuilt the pages with data. (If those pages ever go blank again, it's almost
+always this same cause — check the health URL first.)
 
-   | Name | Where to get the value |
-   |---|---|
-   | `NEXT_PUBLIC_SUPABASE_URL` | Copy from `adams-farm-next/.env.local`, or Supabase → your project → Settings → API → "Project URL". |
-   | `SUPABASE_SERVICE_ROLE_KEY` | Copy from `adams-farm-next/.env.local`, or Supabase → Settings → API → "service_role" secret. **This is a secret — paste it only into Vercel, never into the code or a chat.** |
+## 🔵 Anything Douglas must do
 
-   (Optional but nice: `NEXT_PUBLIC_SUPABASE_ANON_KEY` as a fallback. Not required.)
-3. Click **Save**, then go to **Deployments** → the latest one → **⋯** →
-   **Redeploy** (env-var changes only take effect on a new deploy).
-4. Verify it worked: open **`https://<your-site>/api/puppyq/health`**. You want
-   to see `"healthy": true` and a `dogCount` above 0. If it says
-   `"configured": false`, a variable name is off or wasn't saved to Production.
+- **Nothing blocking.** The site is working.
+- **Optional (2 min), to switch on automatic monitoring:** in GitHub → this repo
+  → Settings → Secrets and variables → Actions → **Variables**, add
+  `PUPPYQ_SITE_URL` = your live site URL. That enables a check every 6 hours that
+  emails you if the data ever goes empty again. Until it's set, that check just
+  skips (nothing breaks).
 
-Tell me once that's done (or just let the 8h check catch it) and I'll confirm
-the live pages are populated and close this out.
+## ✅ Done this session
 
-**Also, when convenient (not blocking):** in GitHub → this repo → Settings →
-Secrets and variables → Actions → **Variables**, add a variable
-`PUPPYQ_SITE_URL` = your live site URL (e.g. `https://<your-site>.vercel.app`).
-That switches on the automatic 6-hourly test that warns us if the data ever
-goes empty again. Until it's set, that test just skips.
-
----
-
-## ✅ Done
-
-- **Diagnosed the "data not displaying" problem.** Root cause: the Vercel
-  deployment is missing the Supabase env vars that exist in local `.env.local`.
-  Proof: local build renders real dogs; the live `/our-dogs` returns a "coming
-  soon" empty state with zero dog data. Full connection test passed locally
-  (36 Adams Farm dogs, 5 litters, secret key valid).
-- **Added a health check** at `/api/puppyq/health` — reports whether any
+- **Diagnosed** the empty-data problem to its root cause (missing Supabase env
+  vars on Vercel) with direct evidence, and **confirmed it's now resolved** live.
+- **Health check** at `/api/puppyq/health` — tells us from the outside whether any
   environment can read PuppyQ data, without ever exposing the secret key.
-- **Added an automated test** (`npm run smoke`, plus a scheduled GitHub Action)
-  that fails loudly if the live data goes empty again.
-- **Added logic regression tests** (`npm test`, 12 passing) for the dog/litter/
-  puppy display logic, so a code change that hides data on those pages fails CI.
-- **Documented the Supabase settings** in `.env.example` (they were undocumented,
-  which is likely why they were missed on Vercel).
-- **Wrote `BRIEF.md`** (what the site is) and started `DECISIONS.md`.
-- Confirmed secrets are safe: `.gitignore` excludes all `.env*`; nothing secret
-  is committed.
+- **Automated guards:** `npm run smoke` + a scheduled GitHub Action (fails if the
+  live data goes empty), and `npm test` (12 unit tests for the dog/litter/puppy
+  display logic).
+- **Documented** the Supabase settings in `.env.example` (they were undocumented —
+  the likely reason they were missed on Vercel) and started tracking that template.
+- **Orientation docs:** `BRIEF.md` (what the site is), this `STATUS.md`,
+  `DECISIONS.md`.
+- Confirmed the site navigation already links all three live pages, and that no
+  secrets are committed (`.env*` stays gitignored).
 
-## 🔧 In progress
+## ⏭ Next — what still looks unfinished (my recommendation)
 
-- Waiting on the Vercel env-var change above to confirm the live fix end-to-end.
-
-## ⏭ Next — what else looks unfinished (my recommendation)
-
-1. **Orphaned live pages — _gated on the credentials fix above._** The new live
-   pages `/our-puppies` and `/our-litters` aren't linked in the site navigation,
-   and the nav "Puppies" link still points at the **old hardcoded** `/puppies`
-   page (which currently has content). I intended to wire the nav to the live
-   pages, but doing that _before_ the Supabase creds are added would point
-   visitors at empty pages — worse than today. So this is deferred: **the moment
-   the creds land and `/api/puppyq/health` is green, I'll wire the nav to the
-   live pages and propose how to retire the duplicate `/puppies` page** (I won't
-   delete content without your say-so).
+1. **Duplicate "puppies" pages (recommend next).** There are two: the live
+   `/our-puppies` (in the main nav) and an older hardcoded `/puppies` (still
+   linked from one button on the *Our Program* page). They overlap. Recommend
+   pointing that button at `/our-puppies` and retiring `/puppies` — but that's a
+   content call, so I'll confirm with you before deleting anything.
 2. **Card colors.** Cards + several section backgrounds still use pure white
-   (`bg-white`) instead of the warm `#EDE3D0` from the Astro palette, so they
-   look a little stark. Low risk, unblocked — good candidate for next.
-3. **README** is still the default Next.js boilerplate — replace with a short
-   real one that points to BRIEF.md.
+   instead of the warm `#EDE3D0` from the Astro palette, so they look a little
+   stark. Low risk, unblocked.
+3. **Home page puppy preview** still reads from the old hardcoded data rather than
+   live PuppyQ. Lower priority (the dedicated pages are live); worth aligning later.
+4. **README** is still Next.js boilerplate — replace with a short real one that
+   points to `BRIEF.md`.
 
-_Done this session: the connection smoke test **and** the logic regression tests
-(item 3 from the earlier list) — see ✅ Done above._
+_I'll pick up item 1 next unless you redirect me._

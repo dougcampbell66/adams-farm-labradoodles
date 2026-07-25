@@ -31,6 +31,19 @@ _Maintained by EngineerQ._
   enter credentials into third-party settings on his behalf. Exact steps are in
   `STATUS.md`.
 
+## 2026-07-25 — Data issue resolved live; nav already wired
+
+- After the health endpoint + guards shipped, the live `/api/puppyq/health` went
+  **green** (configured, 36 dogs) and all three PuppyQ pages render data on the
+  latest deployment. Conclusion: the Supabase env vars are now present in Vercel;
+  the redeploy rebuilt the ISR pages with data. The earlier empty deployment was
+  built before the creds existed. Root cause and fix both confirmed.
+- The site nav already links `/our-dogs`, `/our-puppies`, `/our-litters` (done in
+  the PuppyQ commit), so the "orphaned live pages" concern was already handled —
+  the nav-wiring follow-up is unnecessary. Remaining loose end: an older static
+  `/puppies` page still linked from one CTA; retiring it is a content call for
+  Douglas, not something to do unilaterally.
+
 ## 2026-07-25 — Added Vitest logic tests; deferred nav wiring
 
 - **Added Vitest** (dev dependency) + `npm test` with unit tests for the pure
