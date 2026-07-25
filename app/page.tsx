@@ -85,7 +85,7 @@ export default function Home() {
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="bg-navy">
-        <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[3fr_2fr] gap-10 md:gap-14 items-stretch">
+        <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10 md:gap-14 items-stretch">
           <div className="py-16 md:py-20 flex flex-col justify-center">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
               Australian Labradoodles
