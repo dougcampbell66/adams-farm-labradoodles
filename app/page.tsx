@@ -104,7 +104,7 @@ export default function Home() {
               See available puppies
             </Link>
           </div>
-          <div className="relative min-h-[420px] md:min-h-[540px]">
+          <div className="relative aspect-square w-full">
             <Image
               src="/images/hero-portrait.png"
               alt="A girl holding an Adams Farm Labradoodle puppy"
@@ -112,7 +112,7 @@ export default function Home() {
               priority
               sizes="(max-width: 768px) 100vw, 40vw"
               className="object-cover"
-              style={{ objectPosition: "center 25%" }}
+              style={{ objectPosition: "center top" }}
             />
           </div>
         </div>
