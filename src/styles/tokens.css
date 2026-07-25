@@ -1,7 +1,7 @@
 /* ============================================================
    Adams Farm Labradoodles — DEFAULT color tokens
    ------------------------------------------------------------
-   Farm Gold & Deep Navy: warm, heritage, trustworthy.
+   Pine & Brass: matches the live Astro/Netlify site.
    Single source of truth for every color used across the site.
    These live in a Tailwind v4 @theme block, so each token also
    generates matching utilities (bg-*, text-*, border-*, fill-*,
@@ -15,22 +15,22 @@
 
 @theme {
   /* ── Core palette ─────────────────────────────────────────── */
-  --color-navy: #0E1A2E;        /* Deep Navy — header/hero, nav, dark sections */
-  --color-navy-deep: #152238;   /* Ink — hero overlay / layering */
-  --color-navy-hover: #0A1422;  /* darker deep-navy hover state */
-  --color-cream: #FDFCFA;       /* Paper — page body background */
-  --color-cream-panel: #F2EFE8; /* Warm Cream — section fill background */
-  --color-cream-soft: #EEF1F7;  /* soft light text on dark (SVG labels) */
-  --color-charcoal: #1a1a2e;    /* body text */
-  --color-muted: #5A6274;       /* muted blue-gray body copy */
-  --color-body-soft: #44464F;   /* neutral gray body copy */
-  --color-tan: #6B7488;         /* muted slate — citations, separators */
-  --color-placeholder-muted: #9AA1B0; /* form field placeholder text */
+  --color-navy: #22344A;        /* Pine/Navy — header/hero, nav, primary */
+  --color-navy-deep: #2A2E35;   /* Charcoal-bg — hero sections / layering */
+  --color-navy-hover: #1A2838;  /* darker pine hover state */
+  --color-cream: #F7F2E7;       /* Cream — page body background */
+  --color-cream-panel: #EDE3D0; /* Card / section fill background */
+  --color-cream-soft: #F5EFE2;  /* soft light text on dark (SVG labels) */
+  --color-charcoal: #2C2A24;    /* body text */
+  --color-muted: #6B6558;       /* muted body copy */
+  --color-body-soft: #4E4A40;   /* neutral warm body copy */
+  --color-tan: #8A7C5C;         /* muted tan — citations, separators */
+  --color-placeholder-muted: #9A8F7C; /* form field placeholder text */
 
-  /* ── Farm Gold — primary CTA / accent ─────────────────────── */
-  --color-coral: #E1AF4A;       /* Farm Gold — buttons, CTAs, accent */
-  --color-coral-dark: #8C6C2D;  /* Antique Gold — hover / pressed, eyebrows on light */
-  --color-coral-tint: #F7ECD5;  /* soft gold wash for dropdowns/hovers */
+  /* ── Brass gold — primary CTA / accent ────────────────────── */
+  --color-coral: #B08D57;       /* Brass gold — buttons, CTAs, accent */
+  --color-coral-dark: #8C6C3A;  /* darker brass — hover / pressed, eyebrows on light */
+  --color-coral-tint: #EFE6D3;  /* soft brass wash for dropdowns/hovers */
 
   /* ── PuppyQ accent dots ───────────────────────────────────── */
   --color-calm-blue: #3E6BA8;
@@ -39,12 +39,12 @@
   --color-excite-yellow-dark: #B8921E; /* legible gold on light surfaces */
   --color-feelings-red: #C2181D;
 
-  /* ── Cool neutrals / surfaces ─────────────────────────────── */
-  --color-warm-sand: #F2EFE8;
-  --color-warm-border: #D9E0EC;
-  --color-line: rgba(14, 26, 46, 0.10);
-  --color-photo-placeholder: #E4E9F2; /* image placeholder background */
-  --color-sand-deep: #C9D3E4;         /* thumbnail placeholder background */
+  /* ── Warm neutrals / surfaces ─────────────────────────────── */
+  --color-warm-sand: #EDE3D0;
+  --color-warm-border: #DED2BC;
+  --color-line: rgba(34, 52, 74, 0.10);
+  --color-photo-placeholder: #E6DAC5; /* image placeholder background */
+  --color-sand-deep: #D8C6A6;         /* thumbnail placeholder background */
 
   /* ── "Available" badge ────────────────────────────────────── */
   --color-avail-bg: #E1F5EE;
