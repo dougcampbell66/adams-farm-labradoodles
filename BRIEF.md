@@ -6,12 +6,12 @@ _Plain-language orientation for Douglas. Written by EngineerQ, 2026-07-25._
 
 This is the **new Adams Farm Labradoodles website**, built with **Next.js**
 (a modern web framework) and hosted on **Vercel**. It's the successor to the
-older site built with Astro that's currently live on Netlify.
+older site that was built with Astro.
 
 There are **two separate projects** in this workspace, each its own code repo:
 
-- `adams-farm/` — the **old Astro site** (the Netlify one). We treat it as a
-  read-only reference for content and design. We don't deploy it.
+- `adams-farm/` — the **old Astro site**. We keep it only as a read-only
+  reference for content/copy; we don't deploy or track it.
 - `adams-farm-next/` — the **new Next.js site** (this one). It deploys to
   Vercel and is where all current work happens.
 

@@ -31,6 +31,18 @@ _Maintained by EngineerQ._
   enter credentials into third-party settings on his behalf. Exact steps are in
   `STATUS.md`.
 
+## 2026-07-25 — Replace-don't-retire convention; ignore Netlify
+
+- **Old pages that a new page replaces get a `2` suffix, not deletion** (Douglas's
+  call). First application: the old hardcoded `/puppies` → `/puppies2`, kept and
+  still reachable, with its internal links repointed. The live `/our-puppies`
+  remains the primary page in the nav. The bare `/puppies` URL now 404s; a
+  redirect to `/puppies2` is available on request but wasn't added (keeping the
+  rename literal).
+- **Ignore Netlify.** Per Douglas, we no longer treat the old Netlify deployment
+  as a reference point. The Astro project stays only as a read-only content
+  source. Docs de-emphasized accordingly.
+
 ## 2026-07-25 — Data issue resolved live; nav already wired
 
 - After the health endpoint + guards shipped, the live `/api/puppyq/health` went

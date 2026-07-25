@@ -42,20 +42,20 @@ always this same cause — check the health URL first.)
   `DECISIONS.md`.
 - Confirmed the site navigation already links all three live pages, and that no
   secrets are committed (`.env*` stays gitignored).
+- **Renamed the old hardcoded puppies page to `/puppies2`** (kept, not retired,
+  per your call) and repointed its internal links. The live `/our-puppies` stays
+  primary in the nav. New convention: when a new page replaces an old one, the
+  old one gets a `2` suffix rather than being deleted.
+- **Replaced the boilerplate README** with a real one.
 
 ## ⏭ Next — what still looks unfinished (my recommendation)
 
-1. **Duplicate "puppies" pages (recommend next).** There are two: the live
-   `/our-puppies` (in the main nav) and an older hardcoded `/puppies` (still
-   linked from one button on the *Our Program* page). They overlap. Recommend
-   pointing that button at `/our-puppies` and retiring `/puppies` — but that's a
-   content call, so I'll confirm with you before deleting anything.
-2. **Card colors.** Cards + several section backgrounds still use pure white
-   instead of the warm `#EDE3D0` from the Astro palette, so they look a little
-   stark. Low risk, unblocked.
-3. **Home page puppy preview** still reads from the old hardcoded data rather than
+1. **Card colors (recommend next).** Cards + several section backgrounds still use
+   pure white instead of the warm `#EDE3D0`, so they look a little stark. Low
+   risk, unblocked, no decision needed from you.
+2. **Home page puppy preview** still reads from the old hardcoded data rather than
    live PuppyQ. Lower priority (the dedicated pages are live); worth aligning later.
-4. **README** is still Next.js boilerplate — replace with a short real one that
-   points to `BRIEF.md`.
 
-_I'll pick up item 1 next unless you redirect me._
+_Note: the old `/puppies` URL now returns "not found" (its content lives at
+`/puppies2`). If you want the old URL to keep working (redirect to `/puppies2`),
+say the word — one-line change._
