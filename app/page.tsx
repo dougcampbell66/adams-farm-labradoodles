@@ -84,10 +84,12 @@ export default function Home() {
   return (
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-navy overflow-hidden">
+      <section className="relative bg-navy overflow-visible">
         {/* Image — desktop/tablet: pinned to exactly the right half of the
-            viewport, filling the full section height edge-to-edge */}
-        <div className="hidden md:block absolute inset-y-0 right-0 w-[50vw]">
+            viewport. Height is 10% taller than the section (min-h 660px ->
+            726px) so it bleeds below the hero; z-10 lifts it over the next
+            section (overflow-visible on the section lets the bleed show). */}
+        <div className="hidden md:block absolute top-0 right-0 w-[50vw] h-[726px] z-10">
           <Image
             src="/images/hero-portrait.png"
             alt="A girl holding an Adams Farm Labradoodle puppy"
