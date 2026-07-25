@@ -5,8 +5,9 @@ import { useState } from "react";
 
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Puppies", href: "/puppies" },
   { label: "Our Dogs", href: "/our-dogs" },
+  { label: "Our Puppies", href: "/our-puppies" },
+  { label: "Our Litters", href: "/our-litters" },
 ];
 
 const aboutLinks = [
