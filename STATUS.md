@@ -50,6 +50,8 @@ goes empty again. Until it's set, that test just skips.
   environment can read PuppyQ data, without ever exposing the secret key.
 - **Added an automated test** (`npm run smoke`, plus a scheduled GitHub Action)
   that fails loudly if the live data goes empty again.
+- **Added logic regression tests** (`npm test`, 12 passing) for the dog/litter/
+  puppy display logic, so a code change that hides data on those pages fails CI.
 - **Documented the Supabase settings** in `.env.example` (they were undocumented,
   which is likely why they were missed on Vercel).
 - **Wrote `BRIEF.md`** (what the site is) and started `DECISIONS.md`.
@@ -62,18 +64,20 @@ goes empty again. Until it's set, that test just skips.
 
 ## ⏭ Next — what else looks unfinished (my recommendation)
 
-1. **Orphaned live pages (recommend doing first).** The new live pages
-   `/our-puppies` and `/our-litters` aren't linked anywhere in the site
-   navigation, and the nav "Puppies" link still points at the **old hardcoded**
-   `/puppies` page. So visitors can't reach the live data pages, and there are
-   two competing "puppies" pages. → _I'm proceeding with this now: wiring the
-   nav to the live pages. Consolidating/redirecting the old `/puppies` needs a
-   product call — I'll propose options rather than delete content._
+1. **Orphaned live pages — _gated on the credentials fix above._** The new live
+   pages `/our-puppies` and `/our-litters` aren't linked in the site navigation,
+   and the nav "Puppies" link still points at the **old hardcoded** `/puppies`
+   page (which currently has content). I intended to wire the nav to the live
+   pages, but doing that _before_ the Supabase creds are added would point
+   visitors at empty pages — worse than today. So this is deferred: **the moment
+   the creds land and `/api/puppyq/health` is green, I'll wire the nav to the
+   live pages and propose how to retire the duplicate `/puppies` page** (I won't
+   delete content without your say-so).
 2. **Card colors.** Cards + several section backgrounds still use pure white
    (`bg-white`) instead of the warm `#EDE3D0` from the Astro palette, so they
-   look a little stark. Low risk, ~30 min.
-3. **Logic regression tests.** The smoke test covers the connection; adding a
-   couple of unit tests for the dog/litter/puppy sorting logic would catch
-   display bugs. Nice-to-have.
-4. **README** is still the default Next.js boilerplate — replace with a short
-   real one (points to BRIEF.md).
+   look a little stark. Low risk, unblocked — good candidate for next.
+3. **README** is still the default Next.js boilerplate — replace with a short
+   real one that points to BRIEF.md.
+
+_Done this session: the connection smoke test **and** the logic regression tests
+(item 3 from the earlier list) — see ✅ Done above._

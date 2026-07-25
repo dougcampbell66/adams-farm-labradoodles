@@ -31,6 +31,19 @@ _Maintained by EngineerQ._
   enter credentials into third-party settings on his behalf. Exact steps are in
   `STATUS.md`.
 
+## 2026-07-25 — Added Vitest logic tests; deferred nav wiring
+
+- **Added Vitest** (dev dependency) + `npm test` with unit tests for the pure
+  PuppyQ display logic (tier split, sex/role inference, name fallbacks, puppy
+  standing). These run with no network/DB and complement the live smoke test.
+  Chosen over Node's built-in runner because the data layer uses `@/` path
+  aliases that Vitest resolves cleanly via one config line.
+- **Deferred wiring the nav to the live PuppyQ pages.** It was the top "unfinished"
+  item, but it's gated on the credentials fix: pointing the nav at `/our-puppies`
+  / `/our-litters` while Vercel still lacks Supabase creds would send visitors to
+  empty pages — a regression. Will do it the moment `/api/puppyq/health` is green.
+  Picked the logic tests (unblocked, zero production risk) to proceed with instead.
+
 ## Adopted working rules (EngineerQ)
 
 - `STATUS.md` kept current in plain language (Done / In progress / Next / Douglas
