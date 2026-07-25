@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
 import { getPuppiesForLitter } from "@/src/data/litters";
-import { testimonials } from "@/src/data/testimonials";
 
 const homeStats = [
   { num: "6", label: "Litters" },
@@ -80,8 +80,6 @@ export default function Home() {
   const springPuppies = getPuppiesForLitter("spring-2026").filter(
     (p) => p.status === "available"
   );
-  const featured = testimonials.find((t) => t.featured);
-  const rest = testimonials.filter((t) => !t.featured);
 
   return (
     <main>
@@ -302,34 +300,15 @@ export default function Home() {
             Loved by Families
           </h2>
 
-          {featured && (
-            <div className="bg-white/[0.06] border border-white/12 rounded-2xl p-8 md:p-10 mb-6">
-              <blockquote className="font-heading italic font-medium text-[1.2rem] md:text-[1.35rem] text-cream leading-[1.55] mb-5">
-                “{featured.quote}”
-              </blockquote>
-              <p className="font-extrabold text-[0.85rem] text-coral">
-                — {featured.family}
-                {featured.year ? `, ${featured.year}` : ""}
-              </p>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {rest.map((t) => (
-              <div
-                key={t.id}
-                className="bg-white/[0.06] border border-white/12 rounded-xl p-7"
-              >
-                <blockquote className="text-[0.97rem] text-cream/85 leading-[1.7] italic mb-4">
-                  “{t.quote}”
-                </blockquote>
-                <p className="font-extrabold text-[0.82rem] text-cream">
-                  — {t.family}
-                  {t.year ? `, ${t.year}` : ""}
-                </p>
-              </div>
-            ))}
-          </div>
+          {/* Live Google Reviews (Elfsight) */}
+          <Script
+            src="https://elfsightcdn.com/platform.js"
+            strategy="lazyOnload"
+          />
+          <div
+            className="elfsight-app-460e5003-87bc-4cbe-a8d7-8d93a30a0ad2"
+            data-elfsight-app-lazy
+          />
         </div>
       </section>
 
