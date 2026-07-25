@@ -85,24 +85,8 @@ export default function Home() {
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-navy overflow-visible">
-        {/* Image — desktop/tablet: pinned to exactly the right half of the
-            viewport. Height is 10% taller than the section (min-h 660px ->
-            726px) so it bleeds below the hero; z-10 lifts it over the next
-            section (overflow-visible on the section lets the bleed show). */}
-        <div className="hidden md:block absolute top-0 right-0 w-[50vw] h-[726px] z-10">
-          <Image
-            src="/images/hero-portrait.png"
-            alt="A girl holding an Adams Farm Labradoodle puppy"
-            fill
-            priority
-            sizes="50vw"
-            className="object-cover"
-            style={{ objectPosition: "center top" }}
-          />
-        </div>
-
-        <div className="max-w-[1160px] mx-auto px-6">
-          <div className="w-full md:w-1/2 md:pr-10 flex flex-col justify-center py-16 md:min-h-[660px]">
+        <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10 md:gap-14 items-stretch">
+          <div className="flex flex-col justify-center py-16 md:min-h-[500px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
               Australian Labradoodles
             </p>
@@ -120,18 +104,38 @@ export default function Home() {
               See available puppies
             </Link>
           </div>
+
+          {/* Circular image — desktop/tablet: centered in the right column,
+              large enough (~520px) to bleed slightly above/below the hero.
+              z-10 lifts it over the next section; overflow-visible + the
+              sticky z-[100] nav mean the top tucks behind the nav cleanly. */}
+          <div className="hidden md:block relative">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(520px,42vw)] h-[min(520px,42vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)] z-10">
+              <Image
+                src="/images/hero-portrait.png"
+                alt="A girl holding an Adams Farm Labradoodle puppy"
+                fill
+                priority
+                sizes="520px"
+                className="object-cover"
+                style={{ objectPosition: "center top" }}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Image — mobile: full-width square stacked below the text */}
-        <div className="md:hidden relative w-full aspect-square">
-          <Image
-            src="/images/hero-portrait.png"
-            alt="A girl holding an Adams Farm Labradoodle puppy"
-            fill
-            sizes="100vw"
-            className="object-cover"
-            style={{ objectPosition: "center top" }}
-          />
+        {/* Circular image — mobile: centered below the text */}
+        <div className="md:hidden flex justify-center pb-14">
+          <div className="relative w-[min(300px,78vw)] h-[min(300px,78vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)]">
+            <Image
+              src="/images/hero-portrait.png"
+              alt="A girl holding an Adams Farm Labradoodle puppy"
+              fill
+              sizes="300px"
+              className="object-cover"
+              style={{ objectPosition: "center top" }}
+            />
+          </div>
         </div>
       </section>
 
