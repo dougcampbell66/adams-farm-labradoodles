@@ -6,13 +6,13 @@ const siteLinks = [
   { label: "Our dogs", href: "/our-dogs" },
   { label: "Our program", href: "/our-program" },
   { label: "Guardians", href: "/guardians" },
-  { label: "Puppies", href: "/puppies" },
+  { label: "Puppies", href: "/puppies2" },
   { label: "Testimonials", href: "/#testimonials" },
   { label: "FAQ", href: "/#faq" },
 ];
 
 const getAPuppyLinks = [
-  { label: "See available puppies", href: "/puppies" },
+  { label: "See available puppies", href: "/puppies2" },
   { label: "Join the waitlist", href: "/contact" },
   { label: "Meet the parents", href: "/our-dogs" },
   { label: "Our health guarantee", href: "/our-program" },

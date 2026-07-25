@@ -199,7 +199,7 @@ export default function OurProgramPage() {
             See our current puppies
           </h2>
           <Link
-            href="/puppies"
+            href="/puppies2"
             className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
             See available puppies
