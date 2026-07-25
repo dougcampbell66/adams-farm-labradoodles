@@ -93,7 +93,7 @@ export default function Home() {
               Australian Labradoodles
             </p>
             <h1 className="font-heading font-bold text-[clamp(2rem,4vw,2.9rem)] leading-[1.15] text-cream mb-5">
-              Raised in Loving Homes. Ready for Yours.
+              Puppies with a Purpose
             </h1>
             <p className="text-[1.05rem] text-cream/75 leading-[1.7] max-w-[440px] mb-7">
               Every litter comes from fully health-tested parents and grows up
@@ -108,13 +108,13 @@ export default function Home() {
           </div>
           <div className="relative min-h-[420px] md:min-h-[540px]">
             <Image
-              src="/images/hero/founder-hero-portrait.jpg"
+              src="/images/hero-portrait.png"
               alt="A girl holding an Adams Farm Labradoodle puppy"
               fill
               priority
               sizes="(max-width: 768px) 100vw, 40vw"
               className="object-cover"
-              style={{ objectPosition: "center 15%" }}
+              style={{ objectPosition: "center 25%" }}
             />
           </div>
         </div>
