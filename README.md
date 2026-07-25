@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Adams Farm Labradoodles — website (Next.js)
 
-## Getting Started
+The Adams Farm Labradoodles site. Marketing pages plus live dog/litter/puppy
+pages that read from the **PuppyQ** database (Supabase). Deploys to Vercel.
 
-First, run the development server:
+New here? Read **[BRIEF.md](./BRIEF.md)** first (plain-language overview), then
+**[STATUS.md](./STATUS.md)** (current state + anything the owner must do). Notable
+engineering choices are in **[DECISIONS.md](./DECISIONS.md)**.
+
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+# create .env.local from the template and fill in the values (see below)
+cp .env.example .env.local
+npm run dev            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and fill it in. The important ones:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | PuppyQ database URL. |
+| `SUPABASE_SERVICE_ROLE_KEY` | PuppyQ read key (**secret** — server only, never commit). |
+| `SMTP_EMAIL` / `SMTP_PASSWORD` | Contact-form email (Hostinger). |
+| `MAGIC_LINK_SECRET`, `ADAMS_FARM_ALLOWED_EMAILS`, `RESEND_API_KEY` | `/forever-families` login. |
 
-## Learn More
+**These must also be set in Vercel** (Settings → Environment Variables, for
+Production *and* Preview). If the Supabase vars are missing in an environment,
+the live-data pages (`/our-dogs`, `/our-puppies`, `/our-litters`) render empty.
 
-To learn more about Next.js, take a look at the following resources:
+## Is the PuppyQ data working?
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Visit **`/api/puppyq/health`** on any environment. `"healthy": true` with a
+`dogCount` above 0 means that environment can read the database. `"configured":
+false` means its Supabase env vars are missing. No secrets are exposed by this
+endpoint.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tests
 
-## Deploy on Vercel
+```bash
+npm test                       # unit tests for the PuppyQ display logic
+npm run smoke -- <site-url>    # checks a running/deployed site's /api/puppyq/health
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A scheduled GitHub Action (`.github/workflows/puppyq-smoke.yml`) runs the smoke
+test against the live site every 6 hours once the `PUPPYQ_SITE_URL` repo variable
+is set — it fails if the data ever goes empty again.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts
+
+| Command | Does |
+|---|---|
+| `npm run dev` | Local dev server |
+| `npm run build` / `npm start` | Production build / serve |
+| `npm run lint` | ESLint |
+| `npm test` | Unit tests (Vitest) |
+| `npm run smoke` | PuppyQ live health smoke test |
