@@ -42,28 +42,28 @@ function LitterCard({
   return (
     <div
       className={`rounded-[20px] p-8 ${
-        featured ? "bg-[#22344A] text-cream" : "bg-[#f0e9db]"
+        featured ? "bg-navy text-cream" : "bg-panel-alt"
       }`}
     >
       {/* Pairing */}
       <div className="mb-5">
         <p
           className={`text-[0.7rem] font-extrabold uppercase tracking-[0.12em] mb-1 ${
-            featured ? "text-[#B08D57]" : "text-[#B08D57]"
+            featured ? "text-coral" : "text-coral"
           }`}
         >
           {litter.type === "co-litter" ? "Co-litter" : "Litter"}
         </p>
         <h2
           className={`font-heading font-bold text-[1.4rem] leading-snug ${
-            featured ? "text-[#F7F2E7]" : "text-[#22344A]"
+            featured ? "text-cream" : "text-navy"
           }`}
         >
           {damLabel} × {sireLabel}
         </h2>
         <p
           className={`text-[0.85rem] mt-1 ${
-            featured ? "text-[#F7F2E7]/70" : "text-[#22344A]/60"
+            featured ? "text-cream/70" : "text-navy/60"
           }`}
         >
           Born {fmtDate(litter.birthdate)}
@@ -75,7 +75,7 @@ function LitterCard({
         <div>
           <p
             className={`text-[0.68rem] font-extrabold uppercase tracking-[0.1em] mb-3 ${
-              featured ? "text-[#F7F2E7]/60" : "text-[#22344A]/50"
+              featured ? "text-cream/60" : "text-navy/50"
             }`}
           >
             {litter.puppies.length} pup
@@ -87,15 +87,15 @@ function LitterCard({
                 key={p.id}
                 className={`rounded-lg px-3.5 py-2 text-[0.83rem] ${
                   featured
-                    ? "bg-[#F7F2E7]/10 text-[#F7F2E7]"
-                    : "bg-[#22344A]/8 text-[#22344A]"
+                    ? "bg-cream/10 text-cream"
+                    : "bg-navy/8 text-navy"
                 }`}
               >
                 <span className="font-semibold">{pqShortName(p)}</span>
                 {p.color && (
                   <span
                     className={`ml-1.5 text-[0.75rem] capitalize ${
-                      featured ? "text-[#F7F2E7]/55" : "text-[#22344A]/50"
+                      featured ? "text-cream/55" : "text-navy/50"
                     }`}
                   >
                     · {p.color}
@@ -126,22 +126,22 @@ export default async function OurPuppiesPage() {
       />
 
       {/* Current / featured litter */}
-      <section className="py-16 px-6 bg-[#F7F2E7]">
+      <section className="py-16 px-6 bg-cream">
         <div className="max-w-[1080px] mx-auto">
-          <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-2">
+          <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
             Most Recent Litter
           </p>
-          <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-[#22344A] mb-8">
+          <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-navy mb-8">
             Current Program
           </h2>
 
           {current ? (
             <LitterCard litter={current} featured />
           ) : (
-            <div className="border-[1.5px] border-dashed border-[#d8cebc] rounded-xl px-7 py-9 text-center max-w-[540px]">
-              <p className="text-[1rem] text-[#22344A]/60 leading-[1.7]">
+            <div className="border-[1.5px] border-dashed border-warm-border rounded-xl px-7 py-9 text-center max-w-[540px]">
+              <p className="text-[1rem] text-navy/60 leading-[1.7]">
                 No litters on record yet. Check back soon, or{" "}
-                <Link href="/contact" className="text-[#22344A] underline">
+                <Link href="/contact" className="text-navy underline">
                   join our waitlist
                 </Link>
                 .
@@ -152,7 +152,7 @@ export default async function OurPuppiesPage() {
           <div className="mt-8">
             <Link
               href="/contact"
-              className="inline-block bg-[#22344A] text-[#F7F2E7] font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-[#1a2838] transition-colors"
+              className="inline-block bg-navy text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-navy-hover transition-colors"
             >
               Inquire About Puppies
             </Link>
@@ -162,12 +162,12 @@ export default async function OurPuppiesPage() {
 
       {/* Past litters */}
       {past.length > 0 && (
-        <section className="py-16 px-6 bg-white border-t border-[#e8e0d0]">
+        <section className="py-16 px-6 bg-white border-t border-sand-line">
           <div className="max-w-[1080px] mx-auto">
-            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-2">
+            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
               Past Litters
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-[#22344A] mb-10">
+            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-navy mb-10">
               Our Track Record
             </h2>
             <div className="grid sm:grid-cols-2 gap-6">
@@ -180,23 +180,23 @@ export default async function OurPuppiesPage() {
       )}
 
       {/* Waitlist band */}
-      <section className="bg-[#22344A] py-16 px-6">
+      <section className="bg-navy py-16 px-6">
         <div className="max-w-[1080px] mx-auto flex items-center justify-between gap-8 flex-col md:flex-row">
           <div>
-            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-1.5">
+            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-1.5">
               Future litters
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-[#F7F2E7] mb-2">
+            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-cream mb-2">
               Join the Waitlist
             </h2>
-            <p className="text-[0.93rem] text-[#F7F2E7]/65 max-w-[460px]">
+            <p className="text-[0.93rem] text-cream/65 max-w-[460px]">
               Our litters fill quickly. Getting on the list early means first
               access to puppy picks.
             </p>
           </div>
           <Link
             href="/contact"
-            className="shrink-0 border-[1.5px] border-white/40 text-[#F7F2E7] font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:border-white/80 transition-colors whitespace-nowrap"
+            className="shrink-0 border-[1.5px] border-white/40 text-cream font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:border-white/80 transition-colors whitespace-nowrap"
           >
             Get on the list
           </Link>

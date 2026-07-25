@@ -46,7 +46,7 @@ function DogCard({
   if (compact) {
     return (
       <div className="bg-cream rounded-[18px] p-6 flex gap-6 flex-wrap md:flex-nowrap items-start">
-        <div className="relative w-full md:w-[160px] h-[200px] shrink-0 rounded-[12px] overflow-hidden bg-[#e8e0d0]">
+        <div className="relative w-full md:w-[160px] h-[200px] shrink-0 rounded-[12px] overflow-hidden bg-sand-line">
           {photo ? (
             <Image
               src={photo}
@@ -56,7 +56,7 @@ function DogCard({
               sizes="160px"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#9e8c72] text-xs">
+            <div className="w-full h-full flex items-center justify-center text-placeholder-muted text-xs">
               No photo yet
             </div>
           )}
@@ -74,7 +74,7 @@ function DogCard({
                 <span className="block font-extrabold text-[0.62rem] uppercase tracking-wider text-navy/50 mb-0.5">
                   Born
                 </span>
-                <span className="text-[#3a3226]">{fmtDate(dog.birthdate)}</span>
+                <span className="text-body-strong">{fmtDate(dog.birthdate)}</span>
               </div>
             )}
             {dog.color && (
@@ -82,7 +82,7 @@ function DogCard({
                 <span className="block font-extrabold text-[0.62rem] uppercase tracking-wider text-navy/50 mb-0.5">
                   Color
                 </span>
-                <span className="text-[#3a3226] capitalize">{dog.color}</span>
+                <span className="text-body-strong capitalize">{dog.color}</span>
               </div>
             )}
           </div>
@@ -92,9 +92,9 @@ function DogCard({
   }
 
   return (
-    <div className="bg-[#f0e9db] rounded-[20px] p-8 flex gap-8 flex-wrap md:flex-nowrap">
+    <div className="bg-panel-alt rounded-[20px] p-8 flex gap-8 flex-wrap md:flex-nowrap">
       {/* Photo */}
-      <div className="relative w-full md:w-[240px] h-[300px] shrink-0 rounded-[14px] overflow-hidden bg-[#e8e0d0]">
+      <div className="relative w-full md:w-[240px] h-[300px] shrink-0 rounded-[14px] overflow-hidden bg-sand-line">
         {photo ? (
           <Image
             src={photo}
@@ -104,7 +104,7 @@ function DogCard({
             sizes="240px"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#9e8c72] text-sm">
+          <div className="w-full h-full flex items-center justify-center text-placeholder-muted text-sm">
             No photo yet
           </div>
         )}
@@ -135,7 +135,7 @@ function DogCard({
               <span className="block font-extrabold text-[0.68rem] uppercase tracking-wider text-navy/50 mb-0.5">
                 Born
               </span>
-              <span className="text-[#3a3226]">{fmtDate(dog.birthdate)}</span>
+              <span className="text-body-strong">{fmtDate(dog.birthdate)}</span>
             </div>
           )}
           {dog.color && (
@@ -143,7 +143,7 @@ function DogCard({
               <span className="block font-extrabold text-[0.68rem] uppercase tracking-wider text-navy/50 mb-0.5">
                 Color
               </span>
-              <span className="text-[#3a3226] capitalize">{dog.color}</span>
+              <span className="text-body-strong capitalize">{dog.color}</span>
             </div>
           )}
           {dog.sex && (
@@ -151,7 +151,7 @@ function DogCard({
               <span className="block font-extrabold text-[0.68rem] uppercase tracking-wider text-navy/50 mb-0.5">
                 Sex
               </span>
-              <span className="text-[#3a3226] capitalize">{dog.sex}</span>
+              <span className="text-body-strong capitalize">{dog.sex}</span>
             </div>
           )}
           {dog.breed && (
@@ -159,7 +159,7 @@ function DogCard({
               <span className="block font-extrabold text-[0.68rem] uppercase tracking-wider text-navy/50 mb-0.5">
                 Breed
               </span>
-              <span className="text-[#3a3226]">{dog.breed}</span>
+              <span className="text-body-strong">{dog.breed}</span>
             </div>
           )}
         </div>
@@ -169,7 +169,7 @@ function DogCard({
             {gallery.map((src, i) => (
               <div
                 key={i}
-                className="relative w-14 h-14 rounded-[8px] overflow-hidden bg-[#e8e0d0]"
+                className="relative w-14 h-14 rounded-[8px] overflow-hidden bg-sand-line"
               >
                 <Image
                   src={src}
@@ -209,12 +209,12 @@ export default async function OurDogsPage() {
 
       {/* Active breeding dogs */}
       {hasActive && (
-        <section className="py-16 px-6 bg-[#F7F2E7]">
+        <section className="py-16 px-6 bg-cream">
           <div className="max-w-[1080px] mx-auto">
-            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-2">
+            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
               Active Breeding Dogs · {tiers.active.length}
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-[#22344A] mb-10">
+            <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-navy mb-10">
               Our Breeding Program
             </h2>
             <div className="flex flex-col gap-8">
@@ -228,12 +228,12 @@ export default async function OurDogsPage() {
 
       {/* Retained young stock (true retained — no birth litter in PuppyQ) */}
       {hasRetained && (
-        <section className="py-14 px-6 bg-white border-t border-[#e8e0d0]">
+        <section className="py-14 px-6 bg-white border-t border-sand-line">
           <div className="max-w-[1080px] mx-auto">
-            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-2">
+            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
               Retained · {retainedStock.length}
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.4rem,3vw,1.7rem)] text-[#22344A] mb-8">
+            <h2 className="font-heading font-bold text-[clamp(1.4rem,3vw,1.7rem)] text-navy mb-8">
               Next Generation
             </h2>
             <div className="grid sm:grid-cols-2 gap-5">
@@ -247,12 +247,12 @@ export default async function OurDogsPage() {
 
       {/* Retired producers */}
       {hasRetired && (
-        <section className="py-14 px-6 bg-[#f0e9db] border-t border-[#e8e0d0]">
+        <section className="py-14 px-6 bg-panel-alt border-t border-sand-line">
           <div className="max-w-[1080px] mx-auto">
-            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-[#B08D57] mb-2">
+            <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
               Retired · {tiers.retired.length}
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.4rem,3vw,1.7rem)] text-[#22344A] mb-8">
+            <h2 className="font-heading font-bold text-[clamp(1.4rem,3vw,1.7rem)] text-navy mb-8">
               Alumni
             </h2>
             <div className="grid sm:grid-cols-2 gap-5">
@@ -266,7 +266,7 @@ export default async function OurDogsPage() {
 
       {/* Empty state */}
       {!hasActive && !hasRetained && !hasRetired && (
-        <section className="py-24 px-6 bg-[#F7F2E7]">
+        <section className="py-24 px-6 bg-cream">
           <div className="max-w-[560px] mx-auto text-center">
             <p className="text-[1rem] text-navy/60">
               Dog profiles coming soon. Check back shortly.

@@ -45,6 +45,9 @@
   --color-line: rgba(0, 0, 0, 0.20);
   --color-photo-placeholder: #E1DACC; /* image placeholder background */
   --color-sand-deep: #C6B48A;         /* thumbnail placeholder background */
+  --color-panel-alt: #EBE4D5;         /* alternate clean section panel */
+  --color-sand-line: #E1D9C9;         /* subtle sand fill / hairline border */
+  --color-body-strong: #1E1B15;       /* near-black strong text for data values */
 
   /* ── "Available" badge ────────────────────────────────────── */
   --color-avail-bg: #CBEDDD;
