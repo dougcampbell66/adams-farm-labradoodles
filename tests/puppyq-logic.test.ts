@@ -1,9 +1,10 @@
 // Unit tests for the pure PuppyQ display logic (no network / no database).
 //
-// These guard the derivations that decide what shows on /our-dogs, /our-litters,
-// and /our-puppies — e.g. that a dog which is BOTH a puppy (has a litter_id) and
-// a parent still lands in the right tier. The live connection is covered
-// separately by scripts/puppyq-smoke.mjs.
+// These guard the derivations that decide what shows on /dams, /sires,
+// /litters, and /our-puppies — who earns a place on a breeding-lines page,
+// and which of the record's several statuses mean a dog or puppy is still in
+// the program. The live connection is covered separately by
+// scripts/puppyq-smoke.mjs.
 
 import { describe, it, expect } from "vitest";
 import {
@@ -11,7 +12,6 @@ import {
   pqShortName,
   pqSex,
   pqRole,
-  pqDogTiers,
   pqBreedingLines,
   pqPuppyStanding,
   type PqDog,
@@ -92,37 +92,6 @@ describe("pqSex — inferred from litter parentage when unset", () => {
   });
   it("returns null when unknown", () => {
     expect(pqSex(dog({ id: "C" }), [])).toBeNull();
-  });
-});
-
-describe("pqDogTiers — active / retired / retained split", () => {
-  const macy = dog({ id: "A", call_name: "Macy", status: "active" }); // active producer
-  const oldDam = dog({ id: "D", call_name: "Old", status: "placed" }); // past producer
-  const youngPup = dog({ id: "C", call_name: "Pup", status: "active", litter_id: "L1" }); // active, not a producer
-  const litters = [
-    litter("L1", "A", null, "2026-05-01"), // Macy's current litter
-    litter("L0", "D", null, "2020-01-01"), // Old's past litter
-  ];
-  const tiers = pqDogTiers({
-    orgId: "org",
-    dogs: [macy, oldDam, youngPup],
-    allDogs: [macy, oldDam, youngPup],
-    litters,
-    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 3, litterRows: 2, errors: [] },
-  });
-
-  it("puts an active producer in 'active'", () => {
-    expect(tiers.active.map((d) => d.id)).toContain("A");
-  });
-  it("puts a non-active producer in 'retired'", () => {
-    expect(tiers.retired.map((d) => d.id)).toContain("D");
-  });
-  it("puts an active non-producer in 'retained' (young stock)", () => {
-    expect(tiers.retained.map((d) => d.id)).toContain("C");
-  });
-  it("never double-counts a dog across tiers", () => {
-    const all = [...tiers.active, ...tiers.retired, ...tiers.retained].map((d) => d.id);
-    expect(new Set(all).size).toBe(all.length);
   });
 });
 

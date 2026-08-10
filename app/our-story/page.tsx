@@ -46,10 +46,10 @@ export default function OurStoryPage() {
           </blockquote>
 
           <Link
-            href="/our-dogs"
+            href="/dams"
             className="self-start text-[0.88rem] font-extrabold text-coral-dark border-b-2 border-coral pb-[2px] hover:text-coral-dark transition-colors"
           >
-            Meet our dogs →
+            Meet our dams →
           </Link>
         </div>
       </section>

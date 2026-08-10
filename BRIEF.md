@@ -23,9 +23,11 @@ Contact, and a "Puppies" overview. These use fixed content stored in the code
 (`src/data/`), so they render the same everywhere.
 
 **Live-data pages** (pull from the PuppyQ database — see below):
-`/our-dogs`, `/our-litters`, `/our-puppies`. These show your actual dogs,
-litters, and puppies straight from PuppyQ, so they stay current without editing
-code.
+`/dams`, `/sires`, `/litters`, `/our-litters`, `/our-puppies`. These show your
+actual dogs, litters, and puppies straight from PuppyQ, so they stay current
+without editing code. Dams and Sires list a dog only once it has produced a
+litter on the Adams Farm record — the line is defined by what a dog has
+produced, not by who owns it.
 
 **A private area:** `/forever-families` — gated behind a passwordless
 "magic link" email login. Only email addresses you allowlist can get in.

@@ -29,7 +29,8 @@ Copy `.env.example` to `.env.local` and fill it in. The important ones:
 
 **These must also be set in Vercel** (Settings → Environment Variables, for
 Production *and* Preview). If the Supabase vars are missing in an environment,
-the live-data pages (`/our-dogs`, `/our-puppies`, `/our-litters`) render empty.
+the live-data pages (`/dams`, `/sires`, `/litters`, `/our-puppies`,
+`/our-litters`) render empty.
 
 ## Is the PuppyQ data working?
 

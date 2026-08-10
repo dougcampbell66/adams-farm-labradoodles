@@ -7,7 +7,6 @@ import { useState } from "react";
 // stays live but unlinked, the same way /puppies2 was kept after its rename.
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Our Dogs", href: "/our-dogs" },
   { label: "Dams", href: "/dams" },
   { label: "Sires", href: "/sires" },
   { label: "Our Puppies", href: "/our-puppies" },

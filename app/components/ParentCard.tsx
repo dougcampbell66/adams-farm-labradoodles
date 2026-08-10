@@ -11,9 +11,8 @@ import {
 
 /**
  * Portrait card for the /dams and /sires grids — the Legend Manor breeding-line
- * card in Adams Farm's palette. Deliberately not the row layout /our-dogs uses:
- * these pages show a whole side of the program at a glance, so the card stays
- * narrow enough for a four-across grid.
+ * card in Adams Farm's palette. These pages show a whole side of the program at
+ * a glance, so the card stays narrow enough for a four-across grid.
  */
 export default function ParentCard({
   dog,

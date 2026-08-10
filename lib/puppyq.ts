@@ -13,7 +13,7 @@
 
 import { cache } from "react";
 import { getSupabase, supabaseKeyKind, supabaseUrl } from "@/lib/supabase";
-import { pqDogPhoto, pqDogGallery } from "@/lib/images-pq";
+import { pqDogPhoto } from "@/lib/images-pq";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -129,17 +129,6 @@ export function pqPhoto(dog: PqDog): string | null {
   return null;
 }
 
-export function pqGallery(dog: PqDog): string[] {
-  const candidates: string[] = [];
-  if (dog.call_name) candidates.push(slugify(dog.call_name));
-  if (dog.registered_name) candidates.push(slugify(dog.registered_name));
-  for (const slug of candidates) {
-    const g = pqDogGallery(slug);
-    if (g.length) return g;
-  }
-  return [];
-}
-
 // ─── Sex / role derivation ────────────────────────────────────────────────────
 
 export function pqSex(dog: PqDog, litters: PqLitter[]): "female" | "male" | null {
@@ -158,34 +147,7 @@ export function pqRole(dog: PqDog, litters: PqLitter[]): string {
   return "On record";
 }
 
-// ─── Dog tiers ────────────────────────────────────────────────────────────────
-
-function pqIsProducer(dog: PqDog, litters: PqLitter[]): boolean {
-  return litters.some((l) => l.row.dam_id === dog.id || l.row.sire_id === dog.id);
-}
-
-/** Split our dogs into active (producing), retired (past producer), retained (young stock). */
-export function pqDogTiers(pq: PuppyQ) {
-  const { dogs, litters } = pq;
-  const isActive = (d: PqDog) => (d.status ?? "").toLowerCase() === "active";
-  const active: PqDog[] = [];
-  const retired: PqDog[] = [];
-  const retained: PqDog[] = [];
-  for (const dog of dogs) {
-    const producer = pqIsProducer(dog, litters);
-    if (isActive(dog) && producer) active.push(dog);
-    else if (producer) retired.push(dog);
-    else if (isActive(dog)) retained.push(dog);
-  }
-  const byAge = (a: PqDog, b: PqDog) =>
-    (a.birthdate ?? "9999").localeCompare(b.birthdate ?? "9999") ||
-    pqName(a).localeCompare(pqName(b));
-  return {
-    active: active.sort(byAge),
-    retired: retired.sort(byAge),
-    retained: retained.sort(byAge),
-  };
-}
+// ─── Dog helpers ──────────────────────────────────────────────────────────────
 
 /** The registered name, when it says something the heading does not. */
 export function pqRegisteredName(dog: PqDog): string | null {
