@@ -100,18 +100,22 @@ export default function Footer() {
           </p>
           {/*
             The Q family attribution mark. Legend Manor carries the same wording
-            in its own palette; here it is a link, so the UTMs tell breederQ which
-            breeder site sent the visit. A plain <a>, not next/link — the target is
-            off-site, so there is no route to prefetch.
+            in its own palette. Only the brand name is the link — "powered by"
+            stays plain text — and the UTMs tell breederQ which breeder site sent
+            the visit. A plain <a>, not next/link: the target is off-site, so
+            there is no route to prefetch.
           */}
-          <a
-            href="https://breederq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[0.75rem] text-cream/60 hover:text-cream transition-colors"
-          >
-            powered by <span className="font-semibold text-coral">breederQ</span>
-          </a>
+          <p className="text-[0.75rem] text-cream/60">
+            powered by{" "}
+            <a
+              href="https://breederq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-coral hover:text-coral-dark transition-colors"
+            >
+              breederQ
+            </a>
+          </p>
         </div>
       </div>
     </footer>
