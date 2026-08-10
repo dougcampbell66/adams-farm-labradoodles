@@ -77,8 +77,10 @@ const faqs = [
 ];
 
 export default function Home() {
+  // Adopted puppies keep their spot with the status shown — this litter is
+  // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
   const springPuppies = getPuppiesForLitter("spring-2026").filter(
-    (p) => p.status === "available"
+    (p) => p.status === "available" || p.status === "adopted"
   );
 
   return (
@@ -204,8 +206,14 @@ export default function Home() {
                     <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                       {p.sex}
                     </span>
-                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-avail-bg text-avail-text">
-                      Available
+                    <span
+                      className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
+                        p.status === "adopted"
+                          ? "bg-white/12 text-cream/70"
+                          : "bg-avail-bg text-avail-text"
+                      }`}
+                    >
+                      {p.status === "adopted" ? "Adopted" : "Available"}
                     </span>
                   </div>
                 </div>
