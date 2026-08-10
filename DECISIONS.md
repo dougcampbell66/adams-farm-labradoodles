@@ -17,8 +17,11 @@ _Maintained by EngineerQ._
   true; it is wrong here, where the objection is that the framing itself
   misleads. Leaving it reachable would leave the misleading page indexed.
   `pqDogTiers` and `pqGallery` went with it — dead once the page was gone, and
-  both encode the retired ownership framing. `/our-dogs` now 404s; a redirect to
-  `/dams` is a one-line change if inbound links turn out to matter.
+  both encode the retired ownership framing. `/our-dogs` then got a **permanent
+  (308) redirect to `/dams`** in `next.config.ts`, at Douglas's request: old
+  links off Facebook and ALAA listings should land somewhere useful, and 308
+  tells search engines to consolidate onto `/dams` since the page is not coming
+  back. Query strings pass through.
 - **Two derivations corrected against the record, not copied from Legend
   Manor.** LM tiers on `status === 'active'`, which is safe against its own
   slice but wrong against ours: it emptied the active tier, filed the sire of
