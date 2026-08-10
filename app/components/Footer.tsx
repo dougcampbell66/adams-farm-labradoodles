@@ -94,10 +94,24 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/12 py-4">
-        <div className="max-w-[1160px] mx-auto px-6">
+        <div className="max-w-[1160px] mx-auto px-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <p className="text-[0.75rem] text-cream/60">
             © {year} Adams Farm Labradoodles · Greensboro, NC
           </p>
+          {/*
+            The Q family attribution mark. Legend Manor carries the same wording
+            in its own palette; here it is a link, so the UTMs tell breederQ which
+            breeder site sent the visit. A plain <a>, not next/link — the target is
+            off-site, so there is no route to prefetch.
+          */}
+          <a
+            href="https://breederq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[0.75rem] text-cream/60 hover:text-cream transition-colors"
+          >
+            powered by <span className="font-semibold text-coral">breederQ</span>
+          </a>
         </div>
       </div>
     </footer>
