@@ -3,12 +3,16 @@ import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
 import { getPuppiesForLitter } from "@/src/data/litters";
+import { getPuppyQ } from "@/lib/puppyq";
 
-const homeStats = [
-  { num: "6", label: "Litters" },
-  { num: "56", label: "Puppies Raised" },
-  { num: "15", label: "Five-Star Reviews" },
-];
+// The litter and puppy counts are read from the same PuppyQ record /litters
+// and /dams use, so the home page can't drift away from them again. Same
+// 5-minute window as those pages.
+export const revalidate = 300;
+
+// Reviews live in the Elfsight widget further down the page, not in PuppyQ,
+// so this one stays a written figure — it has no record to be derived from.
+const reviewStat = { num: "15", label: "Five-Star Reviews" };
 
 const aboutPillars = [
   {
@@ -76,12 +80,28 @@ const faqs = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
   // Adopted puppies keep their spot with the status shown — this litter is
   // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
   const springPuppies = getPuppiesForLitter("spring-2026").filter(
     (p) => p.status === "available" || p.status === "adopted"
   );
+
+  const pq = await getPuppyQ();
+  const litterCount = pq.litters.length;
+  const puppyCount = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
+
+  // With the record unreadable the counts would both be zero, and "0 Litters"
+  // over the hero is worse than no bar at all — so the whole strip drops out,
+  // the way an empty BreedingTier renders nothing rather than a bare heading.
+  const homeStats =
+    litterCount > 0
+      ? [
+          { num: String(litterCount), label: litterCount === 1 ? "Litter" : "Litters" },
+          { num: String(puppyCount), label: "Puppies Raised" },
+          reviewStat,
+        ]
+      : [];
 
   return (
     <main>
@@ -142,6 +162,7 @@ export default function Home() {
       </section>
 
       {/* ── STATS BAR ────────────────────────────────────────── */}
+      {homeStats.length > 0 && (
       <section className="bg-cream-panel border-b border-warm-border">
         <div className="max-w-[1160px] mx-auto px-6 py-8 flex flex-col sm:flex-row justify-center gap-8 sm:gap-16">
           {homeStats.map((s) => (
@@ -156,6 +177,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ── AVAILABLE PUPPIES ───────────────────────────────── */}
       <section id="puppies" className="bg-white border-b border-line py-16">
