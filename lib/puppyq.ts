@@ -6,12 +6,14 @@
 //
 // Schema notes (same as Legend Manor):
 //   • No `puppies` table — a puppy is a `dogs` row with a litter_id.
-//   • `status` values: 'active' | 'placed'. Nothing else.
+//   • `status` is free-form. Observed live: 'active', 'placed', 'retired',
+//     'reserved', 'retained', 'transferred'. Never assume the set is closed —
+//     branch on the values you care about and let the rest fall through.
 //   • `sex` is null on most rows — inferred from litter parentage.
 
 import { cache } from "react";
 import { getSupabase, supabaseKeyKind, supabaseUrl } from "@/lib/supabase";
-import { pqDogPhoto, pqDogGallery } from "@/lib/images-pq";
+import { pqDogPhoto } from "@/lib/images-pq";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -86,14 +88,21 @@ export function pqName(dog: PqDog): string {
   return dog.call_name?.trim() || dog.registered_name?.trim() || "Unnamed dog";
 }
 
-/** The distinctive part of a registered name: "Adams Farm's Silas" → "Silas". */
+/**
+ * The distinctive part of a registered name: "Adams Farm's Silas" → "Silas".
+ * The live record writes most of our own dogs without the possessive
+ * ("Adams Farm Madison"), so that form is stripped too — otherwise every name
+ * in a litter grid opens with the same two words.
+ */
 export function pqShortName(dog: PqDog): string {
   const call = dog.call_name?.trim();
   if (call) return call;
   const reg = dog.registered_name?.trim();
   if (!reg) return "Unnamed dog";
   const apostrophe = reg.match(/^.*?['']s\s+(.+)$/);
-  return apostrophe ? apostrophe[1] : reg;
+  if (apostrophe) return apostrophe[1];
+  const kennel = reg.match(/^adams\s+farm\s+(.+)$/i);
+  return kennel ? kennel[1] : reg;
 }
 
 function slugify(value: string): string {
@@ -120,17 +129,6 @@ export function pqPhoto(dog: PqDog): string | null {
   return null;
 }
 
-export function pqGallery(dog: PqDog): string[] {
-  const candidates: string[] = [];
-  if (dog.call_name) candidates.push(slugify(dog.call_name));
-  if (dog.registered_name) candidates.push(slugify(dog.registered_name));
-  for (const slug of candidates) {
-    const g = pqDogGallery(slug);
-    if (g.length) return g;
-  }
-  return [];
-}
-
 // ─── Sex / role derivation ────────────────────────────────────────────────────
 
 export function pqSex(dog: PqDog, litters: PqLitter[]): "female" | "male" | null {
@@ -149,43 +147,117 @@ export function pqRole(dog: PqDog, litters: PqLitter[]): string {
   return "On record";
 }
 
-// ─── Dog tiers ────────────────────────────────────────────────────────────────
+// ─── Dog helpers ──────────────────────────────────────────────────────────────
 
-function pqIsProducer(dog: PqDog, litters: PqLitter[]): boolean {
-  return litters.some((l) => l.row.dam_id === dog.id || l.row.sire_id === dog.id);
+/** The registered name, when it says something the heading does not. */
+export function pqRegisteredName(dog: PqDog): string | null {
+  const reg = dog.registered_name?.trim();
+  if (!reg || reg === dog.call_name?.trim()) return null;
+  return reg;
 }
 
-/** Split our dogs into active (producing), retired (past producer), retained (young stock). */
-export function pqDogTiers(pq: PuppyQ) {
-  const { dogs, litters } = pq;
-  const isActive = (d: PqDog) => (d.status ?? "").toLowerCase() === "active";
-  const active: PqDog[] = [];
-  const retired: PqDog[] = [];
-  const retained: PqDog[] = [];
-  for (const dog of dogs) {
-    const producer = pqIsProducer(dog, litters);
-    if (isActive(dog) && producer) active.push(dog);
-    else if (producer) retired.push(dog);
-    else if (isActive(dog)) retained.push(dog);
-  }
-  const byAge = (a: PqDog, b: PqDog) =>
-    (a.birthdate ?? "9999").localeCompare(b.birthdate ?? "9999") ||
-    pqName(a).localeCompare(pqName(b));
-  return {
-    active: active.sort(byAge),
-    retired: retired.sort(byAge),
-    retained: retained.sort(byAge),
+/** Every litter this dog is recorded as a parent of. */
+export function pqLittersProduced(dog: PqDog, litters: PqLitter[]): PqLitter[] {
+  return litters.filter((l) => l.row.dam_id === dog.id || l.row.sire_id === dog.id);
+}
+
+/** Every puppy out of this dog's litters. */
+export function pqOffspring(dog: PqDog, litters: PqLitter[]): PqDog[] {
+  return pqLittersProduced(dog, litters).flatMap((l) => l.puppies);
+}
+
+// ─── Breeding lines (Dams / Sires) ────────────────────────────────────────────
+
+/**
+ * Statuses that mean a parent's breeding days here are over. Everything else
+ * ('active', 'retained', 'reserved') is still in the program.
+ *
+ * Legend Manor splits its tiers on `status === 'active'` alone. That rule reads
+ * wrong against the Adams Farm slice, where the record marks the dam of the
+ * newest litter and the sire of four of five litters as 'retained': it would
+ * empty the active tier and file the program's busiest sire under "retired",
+ * while promoting a once-hired outside stud into it. Naming the finished
+ * statuses instead keeps the same intent honest against the data we have.
+ */
+const RETIRED_STATUSES = new Set(["retired", "placed", "transferred", "deceased"]);
+
+/**
+ * One parent on the /dams or /sires page: the dog row when the record has one,
+ * the name the litter recorded otherwise, plus how many litters they produced.
+ */
+export interface PqParentEntry {
+  dog: PqDog | null;
+  name: string;
+  litterCount: number;
+  /** True when the dog row belongs to another program — a partner's dam or a hired stud. */
+  outside: boolean;
+}
+
+/**
+ * THE MEMBERSHIP RULE for the public Dams and Sires pages, same as Legend
+ * Manor's: a dog appears only after producing a litter that is on the Adams
+ * Farm record. Prospects wait for their first litter; nothing here is
+ * aspirational.
+ *
+ * One deliberate difference from Legend Manor, which counts only litters its
+ * own org owns: Adams Farm's record already scopes `pq.litters` to litters the
+ * farm owns *or* co-bred, and /litters shows every one of them. Counting the
+ * same set here keeps the two pages telling one story — the parents of a
+ * co-litter show up, flagged as belonging to the partner program.
+ */
+export function pqBreedingLines(pq: PuppyQ) {
+  const ours = new Set(pq.dogs.map((d) => d.id));
+
+  const collect = (side: "dam" | "sire") => {
+    const done = (dog: PqDog) => RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
+    const m = new Map<string, PqParentEntry>();
+    for (const l of pq.litters) {
+      const dog = side === "dam" ? l.dam : l.sire;
+      const recordedName = side === "dam" ? l.damName : l.sireName;
+      const key = dog ? dog.id : `name:${(recordedName ?? "?").toLowerCase()}`;
+      const entry = m.get(key) ?? {
+        dog: dog ?? null,
+        name: dog ? pqName(dog) : (recordedName ?? "Unrecorded"),
+        litterCount: 0,
+        outside: dog ? !ours.has(dog.id) : true,
+      };
+      entry.litterCount += 1;
+      m.set(key, entry);
+    }
+    const all = [...m.values()].sort(
+      (a, b) => b.litterCount - a.litterCount || a.name.localeCompare(b.name),
+    );
+    return {
+      // "Producing" vs "retired" is whatever the record claims via status;
+      // membership never depends on it.
+      producing: all.filter((e) => e.dog && !done(e.dog)),
+      retired: all.filter((e) => e.dog && done(e.dog)),
+      // Parents the record knows only by name — outside studs with no dog row.
+      nameOnly: all.filter((e) => !e.dog),
+    };
   };
+
+  return { dams: collect("dam"), sires: collect("sire") };
 }
 
 // ─── Puppy helpers ────────────────────────────────────────────────────────────
 
 export type PqPuppyStanding = "placed" | "in-program" | "unknown";
 
+/**
+ * A puppy's standing in the record. PuppyQ tracks placement, not availability —
+ * there is no 'available' — so the labels stop at what's true.
+ *
+ * 'retained' and 'reserved' count as in-program: the record uses them for
+ * puppies the farm kept and puppies not yet gone to their family, and reading
+ * them as "unknown" left every litter looking finished the moment its first
+ * puppies were placed. 'transferred' stays unknown — that dog left for another
+ * program, which is neither a placement with a family nor a puppy still here.
+ */
 export function pqPuppyStanding(puppy: PqDog): PqPuppyStanding {
   const status = (puppy.status ?? "").toLowerCase();
   if (status === "placed") return "placed";
-  if (status === "active") return "in-program";
+  if (status === "active" || status === "retained" || status === "reserved") return "in-program";
   return "unknown";
 }
 

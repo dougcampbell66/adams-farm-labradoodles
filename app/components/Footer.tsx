@@ -3,7 +3,9 @@ import Image from "next/image";
 
 const siteLinks = [
   { label: "Home", href: "/" },
-  { label: "Our dogs", href: "/our-dogs" },
+  { label: "Dams", href: "/dams" },
+  { label: "Sires", href: "/sires" },
+  { label: "Litters", href: "/litters" },
   { label: "Our program", href: "/our-program" },
   { label: "Guardians", href: "/guardians" },
   { label: "Puppies", href: "/puppies2" },
@@ -14,7 +16,8 @@ const siteLinks = [
 const getAPuppyLinks = [
   { label: "See available puppies", href: "/puppies2" },
   { label: "Join the waitlist", href: "/contact" },
-  { label: "Meet the parents", href: "/our-dogs" },
+  { label: "Meet the dams", href: "/dams" },
+  { label: "Meet the sires", href: "/sires" },
   { label: "Our health guarantee", href: "/our-program" },
 ];
 
@@ -91,9 +94,27 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/12 py-4">
-        <div className="max-w-[1160px] mx-auto px-6">
+        <div className="max-w-[1160px] mx-auto px-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <p className="text-[0.75rem] text-cream/60">
             © {year} Adams Farm Labradoodles · Greensboro, NC
+          </p>
+          {/*
+            The Q family attribution mark. Legend Manor carries the same wording
+            in its own palette. Only the brand name is the link — "powered by"
+            stays plain text — and the UTMs tell breederQ which breeder site sent
+            the visit. A plain <a>, not next/link: the target is off-site, so
+            there is no route to prefetch.
+          */}
+          <p className="text-[0.75rem] text-cream/60">
+            powered by{" "}
+            <a
+              href="https://breederq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-coral hover:text-coral-dark transition-colors"
+            >
+              breederQ
+            </a>
           </p>
         </div>
       </div>

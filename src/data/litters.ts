@@ -1,4 +1,4 @@
-export type PuppyStatus = "available" | "reserved";
+export type PuppyStatus = "available" | "reserved" | "adopted";
 export type LitterStatus = "planned" | "available" | "reserved" | "past";
 
 export type Puppy = {
@@ -43,7 +43,7 @@ export const litters: Litter[] = [
     readyDate: "2026-07-13",
     status: "available",
     puppyCount: 6,
-    availableCount: 2,
+    availableCount: 1,
     expectedSize: "large mini, 20–25 lbs",
     photos: [],
   },
@@ -55,7 +55,7 @@ export const puppies: Puppy[] = [
     name: "Stitch",
     collar: "Blue Collar",
     order: 1,
-    status: "available",
+    status: "adopted",
     sex: "Male",
     photo: "/images/puppies/blue-collar-5-18-26.jpg",
     litterId: "spring-2026",

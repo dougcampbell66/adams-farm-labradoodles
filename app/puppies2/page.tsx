@@ -23,9 +23,16 @@ export default function PuppiesPage() {
     litters.find((l) => l.status === "available" || l.status === "reserved") ??
     null;
 
+  // Adopted puppies stay on the page with their status shown rather than
+  // vanishing — the litter reads as a whole, and "Adopted" is the honest label.
+  // Reserved puppies are still held back until their placement is final.
   const currentPuppies = activeLitter
-    ? getPuppiesForLitter(activeLitter.id).filter((p) => p.status === "available")
+    ? getPuppiesForLitter(activeLitter.id).filter(
+        (p) => p.status === "available" || p.status === "adopted",
+      )
     : [];
+
+  const availableCount = currentPuppies.filter((p) => p.status === "available").length;
 
   return (
     <main>
@@ -82,16 +89,24 @@ export default function PuppiesPage() {
                       <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                         {p.sex}
                       </span>
-                      <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-avail-bg text-avail-text">
-                        Available
+                      <span
+                        className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
+                          p.status === "adopted"
+                            ? "bg-white/12 text-cream/70"
+                            : "bg-avail-bg text-avail-text"
+                        }`}
+                      >
+                        {p.status === "adopted" ? "Adopted" : "Available"}
                       </span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-[1rem] text-muted">
+          ) : null}
+
+          {availableCount === 0 && (
+            <p className="text-[1rem] text-muted mt-6">
               All puppies from our current litter are spoken for.{" "}
               <Link href="/contact" className="text-navy underline">
                 Join our waitlist

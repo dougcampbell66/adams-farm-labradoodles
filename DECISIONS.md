@@ -3,6 +3,35 @@
 _Significant engineering choices and the reasoning behind them. Newest first._
 _Maintained by EngineerQ._
 
+## 2026-08-10 — Breeding lines replace the ownership-based dogs page
+
+- **`/dams`, `/sires`, `/litters` added; `/our-dogs` deleted.** Douglas's call:
+  a page built on which dogs the farm *owns* misleads, because ownership is not
+  what defines the bloodline. The new pages use Legend Manor's membership rule
+  instead — a dog appears only after producing a litter on the Adams Farm
+  record — so the line is defined by what a dog has produced. Parents owned by
+  another kennel (Legend Manor's Prancer and Silas, Tarheel's Chewy) are shown
+  and flagged "Partner program" rather than hidden or silently claimed.
+- **Deleted rather than suffixed.** The `/puppies` → `/puppies2` precedent keeps
+  a superseded page live. That was right for a page whose content was still
+  true; it is wrong here, where the objection is that the framing itself
+  misleads. Leaving it reachable would leave the misleading page indexed.
+  `pqDogTiers` and `pqGallery` went with it — dead once the page was gone, and
+  both encode the retired ownership framing. `/our-dogs` then got a **permanent
+  (308) redirect to `/dams`** in `next.config.ts`, at Douglas's request: old
+  links off Facebook and ALAA listings should land somewhere useful, and 308
+  tells search engines to consolidate onto `/dams` since the page is not coming
+  back. Query strings pass through.
+- **Two derivations corrected against the record, not copied from Legend
+  Manor.** LM tiers on `status === 'active'`, which is safe against its own
+  slice but wrong against ours: it emptied the active tier, filed the sire of
+  four of five litters under "retired", and promoted a once-hired outside stud
+  in his place. Likewise `pqPuppyStanding` read `retained`/`reserved` as
+  unknown, so a litter looked finished as soon as its first puppies were placed.
+  The live `status` vocabulary is `active`, `placed`, `retired`, `reserved`,
+  `retained`, `transferred` — not the two the file's header comment claimed.
+  Both fixes are pinned by unit tests.
+
 ## 2026-07-25 — PuppyQ "data not displaying" diagnosis & guardrails
 
 - **Diagnosis method.** Rather than guess, I ran a throwaway connection test

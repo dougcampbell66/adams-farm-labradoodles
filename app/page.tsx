@@ -77,8 +77,10 @@ const faqs = [
 ];
 
 export default function Home() {
+  // Adopted puppies keep their spot with the status shown — this litter is
+  // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
   const springPuppies = getPuppiesForLitter("spring-2026").filter(
-    (p) => p.status === "available"
+    (p) => p.status === "available" || p.status === "adopted"
   );
 
   return (
@@ -173,12 +175,21 @@ export default function Home() {
             <p className="text-[0.85rem] italic text-muted mb-3.5">
               Bred in partnership with Legend Manor Labradoodles
             </p>
-            <Link
-              href="/our-dogs"
-              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
-            >
-              Meet the Parents →
-            </Link>
+            {/* The parents live on two pages now — a litter has one of each. */}
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              <Link
+                href="/dams"
+                className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
+              >
+                Meet Our Dams →
+              </Link>
+              <Link
+                href="/sires"
+                className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
+              >
+                Meet Our Sires →
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -204,8 +215,14 @@ export default function Home() {
                     <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                       {p.sex}
                     </span>
-                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-avail-bg text-avail-text">
-                      Available
+                    <span
+                      className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
+                        p.status === "adopted"
+                          ? "bg-white/12 text-cream/70"
+                          : "bg-avail-bg text-avail-text"
+                      }`}
+                    >
+                      {p.status === "adopted" ? "Adopted" : "Available"}
                     </span>
                   </div>
                 </div>

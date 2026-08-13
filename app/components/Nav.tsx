@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 
+// "Litters" points at the newer /litters registry; the older /our-litters page
+// stays live but unlinked, the same way /puppies2 was kept after its rename.
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Our Dogs", href: "/our-dogs" },
+  { label: "Dams", href: "/dams" },
+  { label: "Sires", href: "/sires" },
   { label: "Our Puppies", href: "/our-puppies" },
-  { label: "Our Litters", href: "/our-litters" },
+  { label: "Litters", href: "/litters" },
 ];
 
 const aboutLinks = [
