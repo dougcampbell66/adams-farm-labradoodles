@@ -81,6 +81,18 @@ export default function Footer() {
               Send us a message
             </Link>
           </p>
+          {/*
+            Sign in is last, deliberately quiet — same ruling as the Puppy
+            Therapy site's footer: the app under /app is for people who
+            already hold access (signing in cannot create an account), so its
+            door sits where those people will look for it without being sold
+            to anyone else.
+          */}
+          <p className="mt-1.5 text-[0.85rem] text-cream/75">
+            <Link href="/login" className="underline hover:text-cream transition-colors">
+              Sign in
+            </Link>
+          </p>
           <div className="mt-5">
             <Image
               src="/images/credentials/Adams-Farm-ALAA-Logo-2026.png"
