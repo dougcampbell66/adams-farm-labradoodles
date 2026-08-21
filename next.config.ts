@@ -5,7 +5,7 @@ import type { NextConfig } from "next";
 // on adamsfarmlabradoodles.com the whole way through sign-in and the app
 // itself. Same wiring as puppytherapy.com, one brand later.
 // Deployment runbook: docs/DEPLOY.md in the dougcampbell66/puppyq-app repo.
-const PUPPYQ_APP = "https://puppyq-app.vercel.app";
+const PUPPYQ_APP = "https://pawsq-app.vercel.app";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["nodemailer"],
