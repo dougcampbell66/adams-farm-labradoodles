@@ -32,6 +32,31 @@ Production *and* Preview). If the Supabase vars are missing in an environment,
 the live-data pages (`/dams`, `/sires`, `/litters`, `/our-puppies`,
 `/our-litters`) render empty.
 
+## The contact form
+
+`app/contact/ContactForm.tsx` → `POST /api/contact` → SMTP (Hostinger,
+nodemailer). **It does not write to pawsq.** A submission exists as an email
+and nowhere else: there is no `corporate_leads` row, no triage queue entry,
+and nothing for the Hub inbox to show.
+
+Wiring it up is not just an insert. It needs:
+
+- **`NEXT_PUBLIC_SUPABASE_ANON_KEY`, which this project does not have.** The
+  only Supabase credential configured here is `SUPABASE_SERVICE_ROLE_KEY`,
+  and that one bypasses row-level security entirely — it must never back a
+  form any visitor can submit. The public forms on the other brand sites
+  write with the anon key, which holds a column-level INSERT-only grant.
+- **Spam screening.** There is no honeypot and no timing check on this form.
+  `puppy-therapy` and `school-dogs` both carry `lib/spam.ts` for exactly this,
+  and pawsq's migration 20 makes the case plainly: `corporate_leads` already
+  holds a bot row, which is why a submission must never become a contact
+  automatically.
+- **A brand key.** `source_brand` would be a new value for this site, set
+  server-side and never from a client value.
+
+The form already asks for a first and a last name separately, so the names
+are correct whenever that wiring lands.
+
 ## Is the PuppyQ data working?
 
 Visit **`/api/puppyq/health`** on any environment. `"healthy": true` with a
