@@ -34,28 +34,51 @@ the live-data pages (`/dams`, `/sires`, `/litters`, `/our-puppies`,
 
 ## The contact form
 
-`app/contact/ContactForm.tsx` → `POST /api/contact` → SMTP (Hostinger,
-nodemailer). **It does not write to pawsq.** A submission exists as an email
-and nowhere else: there is no `corporate_leads` row, no triage queue entry,
-and nothing for the Hub inbox to show.
+`app/contact/ContactForm.tsx` → `POST /api/contact` → **two destinations,
+attempted independently**: pawsq's `corporate_leads` table, and the
+notification email (SMTP, Hostinger). Either one succeeding has kept the
+enquiry; only a total loss shows the visitor an error.
 
-Wiring it up is not just an insert. It needs:
+Rows are told apart by `source_brand = 'adams_farm'` and
+`source_form = 'contact_form'`, both set server-side in `lib/brand.ts` and
+never from a client value.
 
-- **`NEXT_PUBLIC_SUPABASE_ANON_KEY`, which this project does not have.** The
-  only Supabase credential configured here is `SUPABASE_SERVICE_ROLE_KEY`,
-  and that one bypasses row-level security entirely — it must never back a
-  form any visitor can submit. The public forms on the other brand sites
-  write with the anon key, which holds a column-level INSERT-only grant.
-- **Spam screening.** There is no honeypot and no timing check on this form.
-  `puppy-therapy` and `school-dogs` both carry `lib/spam.ts` for exactly this,
-  and pawsq's migration 20 makes the case plainly: `corporate_leads` already
-  holds a bot row, which is why a submission must never become a contact
-  automatically.
-- **A brand key.** `source_brand` would be a new value for this site, set
-  server-side and never from a client value.
+### The anon key, and only the anon key
 
-The form already asks for a first and a last name separately, so the names
-are correct whenever that wiring lands.
+`lib/leads.ts` reads `NEXT_PUBLIC_SUPABASE_ANON_KEY` and **deliberately does
+not fall back to `SUPABASE_SERVICE_ROLE_KEY`**, unlike `lib/supabase.ts`.
+The service-role key carries `BYPASSRLS` — it can read and write every row of
+every brand — which is right for the read-only server components that render
+`/dams` and `/litters`, and must never sit behind a form any visitor can
+submit. With no anon key configured the form still emails, logs loudly, and
+writes no row. That is the correct degradation.
+
+The anon role can only INSERT, on a named column list (pawsq migrations 19,
+20, 45, 46). Sending a column outside that list fails the whole insert, so
+`lib/leads.ts` builds the row explicitly — client input is never spread into
+the payload.
+
+### Spam screening
+
+`lib/spam.ts` and `app/components/HoneyPot.tsx` are ported verbatim from
+`puppy-therapy` and `school-dogs`. Two verdicts, not one: **block** only for
+what a person physically cannot do (the hidden decoy field), everything
+merely suspicious is **flagged** — stored and emailed exactly as normal, with
+the reasons attached, for a person to judge. A single weak signal never
+blocks.
+
+This matters more here than on a marketing form: pawsq migration 20 records
+that `corporate_leads` already holds a bot row, and nothing is deleted from a
+screen in that system.
+
+### Names, and what happens next
+
+The form asks for a first and a last name separately and nothing splits one
+into two — see `lib/name.ts`. `name` is still sent, composed from the parts.
+
+A submission arrives with `status = 'new'` and **does not become a contact**.
+Promotion is a deliberate human act in the Hub; the anon role holds no
+privilege on the triage columns at all.
 
 ## Is the PuppyQ data working?
 

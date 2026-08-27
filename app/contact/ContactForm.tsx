@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import HoneyPot from "@/app/components/HoneyPot";
+import { HONEYPOT_FIELD } from "@/lib/spam";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -12,6 +14,14 @@ const labelClass =
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+
+  // Set after mount rather than during render: a timestamp produced while
+  // server-rendering would be the server's clock and would mismatch on
+  // hydration. Without JS it stays null and simply carries no signal.
+  const startedAt = useRef<number | null>(null);
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,6 +38,10 @@ export default function ContactForm() {
           email: fd.get("email"),
           phone: fd.get("phone"),
           message: fd.get("message"),
+          // The decoy is uncontrolled, so it is read from the form rather
+          // than from React state, which never knows it was filled in.
+          [HONEYPOT_FIELD]: fd.get(HONEYPOT_FIELD) ?? "",
+          started_at: startedAt.current,
         }),
       });
       setStatus(res.ok ? "success" : "error");
@@ -52,7 +66,8 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="relative flex flex-col gap-5">
+      <HoneyPot />
       {/* Two fields, never one split afterwards. pawsq's contacts holds a
           first and a last name as separate columns, and deriving them from
           a single string is a guess that fails on exactly the names whose
