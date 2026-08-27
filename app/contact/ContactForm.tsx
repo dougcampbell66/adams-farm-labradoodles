@@ -23,7 +23,8 @@ export default function ContactForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: fd.get("name"),
+          first_name: fd.get("first_name"),
+          last_name: fd.get("last_name"),
           email: fd.get("email"),
           phone: fd.get("phone"),
           message: fd.get("message"),
@@ -52,19 +53,38 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div>
-        <label htmlFor="name" className={labelClass}>
-          Your name <span className="text-feelings-red">*</span>
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          autoComplete="name"
-          placeholder="Full name"
-          className={inputClass}
-        />
+      {/* Two fields, never one split afterwards. pawsq's contacts holds a
+          first and a last name as separate columns, and deriving them from
+          a single string is a guess that fails on exactly the names whose
+          owners notice — so the form asks. See lib/name.ts. */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="first_name" className={labelClass}>
+            First name <span className="text-feelings-red">*</span>
+          </label>
+          <input
+            id="first_name"
+            name="first_name"
+            type="text"
+            required
+            autoComplete="given-name"
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="last_name" className={labelClass}>
+            Last name <span className="text-feelings-red">*</span>
+          </label>
+          <input
+            id="last_name"
+            name="last_name"
+            type="text"
+            required
+            autoComplete="family-name"
+            className={inputClass}
+          />
+        </div>
       </div>
 
       <div>

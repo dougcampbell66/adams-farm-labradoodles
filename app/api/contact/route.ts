@@ -1,15 +1,30 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { fullName } from "@/lib/name";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, message } = body as {
-      name: string;
+    const { first_name, last_name, email, phone, message } = body as {
+      first_name?: string;
+      last_name?: string;
+      /** Legacy single field, from a page cached before the form split. */
+      name?: string;
       email: string;
       phone?: string;
       message: string;
     };
+
+    // Composed, never split — see lib/name.ts. A page cached from before
+    // the form asked for two parts still posts one `name`, so that is
+    // accepted as given rather than rejected.
+    //
+    // Validation deliberately does not require a last name, even though the
+    // form marks it required: refusing a submission server-side over a
+    // missing surname would throw away a real enquiry, and mononyms exist.
+    const name =
+      fullName(first_name ?? "", last_name ?? "") ||
+      ((body as { name?: string }).name ?? "").trim();
 
     if (!name || !email || !message) {
       return NextResponse.json(
