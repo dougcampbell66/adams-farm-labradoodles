@@ -62,6 +62,22 @@ export interface IntakeResult {
   emailed: boolean;
 }
 
+/**
+ * The marketing checkbox, forwarded for the platform to judge.
+ *
+ * Deliberately NOT a finished packet: the platform builds that itself
+ * (pawsq-app lib/mail/consent.ts) so there is one authority on what an
+ * opt-in record looks like and one clock stamping it. This site sends
+ * the raw facts — was it ticked, what did the page display, where, and
+ * from which address — and nothing else.
+ */
+export interface OptInInput {
+  checked: boolean;
+  wording: string;
+  formUrl?: string | null;
+  ip?: string | null;
+}
+
 export interface IntakePayload {
   form: string;
   screen: {
@@ -77,6 +93,7 @@ export interface IntakePayload {
     fields: [string, string][];
     replyTo?: string;
   };
+  optIn?: OptInInput;
 }
 
 /** null = the platform could not be reached; the caller falls back. */
