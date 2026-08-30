@@ -2,7 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 import { BRAND_KEY, type SourceForm } from "@/lib/brand";
 
 /**
- * The insert path into pawsq's shared `corporate_leads` table.
+ * The FALLBACK insert path into pawsq's shared `leads` table (named
+ * `corporate_leads` until pawsq migration 53) — used only when the
+ * platform intake endpoint is unreachable, so the enquiry still lands
+ * unscreened rather than being lost. The primary path is lib/platform.ts.
  *
  * ─────────────────────────────────────────────────────────────────────
  * THE ANON KEY, AND ONLY THE ANON KEY
@@ -97,7 +100,7 @@ export async function insertCorporateLead(lead: CorporateLead): Promise<boolean>
     const supabase = createClient(url, anonKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const { error } = await supabase.from("corporate_leads").insert(row);
+    const { error } = await supabase.from("leads").insert(row);
     if (error) {
       console.error("[leads] insert failed", {
         ...leadsConfig,

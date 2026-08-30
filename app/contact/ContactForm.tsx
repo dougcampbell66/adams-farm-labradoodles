@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import HoneyPot from "@/app/components/HoneyPot";
-import { HONEYPOT_FIELD } from "@/lib/spam";
+import { HONEYPOT_FIELD } from "@/lib/decoy";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
