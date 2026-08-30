@@ -24,8 +24,13 @@ Copy `.env.example` to `.env.local` and fill it in. The important ones:
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | PuppyQ database URL. |
 | `SUPABASE_SERVICE_ROLE_KEY` | PuppyQ read key (**secret** — server only, never commit). |
-| `SMTP_EMAIL` / `SMTP_PASSWORD` | Hostinger mailbox — sends both the contact-form notification and the magic-link sign-in email. |
+| `PAWSQ_PLATFORM_URL` / `PAWSQ_PLATFORM_KEY` | The pawsq platform (pawsq-app) — screening, the lead write and the notification email all run there since 2026-08-30. Server-only. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Required for the fallback lead write when the platform is unreachable. |
 | `MAGIC_LINK_SECRET`, `ADAMS_FARM_ALLOWED_EMAILS` | `/forever-families` login. |
+
+`SMTP_EMAIL` / `SMTP_PASSWORD` may still be set on the Vercel project and are
+**stale** — this site no longer sends any email. Nothing reads them; remove
+them when convenient.
 
 **These must also be set in Vercel** (Settings → Environment Variables, for
 Production *and* Preview). If the Supabase vars are missing in an environment,
@@ -34,10 +39,18 @@ the live-data pages (`/dams`, `/sires`, `/litters`, `/our-puppies`,
 
 ## The contact form
 
-`app/contact/ContactForm.tsx` → `POST /api/contact` → **two destinations,
-attempted independently**: pawsq's `corporate_leads` table, and the
-notification email (SMTP, Hostinger). Either one succeeding has kept the
-enquiry; only a total loss shows the visitor an error.
+`app/contact/ContactForm.tsx` → `POST /api/contact` → **the pawsq platform**
+(`lib/platform.ts` → pawsq-app `/api/platform/intake`), which screens the
+submission, stores it in `leads`, and sends the notification from
+`adamsfarmlabradoodles@pawsq.com`. This route keeps what is the site's own:
+parsing, validation, composing the name, and answering the visitor.
+
+If the platform is unreachable the site **falls back** to writing the lead
+directly with the anon key (`lib/leads.ts`) — unscreened, but stored and
+logged loudly. A rare unscreened row beats a lost enquiry. Only a total loss —
+no platform, no fallback row — shows the visitor an error, because asking
+someone to send their message twice over our outage would be our failure
+displayed as theirs.
 
 Rows are told apart by `source_brand = 'adams_farm'` and
 `source_form = 'contact_form'`, both set server-side in `lib/brand.ts` and
@@ -53,22 +66,26 @@ every brand — which is right for the read-only server components that render
 submit. With no anon key configured the form still emails, logs loudly, and
 writes no row. That is the correct degradation.
 
-The anon role can only INSERT, on a named column list (pawsq migrations 19,
-20, 45, 46). Sending a column outside that list fails the whole insert, so
-`lib/leads.ts` builds the row explicitly — client input is never spread into
-the payload.
+The anon role can only INSERT, on a named column list (pawsq migration 48 set
+the current one; 53 renamed the table to `leads` and 54 dropped the old
+compatibility view, so `leads` is now the only name that works). Sending a
+column outside that list fails the whole insert, so `lib/leads.ts` builds the
+row explicitly — client input is never spread into the payload.
 
 ### Spam screening
 
-`lib/spam.ts` and `app/components/HoneyPot.tsx` are ported verbatim from
-`puppy-therapy` and `school-dogs`. Two verdicts, not one: **block** only for
-what a person physically cannot do (the hidden decoy field), everything
-merely suspicious is **flagged** — stored and emailed exactly as normal, with
-the reasons attached, for a person to judge. A single weak signal never
-blocks.
+The screening itself moved to the platform on 2026-08-30 — there is now **one
+copy** of it, in pawsq-app, instead of a verbatim copy in each of the four
+brand sites. This repo keeps only the decoy it plants in the form
+(`lib/decoy.ts`, `app/components/HoneyPot.tsx`) and forwards those fields.
+
+Two verdicts, not one: **block** only for what a person physically cannot do
+(the hidden decoy field), everything merely suspicious is **flagged** — stored
+and emailed exactly as normal, with the reasons attached, for a person to
+judge. A single weak signal never blocks.
 
 This matters more here than on a marketing form: pawsq migration 20 records
-that `corporate_leads` already holds a bot row, and nothing is deleted from a
+that the intake table already holds a bot row, and nothing is deleted from a
 screen in that system.
 
 ### Names, and what happens next
