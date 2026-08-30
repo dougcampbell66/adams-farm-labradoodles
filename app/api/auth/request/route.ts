@@ -13,6 +13,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createLoginToken, isAllowed, isConfigured, normalizeEmail } from "@/lib/auth";
 import { remedy, sendMagicLink } from "@/lib/send-email";
+import { isMailerConfigured } from "@/lib/mailer";
 import { EMAIL_RULES, IP_RULES, check, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -61,9 +62,9 @@ export async function POST(request: NextRequest) {
   const link = new URL("/api/auth/verify", request.url);
   link.searchParams.set("token", token);
 
-  // Local convenience: with no Resend key, print the link to the terminal
-  // so dev sign-in still works without wiring up email.
-  if (!process.env.RESEND_API_KEY && process.env.NODE_ENV !== "production") {
+  // Local convenience: with no Hostinger credentials set, print the link to
+  // the terminal so dev sign-in still works without wiring up email.
+  if (!isMailerConfigured() && process.env.NODE_ENV !== "production") {
     console.log(`\n[auth] dev sign-in link for ${email}:\n${link.toString()}\n`);
     return respond();
   }

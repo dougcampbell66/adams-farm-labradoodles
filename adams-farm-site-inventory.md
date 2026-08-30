@@ -145,9 +145,11 @@ using `SMTP_EMAIL` and `SMTP_PASSWORD`. Unset, the form shows "Something went wr
 again or call us directly at 336-338-8660." The form is the only path to the waitlist besides the
 phone number.
 
-**C4 — `/forever-families` needs its own env set.** `MAGIC_LINK_SECRET`,
-`ADAMS_FARM_ALLOWED_EMAILS`, and `AUTH_EMAIL_FROM` (plus `RESEND_API_KEY`). Unconfigured, the gate
-shows "Sign-in isn't configured yet, so this page is closed to everyone." plus a diagnostic string.
+**C4 — `/forever-families` needs its own env set.** `MAGIC_LINK_SECRET` and
+`ADAMS_FARM_ALLOWED_EMAILS`. Unconfigured, the gate shows "Sign-in isn't configured yet, so this
+page is closed to everyone." plus a diagnostic string. *(Updated 2026-08-30: the sign-in email now
+sends via the same `SMTP_EMAIL`/`SMTP_PASSWORD` Hostinger mailbox as C3, not Resend —
+`RESEND_API_KEY`/`AUTH_EMAIL_FROM` no longer apply. This snapshot otherwise reflects 2026-08-10.)*
 
 ## D. Dead code and unreferenced files
 

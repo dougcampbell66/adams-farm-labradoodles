@@ -24,8 +24,8 @@ Copy `.env.example` to `.env.local` and fill it in. The important ones:
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | PuppyQ database URL. |
 | `SUPABASE_SERVICE_ROLE_KEY` | PuppyQ read key (**secret** — server only, never commit). |
-| `SMTP_EMAIL` / `SMTP_PASSWORD` | Contact-form email (Hostinger). |
-| `MAGIC_LINK_SECRET`, `ADAMS_FARM_ALLOWED_EMAILS`, `RESEND_API_KEY` | `/forever-families` login. |
+| `SMTP_EMAIL` / `SMTP_PASSWORD` | Hostinger mailbox — sends both the contact-form notification and the magic-link sign-in email. |
+| `MAGIC_LINK_SECRET`, `ADAMS_FARM_ALLOWED_EMAILS` | `/forever-families` login. |
 
 **These must also be set in Vercel** (Settings → Environment Variables, for
 Production *and* Preview). If the Supabase vars are missing in an environment,

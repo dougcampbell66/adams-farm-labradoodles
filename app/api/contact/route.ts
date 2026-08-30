@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { mailerTransport } from "@/lib/mailer";
 import { fullName } from "@/lib/name";
 import { insertCorporateLead } from "@/lib/leads";
 import { SOURCE, provenance } from "@/lib/brand";
@@ -99,15 +99,7 @@ export async function POST(request: Request) {
   /** Never throws: returns whether the message went out. */
   async function sendNotification(): Promise<boolean> {
     try {
-      const transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.SMTP_EMAIL,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      });
+      const transporter = mailerTransport();
 
       const cell = "padding:10px 12px;border:1px solid #E2DAC7;font-size:14px";
       const head = `${cell};background:#FAF7F0;font-weight:700;width:120px`;

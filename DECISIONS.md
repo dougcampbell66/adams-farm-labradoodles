@@ -3,6 +3,30 @@
 _Significant engineering choices and the reasoning behind them. Newest first._
 _Maintained by EngineerQ._
 
+## 2026-08-30 — Magic-link email moves from Resend to the existing Hostinger mailbox
+
+- **Dropped Resend.** The `/forever-families` sign-in link was sent through
+  Resend's HTTP API (`lib/send-email.ts`), a second paid email service that
+  existed only for this one message — the contact form already sends through
+  a Hostinger mailbox Douglas already pays for and owns. No decision record
+  justified Resend originally; it was simply what got built first. Douglas
+  confirmed the $20/mo Resend subscription is not otherwise needed and is
+  cancelable once this is verified live.
+- **`lib/mailer.ts` added** — the one shared Hostinger SMTP transport, used
+  by both the contact form notification and the magic-link email. Removes a
+  second env-var set (`RESEND_API_KEY`, `AUTH_EMAIL_FROM`) and the domain-
+  verification requirement Resend's free tier imposed (unverified, it could
+  only deliver to the Resend account's own address).
+- **`sendMagicLink()`'s interface is unchanged** — still returns `{ ok,
+  cause, error }` — so `app/api/auth/request/route.ts` needed only its dev-
+  mode fallback condition updated, not its call site. `FailureCause` lost
+  the Resend-specific `"test-sender-recipient-blocked"` value; only
+  `"unconfigured" | "auth" | "other"` remain.
+- **Not yet verified live** — this session confirmed the anon-key write path
+  for `corporate_leads` with a real test submission, but the SMTP switch
+  itself hasn't been tested end-to-end against a live `/forever-families`
+  sign-in attempt. Do that before relying on it.
+
 ## 2026-08-10 — Breeding lines replace the ownership-based dogs page
 
 - **`/dams`, `/sires`, `/litters` added; `/our-dogs` deleted.** Douglas's call:

@@ -1,33 +1,13 @@
-// Minimal Resend client — one POST, no SDK dependency.
-//
-// SENDING DOMAIN: With no verified domain, the only usable From address is
-// the shared `onboarding@resend.dev`, and Resend restricts it to a single
-// recipient — the address that owns the Resend account. Mail to anyone else
-// is rejected 403 "You can only send testing emails to your own email address".
-//
-// To deliver to other addresses, verify a domain at resend.com/domains and
-// set AUTH_EMAIL_FROM to an address on it — e.g.:
-//   Adams Farm Labradoodles <noreply@adamsfarmlabradoodles.com>
+// Magic-link email, sent through the same Hostinger mailbox as the contact
+// form notification (lib/mailer.ts). Previously went through Resend — a
+// second paid email service that existed only to send this one message —
+// which meant a login link couldn't reach anyone until a domain was also
+// verified with Resend. The mailbox used here needs no such verification.
 
+import { mailerTransport, isMailerConfigured } from "@/lib/mailer";
 import { LOGIN_TTL_MINUTES, SESSION_TTL_DAYS } from "@/lib/auth";
 
-/** Works without domain verification, but only to the Resend account owner. */
-export const DEFAULT_FROM = "Adams Farm Labradoodles <onboarding@resend.dev>";
-
-export function fromAddress(): string {
-  return process.env.AUTH_EMAIL_FROM || DEFAULT_FROM;
-}
-
-/** True when we're on the shared testing sender, i.e. one-recipient-only. */
-export function usingTestSender(): boolean {
-  return fromAddress().includes("resend.dev");
-}
-
-export type FailureCause =
-  | "unconfigured"
-  | "test-sender-recipient-blocked"
-  | "auth"
-  | "other";
+export type FailureCause = "unconfigured" | "auth" | "other";
 
 interface SendResult {
   ok: boolean;
@@ -35,40 +15,22 @@ interface SendResult {
   error?: string;
 }
 
-/** Map Resend's HTTP status + body onto something actionable in a log line. */
-function classify(status: number, body: string): FailureCause {
-  const text = body.toLowerCase();
-  if (status === 403 && text.includes("your own email address")) {
-    return "test-sender-recipient-blocked";
-  }
-  if (status === 401 || status === 403) return "auth";
-  return "other";
-}
-
 /** Human-readable next step for each cause — printed to the server log. */
 export function remedy(cause: FailureCause): string {
   switch (cause) {
     case "unconfigured":
-      return "Set RESEND_API_KEY (create a key at resend.com/api-keys).";
-    case "test-sender-recipient-blocked":
-      return (
-        "The shared onboarding@resend.dev sender only delivers to the Resend " +
-        "account owner's own address. Verify a domain at resend.com/domains and " +
-        "set AUTH_EMAIL_FROM to an address on it, or add the account owner's " +
-        "address to ADAMS_FARM_ALLOWED_EMAILS for now."
-      );
+      return "Set SMTP_EMAIL and SMTP_PASSWORD (the Hostinger mailbox's address and password).";
     case "auth":
-      return "RESEND_API_KEY was rejected — check it hasn't been revoked.";
+      return "SMTP_EMAIL / SMTP_PASSWORD were rejected by Hostinger — check the password hasn't changed.";
     default:
-      return "See the Resend response above.";
+      return "See the SMTP error above.";
   }
 }
 
 export async function sendMagicLink(to: string, url: string): Promise<SendResult> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return { ok: false, cause: "unconfigured", error: "RESEND_API_KEY is not set" };
-
-  const from = fromAddress();
+  if (!isMailerConfigured()) {
+    return { ok: false, cause: "unconfigured", error: "SMTP_EMAIL / SMTP_PASSWORD are not set" };
+  }
 
   const text = [
     "Here is your sign-in link for the Adams Farm Forever Families page:",
@@ -98,35 +60,19 @@ export async function sendMagicLink(to: string, url: string): Promise<SendResult
 </div>`.trim();
 
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: "Your Adams Farm sign-in link",
-        text,
-        html,
-      }),
+    await mailerTransport().sendMail({
+      from: `"Adams Farm Labradoodles" <${process.env.SMTP_EMAIL}>`,
+      to,
+      subject: "Your Adams Farm sign-in link",
+      text,
+      html,
     });
-
-    if (!response.ok) {
-      const body = await response.text();
-      return {
-        ok: false,
-        cause: classify(response.status, body),
-        error: `Resend responded ${response.status}: ${body}`,
-      };
-    }
     return { ok: true };
   } catch (error) {
-    return {
-      ok: false,
-      cause: "other",
-      error: error instanceof Error ? error.message : String(error),
-    };
+    const message = error instanceof Error ? error.message : String(error);
+    const cause: FailureCause = /auth|invalid login|credentials/i.test(message)
+      ? "auth"
+      : "other";
+    return { ok: false, cause, error: message };
   }
 }
