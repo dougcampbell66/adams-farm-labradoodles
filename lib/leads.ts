@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { BRAND_KEY, type SourceForm } from "@/lib/brand";
+import type { OptInPacket } from "@/lib/consent";
 
 /**
  * The FALLBACK insert path into pawsq's shared `leads` table (named
@@ -33,15 +34,15 @@ import { BRAND_KEY, type SourceForm } from "@/lib/brand";
  *
  * That makes the column list load-bearing: sending a key outside it fails
  * the whole insert. The row below is built explicitly, field by field —
- * client input is never spread into the payload. As of migrations 45 and
- * 46 the granted columns are:
+ * client input is never spread into the payload. As of migrations 48 and
+ * 56 the granted columns are:
  *
- *   id, created_at, name, first_name, last_name, company, email, phone,
- *   event_type, message, source_brand, source_form, location,
- *   preferred_date, preferred_time, event_name, event_dates,
- *   expected_attendance, enquirer_role
+ *   id, created_at, name, first_name, last_name, company, district,
+ *   email, phone, event_type, message, source_brand, source_form,
+ *   location, preferred_date, preferred_time, event_name, event_dates,
+ *   expected_attendance, enquirer_role, answers, marketing_opt_in
  *
- * This form sends seven of them. `status`, `contact_id`, `inquiry_id`,
+ * This form sends eight of them. `status`, `contact_id`, `inquiry_id`,
  * `triaged_at` and `triage_notes` are ungranted on purpose and fall to
  * their defaults — a submission arrives `new` and a human triages it.
  *
@@ -57,6 +58,13 @@ export type CorporateLead = {
   phone?: string | null;
   message?: string | null;
   source_form: SourceForm;
+  /**
+   * The opt-in evidence packet, or null when no opt-in was given
+   * (pawsq migration 56). NULL is the meaningful value here — not
+   * false, not an empty object — so it is written as an explicit null
+   * rather than omitted, keeping the row shape the same either way.
+   */
+  marketing_opt_in?: OptInPacket | null;
 };
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? null;
@@ -94,6 +102,7 @@ export async function insertCorporateLead(lead: CorporateLead): Promise<boolean>
     // "whose visitor was this", the form "what were they doing".
     source_brand: BRAND_KEY,
     source_form: lead.source_form,
+    marketing_opt_in: lead.marketing_opt_in ?? null,
   };
 
   try {

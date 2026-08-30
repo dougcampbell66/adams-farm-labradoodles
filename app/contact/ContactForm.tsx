@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import HoneyPot from "@/app/components/HoneyPot";
 import { HONEYPOT_FIELD } from "@/lib/decoy";
+import {
+  MARKETING_OPT_IN_FIELD,
+  MARKETING_OPT_IN_WORDING,
+} from "@/lib/consent";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -42,6 +46,17 @@ export default function ContactForm() {
           // than from React state, which never knows it was filled in.
           [HONEYPOT_FIELD]: fd.get(HONEYPOT_FIELD) ?? "",
           started_at: startedAt.current,
+          // The opt-in. Uncontrolled like the decoy, so this reads what
+          // the form actually holds rather than what React thinks.
+          // Absent from the FormData means unticked, which is the whole
+          // point of a box nothing pre-ticks.
+          [MARKETING_OPT_IN_FIELD]: fd.get(MARKETING_OPT_IN_FIELD) === "yes",
+          // The words this page really displayed, sent alongside rather
+          // than assumed server-side: a page cached from before a wording
+          // change showed the OLD text, and that is what its visitor
+          // agreed to.
+          marketing_opt_in_wording: MARKETING_OPT_IN_WORDING,
+          form_url: window.location.href,
         }),
       });
       setStatus(res.ok ? "success" : "error");
@@ -154,6 +169,22 @@ export default function ContactForm() {
           .
         </p>
       )}
+
+      {/* Unchecked by default, always — no defaultChecked, no checked.
+          A pre-ticked box is not express consent, and this is the one
+          control on the form whose default is a legal fact rather than
+          a convenience. */}
+      <label className="flex items-start gap-3 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          name={MARKETING_OPT_IN_FIELD}
+          value="yes"
+          className="mt-[3px] h-4 w-4 shrink-0 accent-navy cursor-pointer"
+        />
+        <span className="text-[0.86rem] text-body-soft leading-snug">
+          {MARKETING_OPT_IN_WORDING}
+        </span>
+      </label>
 
       <button
         type="submit"

@@ -4,6 +4,7 @@ import { insertCorporateLead } from "@/lib/leads";
 import { SOURCE, provenance } from "@/lib/brand";
 import { HONEYPOT_FIELD, STARTED_FIELD } from "@/lib/decoy";
 import { platformIntake } from "@/lib/platform";
+import { optInPacket, visitorIp, MARKETING_OPT_IN_WORDING } from "@/lib/consent";
 
 /**
  * The contact form, from /contact.
@@ -53,6 +54,20 @@ export async function POST(request: Request) {
   const phone = str(body.phone);
   const message = str(body.message);
 
+  // The marketing opt-in (pawsq docs/EMAIL.md ruling 6). Only an
+  // affirmative `true` counts — an absent field, a string, anything
+  // else is no opt-in, which is what an unticked box produces.
+  //
+  // The wording is taken from the page when it sends one, because a
+  // page cached from before a wording change displayed the OLD text and
+  // that is what its visitor agreed to. Falling back to this deploy's
+  // constant keeps a real tick from being discarded when an older
+  // bundle sends none.
+  const optedIn = body.marketing_opt_in === true;
+  const optInWording = str(body.marketing_opt_in_wording) || MARKETING_OPT_IN_WORDING;
+  const formUrl = str(body.form_url) || request.headers.get("referer") || null;
+  const ip = visitorIp(request);
+
   // Deliberately does not require a last name even though the form marks it
   // required: refusing a submission server-side over a missing surname would
   // throw away a real enquiry, and mononyms exist.
@@ -91,6 +106,9 @@ export async function POST(request: Request) {
       ],
       replyTo: email,
     },
+    optIn: optedIn
+      ? { checked: true, wording: optInWording, formUrl, ip }
+      : undefined,
   });
 
   if (result) {
@@ -110,6 +128,10 @@ export async function POST(request: Request) {
 
   // The fallback: unscreened, but stored. The submission also goes to the
   // log whole, so it is recoverable even if this write fails too.
+  // The fallback carries the opt-in too. An enquiry that gave one must
+  // not lose it because our own endpoint was unreachable — the packet is
+  // built here only because there is nobody to ask when the platform is
+  // down (lib/consent.ts).
   const stored = await insertCorporateLead({
     name,
     first_name: firstName || null,
@@ -118,6 +140,12 @@ export async function POST(request: Request) {
     phone: phone || null,
     message,
     source_form: SOURCE.contact,
+    marketing_opt_in: optInPacket({
+      checked: optedIn,
+      wording: optInWording,
+      formUrl,
+      ip,
+    }),
   });
 
   if (!stored) {
