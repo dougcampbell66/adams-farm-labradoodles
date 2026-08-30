@@ -1,61 +1,71 @@
 # STATUS
 
 _Maintained by EngineerQ. Plain language. Douglas checks ~every 8h._
-_Last updated: 2026-07-25._
+_Last updated: 2026-08-30._
 
 ---
 
-## 🟢 Headline: the PuppyQ data problem is FIXED and verified
+## 🟢 Headline: pawsq is now wired in on both the read side and the write side
 
-The live pages now show your real data: `/our-dogs`, `/our-puppies`, and
-`/our-litters` all render dogs and litters straight from PuppyQ (verified on the
-latest deployment — 36 dogs, 5 litters). The health check is green:
-**`https://<your-site>/api/puppyq/health`** → `"healthy": true`.
+Live data still renders straight from pawsq's database — `/dams`, `/sires`,
+and `/litters` (`/our-dogs` was retired in their favor and now redirects to
+`/dams`). The home page's litter/puppy counts read that same record, so they
+can't drift out of sync with those pages the way they once did.
 
-What happened: the code was always correct, but the **Vercel deployment was
-missing the Supabase credentials** that exist locally, so every PuppyQ page
-rendered empty. The credentials are now present in Vercel, and the redeploy
-rebuilt the pages with data. (If those pages ever go blank again, it's almost
-always this same cause — check the health URL first.)
+**New since the last update:** the contact form now writes real leads into
+pawsq (`source_brand = 'adams_farm'`) instead of only reaching an inbox, and
+it asks for first and last name separately rather than splitting one string
+apart. `/app`, `/login`, and `/auth` are proxied to the pawsq-app tenant app,
+and the footer carries a Sign In link — the site's one door into the app.
+
+**Vercel's `NEXT_PUBLIC_SUPABASE_ANON_KEY`** — required for the contact form
+to actually save a lead, as opposed to just emailing and logging — was
+missing as of pawsq's Aug 27 handoff. Douglas confirmed on 2026-08-30 that
+it's now set on both Adams Farm and Legend Manor in Vercel. This has not
+been independently re-verified from a session — there's no live Vercel
+access from here — so if a lead ever stops appearing in pawsq, check this
+setting first.
 
 ## 🔵 Anything Douglas must do
 
-- **Nothing blocking.** The site is working.
-- **Optional (2 min), to switch on automatic monitoring:** in GitHub → this repo
+- **Nothing blocking in this repo.**
+- Two related decisions are open in **pawsq**, not here, if you want to
+  unblock them:
+  - Whether a `flag`-verdict submission (from spam-check) should auto-promote
+    to a full contact record, or hold for a human. Design is settled,
+    nothing is built yet.
+  - `attribute-jill-gravo.mjs` — pushed, not merged, not run. Resolves the
+    one unattributed contact pawsq's state report flags.
+- Optional (2 min), to switch on automatic monitoring: in GitHub → this repo
   → Settings → Secrets and variables → Actions → **Variables**, add
-  `PUPPYQ_SITE_URL` = your live site URL. That enables a check every 6 hours that
-  emails you if the data ever goes empty again. Until it's set, that check just
-  skips (nothing breaks).
+  `PUPPYQ_SITE_URL` = your live site URL. That enables a check every 6 hours
+  that emails you if the data ever goes empty again. Until it's set, that
+  check just skips (nothing breaks).
 
-## ✅ Done this session
+## ✅ Done since the last update (Aug 10 – Aug 27)
 
-- **Diagnosed** the empty-data problem to its root cause (missing Supabase env
-  vars on Vercel) with direct evidence, and **confirmed it's now resolved** live.
-- **Health check** at `/api/puppyq/health` — tells us from the outside whether any
-  environment can read PuppyQ data, without ever exposing the secret key.
-- **Automated guards:** `npm run smoke` + a scheduled GitHub Action (fails if the
-  live data goes empty), and `npm test` (12 unit tests for the dog/litter/puppy
-  display logic).
-- **Documented** the Supabase settings in `.env.example` (they were undocumented —
-  the likely reason they were missed on Vercel) and started tracking that template.
-- **Orientation docs:** `BRIEF.md` (what the site is), this `STATUS.md`,
-  `DECISIONS.md`.
-- Confirmed the site navigation already links all three live pages, and that no
-  secrets are committed (`.env*` stays gitignored).
-- **Renamed the old hardcoded puppies page to `/puppies2`** (kept, not retired,
-  per your call) and repointed its internal links. The live `/our-puppies` stays
-  primary in the nav. New convention: when a new page replaces an old one, the
-  old one gets a `2` suffix rather than being deleted.
-- **Replaced the boilerplate README** with a real one.
+- Added Dams, Sires, and Litters pages; retired Our Dogs in their favor, with
+  a permanent redirect from `/our-dogs` to `/dams`.
+- Home page litter/puppy counts now read from the same pawsq record as those
+  pages.
+- Proxied `/app`, `/login`, and `/auth` to the pawsq-app tenant app; added a
+  footer Sign In link.
+- Contact form now asks for first and last name as separate fields, and
+  writes submissions into pawsq using the anon key only — the service-role
+  key is never used here, since that key bypasses every access rule and must
+  never sit behind a public form.
 
 ## ⏭ Next — what still looks unfinished (my recommendation)
 
-1. **Card colors (recommend next).** Cards + several section backgrounds still use
-   pure white instead of the warm `#EDE3D0`, so they look a little stark. Low
-   risk, unblocked, no decision needed from you.
-2. **Home page puppy preview** still reads from the old hardcoded data rather than
-   live PuppyQ. Lower priority (the dedicated pages are live); worth aligning later.
+1. **Home page "Available Puppies" preview** still reads from the static
+   file `src/data/litters.ts`, not live pawsq — only the counts strip above
+   it was switched over. Worth aligning once there's a live litter to show
+   there; right now the cards can show stale or placeholder puppies even
+   though the count next to them is real.
+2. **Card colors.** Several sections — the Available Puppies cards, the
+   Litters page cards — still use plain white rather than the warm
+   `#EDE3D0` panel tone used elsewhere. Low risk, unblocked, no decision
+   needed from you.
 
-_Note: the old `/puppies` URL now returns "not found" (its content lives at
-`/puppies2`). If you want the old URL to keep working (redirect to `/puppies2`),
-say the word — one-line change._
+_Note: the old `/puppies` URL still 404s (content lives at `/puppies2`) — say
+the word if you want it to redirect instead._
