@@ -3,6 +3,31 @@
 _Significant engineering choices and the reasoning behind them. Newest first._
 _Maintained by EngineerQ._
 
+## 2026-08-30 — Outbound email leaves this site for the pawsq platform
+
+- **This site no longer sends email at all.** Douglas's platform ruling
+  (pawsq `docs/EMAIL.md`, same day, superseding the morning's
+  Resend-to-Hostinger move below): outbound email is a pawsq capability,
+  one sender identity per brand under pawsq.com. The contact-form
+  pipeline — spam screening, the lead write, the notification email —
+  runs on pawsq-app's `/api/platform/intake`, and the magic-link send on
+  `/api/platform/magic-link`, both called server-to-server with
+  `PAWSQ_PLATFORM_URL` / `PAWSQ_PLATFORM_KEY`. Mail arrives from
+  `adamsfarmlabradoodles@pawsq.com`.
+- **`lib/mailer.ts` and `lib/spam.ts` deleted.** The screening's one copy
+  now lives in pawsq-app (`lib/mail/spam.ts`), ending the
+  four-repo-verbatim-copy arrangement its own header apologized for. The
+  decoy field names stay here (`lib/decoy.ts`) — they are the contract
+  between this site's form markup and its route.
+- **The fallback keeps the old resilience.** If the platform is
+  unreachable, `lib/leads.ts` still writes the lead directly (anon key,
+  now to `leads` — pawsq migration 53 renamed the table). Unscreened but
+  stored beats lost; only a total loss shows the visitor an error.
+- **Vercel cleanup owed once verified live:** remove `SMTP_EMAIL` /
+  `SMTP_PASSWORD` from this project; add `PAWSQ_PLATFORM_URL` /
+  `PAWSQ_PLATFORM_KEY`. The morning entry's "not yet verified live"
+  caveat transfers to the platform path.
+
 ## 2026-08-30 — Magic-link email moves from Resend to the existing Hostinger mailbox
 
 - **Dropped Resend.** The `/forever-families` sign-in link was sent through

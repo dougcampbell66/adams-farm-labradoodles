@@ -1,4 +1,4 @@
-import { HONEYPOT_FIELD } from "@/lib/spam";
+import { HONEYPOT_FIELD } from "@/lib/decoy";
 
 /**
  * The decoy field, and the clock.

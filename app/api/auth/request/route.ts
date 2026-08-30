@@ -12,8 +12,7 @@
 
 import { NextResponse, type NextRequest } from "next/server";
 import { createLoginToken, isAllowed, isConfigured, normalizeEmail } from "@/lib/auth";
-import { remedy, sendMagicLink } from "@/lib/send-email";
-import { isMailerConfigured } from "@/lib/mailer";
+import { isMailerConfigured, remedy, sendMagicLink } from "@/lib/send-email";
 import { EMAIL_RULES, IP_RULES, check, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
