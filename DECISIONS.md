@@ -3,6 +3,27 @@
 _Significant engineering choices and the reasoning behind them. Newest first._
 _Maintained by EngineerQ._
 
+## 2026-09-08 — The fallback write goes through `record_form_submission`
+
+- **There is no `leads` table any more.** Douglas ruled the same day that
+  leads and contacts must not be separate tables; pawsq migration 66
+  folded `leads` into `contacts` + `inquiries` + a brand link in
+  `contact_organizations`, and dropped it. The anon key lost its INSERT
+  grant with the table and now holds exactly one privilege: EXECUTE on
+  the SECURITY DEFINER function `record_form_submission(...)`, which
+  creates the person, the enquiry and the Adams Farm link at stage
+  `lead`, and returns the inquiry id and nothing else.
+- **`lib/leads.ts` now calls that function** (`supabase.rpc`) instead of
+  inserting a row; it is renamed `recordFormSubmission` and its type
+  `FormSubmission`. The anon-key-only rule is unchanged and still
+  load-bearing. The wire contract with the platform (`store: "leads"` in
+  `lib/platform.ts`) is deliberately unchanged — the platform now reads
+  that value as "record the person through the function".
+- **Promotion is still a human act.** A submission arrives as a contact
+  at stage `lead` on the Adams Farm link and a human moves the stage in
+  the Hub. The stage is not a parameter of the function, so nothing this
+  site can post arrives already triaged.
+
 ## 2026-08-30 — Outbound email leaves this site for the pawsq platform
 
 - **This site no longer sends email at all.** Douglas's platform ruling
@@ -23,6 +44,7 @@ _Maintained by EngineerQ._
   unreachable, `lib/leads.ts` still writes the lead directly (anon key,
   now to `leads` — pawsq migration 53 renamed the table). Unscreened but
   stored beats lost; only a total loss shows the visitor an error.
+  *(Superseded 2026-09-08: `leads` is gone — see above.)*
 - **Vercel cleanup owed once verified live:** remove `SMTP_EMAIL` /
   `SMTP_PASSWORD` from this project; add `PAWSQ_PLATFORM_URL` /
   `PAWSQ_PLATFORM_KEY`. The morning entry's "not yet verified live"
