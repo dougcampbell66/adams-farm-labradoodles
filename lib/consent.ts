@@ -58,7 +58,7 @@ export function isOptInAffirmative(raw: unknown): boolean {
   return v === "yes" || v === "on" || v === "true";
 }
 
-/** The packet shape `leads.marketing_opt_in` holds (pawsq migration 56). */
+/** The packet shape `inquiries.marketing_opt_in` holds (pawsq migration 66, same shape as 56). */
 export interface OptInPacket {
   checked_at: string;
   wording: string;
