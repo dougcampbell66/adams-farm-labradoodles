@@ -6,7 +6,7 @@ type PageHeroProps = {
 
 export default function PageHero({ eyebrow, title, intro }: PageHeroProps) {
   return (
-    <div className="bg-navy py-16 px-6 border-b border-white/12">
+    <div className="bg-navy py-12 md:py-16 px-6 border-b border-white/12">
       <div className="max-w-[1160px] mx-auto">
         <span className="block font-extrabold text-[0.75rem] tracking-[0.14em] uppercase text-coral mb-3">
           {eyebrow}

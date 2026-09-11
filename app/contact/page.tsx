@@ -17,7 +17,7 @@ export default function ContactPage() {
         intro="Questions about an available puppy, the waitlist, or our program? Send us a message — we respond within 1–2 business days."
       />
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_300px] gap-12">
           {/* Form */}
           <div>

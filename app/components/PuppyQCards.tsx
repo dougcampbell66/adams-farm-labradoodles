@@ -67,11 +67,16 @@ export default function PuppyQCards() {
   const [flipped, setFlipped] = useState<number | null>(null);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div>
+      {/* Phones have no hover; say how the cards work. */}
+      <p className="md:hidden text-[0.72rem] font-semibold tracking-[0.05em] uppercase text-cream/60 mb-3">
+        Tap a period to see what we do
+      </p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
       {phases.map((p) => (
         <div
           key={p.n}
-          className="flip-perspective h-[260px] cursor-pointer outline-none"
+          className="flip-perspective h-[230px] sm:h-[260px] cursor-pointer outline-none"
           tabIndex={0}
           onClick={() =>
             setFlipped((cur) => (cur === p.n ? null : p.n))
@@ -80,7 +85,7 @@ export default function PuppyQCards() {
           <div className={`flip-inner ${flipped === p.n ? "is-flipped" : ""}`}>
             {/* Front */}
             <div
-              className="flip-face flip-front bg-white border border-line shadow-[0_2px_16px_rgba(0,0,0,0.07)] p-7 flex flex-col justify-center gap-2.5"
+              className="flip-face flip-front bg-white border border-line shadow-[0_2px_16px_rgba(0,0,0,0.07)] p-4 sm:p-7 flex flex-col justify-center gap-2.5"
               style={{ borderTop: `4px solid ${p.accent}` }}
             >
               <p
@@ -104,7 +109,7 @@ export default function PuppyQCards() {
             </div>
             {/* Back */}
             <div
-              className="flip-face flip-back flex items-center justify-center text-center p-7"
+              className="flip-face flip-back flex items-center justify-center text-center p-4 sm:p-7"
               style={{ background: p.accent }}
             >
               <p
@@ -117,6 +122,7 @@ export default function PuppyQCards() {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function OurStoryPage() {
         intro="How a search for the right family dog became Adams Farm."
       />
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[720px] mx-auto flex flex-col gap-6">
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
             It started with our kids, Julian and Marie Claire, begging for a

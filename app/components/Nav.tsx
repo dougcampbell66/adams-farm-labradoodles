@@ -124,7 +124,7 @@ export default function Nav() {
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((o) => !o)}
-          className="md:hidden flex flex-col gap-[5px] p-1"
+          className="md:hidden flex flex-col gap-[5px] p-3 -mr-3"
         >
           <span className="block w-[22px] h-[2px] bg-cream rounded" />
           <span className="block w-[22px] h-[2px] bg-cream rounded" />

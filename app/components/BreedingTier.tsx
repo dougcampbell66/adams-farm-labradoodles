@@ -25,7 +25,7 @@ export default function BreedingTier({
 
   return (
     <section
-      className={`py-16 px-6 ${
+      className={`py-12 md:py-16 px-6 ${
         tone === "panel" ? "bg-panel-alt border-t border-sand-line" : "bg-cream"
       }`}
     >
