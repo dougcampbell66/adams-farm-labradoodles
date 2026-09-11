@@ -14,6 +14,7 @@ import {
   pqRole,
   pqBreedingLines,
   pqLitterIsOurs,
+  pqListingChoices,
   pqPuppyStanding,
   type PqDog,
   type PqLitter,
@@ -220,5 +221,32 @@ describe("pqLitterIsOurs — which litters are on the record", () => {
 
   it("treats a missing parent as not ours rather than crashing", () => {
     expect(pqLitterIsOurs(row("other", null, null), "org", ours, rights)).toBe(false);
+  });
+});
+
+describe("pqListingChoices — a program's choice about its own site", () => {
+  const rows = [
+    { litter_id: "L1", organization_id: "org", listed: false },
+    { litter_id: "L2", organization_id: "org", listed: true },
+    { litter_id: "L1", organization_id: "other", listed: false },
+  ];
+
+  it("keeps only the choices about this organization's site", () => {
+    const m = pqListingChoices(rows, "org");
+    expect([...m.keys()].sort()).toEqual(["L1", "L2"]);
+  });
+
+  it("carries the choice, in either direction", () => {
+    const m = pqListingChoices(rows, "org");
+    expect(m.get("L1")).toBe(false);
+    expect(m.get("L2")).toBe(true);
+  });
+
+  it("says nothing about a litter with no row, so the default applies", () => {
+    expect(pqListingChoices(rows, "org").get("L3")).toBeUndefined();
+  });
+
+  it("ignores the partner's choices entirely", () => {
+    expect(pqListingChoices(rows, "other").get("L2")).toBeUndefined();
   });
 });
