@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
-import { getPuppiesForLitter } from "@/src/data/litters";
+import { litters, getPuppiesForLitter } from "@/src/data/litters";
 import { getPuppyQ } from "@/lib/puppyq";
 
 // The litter and puppy counts are read from the same PuppyQ record /litters
@@ -80,12 +80,28 @@ const faqs = [
   },
 ];
 
+function fmtLitterDate(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export default async function Home() {
-  // Adopted puppies keep their spot with the status shown — this litter is
-  // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
-  const springPuppies = getPuppiesForLitter("spring-2026").filter(
-    (p) => p.status === "available" || p.status === "adopted"
-  );
+  // The current litter is the first one still open — the same rule
+  // app/puppies2/page.tsx uses, so the two pages never disagree about which
+  // litter is "now". Adopted puppies keep their spot with the status shown
+  // rather than vanishing; reserved ones are held back until placement is
+  // final.
+  const currentLitter =
+    litters.find((l) => l.status === "available" || l.status === "reserved") ??
+    null;
+  const currentPuppies = currentLitter
+    ? getPuppiesForLitter(currentLitter.id).filter(
+        (p) => p.status === "available" || p.status === "adopted"
+      )
+    : [];
 
   const pq = await getPuppyQ();
   const litterCount = pq.litters.length;
@@ -187,16 +203,22 @@ export default async function Home() {
               Available Puppies
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-              Meet Our Lilo &amp; Stitch May Litter
+              {currentLitter
+                ? `Meet Our ${currentLitter.displayTitle}`
+                : "Our Next Litter"}
             </h2>
-            <p className="text-[0.95rem] text-muted leading-[1.65] mb-2.5">
-              These practically perfect puppies come from Legend Manor’s Holly and
-              Tarheel’s Knox, and are expected to mature into large minis between 20
-              and 25 lbs.
-            </p>
-            <p className="text-[0.85rem] italic text-muted mb-3.5">
-              Bred in partnership with Legend Manor Labradoodles
-            </p>
+            {currentLitter ? (
+              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
+                Born {fmtLitterDate(currentLitter.birthdate)} to{" "}
+                {currentLitter.damDisplay} and {currentLitter.sireDisplay}, and
+                raised underfoot in the Campbell home from day one.
+              </p>
+            ) : (
+              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
+                No puppies are available right now. Join the waitlist and we’ll
+                reach out when the next litter arrives.
+              </p>
+            )}
             {/* The parents live on two pages now — a litter has one of each. */}
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <Link
@@ -215,7 +237,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {springPuppies.map((p) => (
+            {currentPuppies.map((p) => (
               <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
                 <div className="relative aspect-[3/4] w-full bg-cream-panel">
                   <Image
@@ -230,9 +252,11 @@ export default async function Home() {
                   <span className="text-[0.85rem] font-extrabold text-cream">
                     {p.name}
                   </span>
-                  <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                    {p.collar}
-                  </span>
+                  {p.collar && (
+                    <span className="text-[0.7rem] text-cream/70 -mt-1.5">
+                      {p.collar}
+                    </span>
+                  )}
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                       {p.sex}

@@ -82,9 +82,11 @@ export default function PuppiesPage() {
                     <span className="text-[0.85rem] font-extrabold text-cream">
                       {p.name}
                     </span>
-                    <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                      {p.collar}
-                    </span>
+                    {p.collar && (
+                      <span className="text-[0.7rem] text-cream/70 -mt-1.5">
+                        {p.collar}
+                      </span>
+                    )}
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                         {p.sex}
