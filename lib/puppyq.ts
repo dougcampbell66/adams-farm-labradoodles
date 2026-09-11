@@ -71,6 +71,14 @@ export interface PuppyQ {
   dogs: PqDog[];
   allDogs: PqDog[];
   litters: PqLitter[];
+  /**
+   * Dogs Adams Farm holds a recorded right to breed (pawsq `breeding_rights`,
+   * migration 37) — breeding-program membership itself, by Douglas's ruling of
+   * 2026-08-17. Distinct from `dogs`: a shared stud like Gate or Silas is bred
+   * of record elsewhere and breeds for both programs, so his home row is not
+   * ours but his right is.
+   */
+  breedingRightDogIds: Set<string>;
   diagnostics: {
     keyKind: string;
     url: string | null;
@@ -206,7 +214,9 @@ export interface PqParentEntry {
  * co-litter show up, flagged as belonging to the partner program.
  */
 export function pqBreedingLines(pq: PuppyQ) {
-  const ours = new Set(pq.dogs.map((d) => d.id));
+  // In the program: a dog of ours, or one we hold a breeding right on. A shared
+  // stud is not "outside" just because his home row is another program's.
+  const ours = new Set([...pq.dogs.map((d) => d.id), ...pq.breedingRightDogIds]);
 
   const collect = (side: "dam" | "sire") => {
     const done = (dog: PqDog) => RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
@@ -332,6 +342,27 @@ async function resolveOrg(
 const DOG_COLS =
   "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id";
 const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id";
+const BREEDING_RIGHT_COLS = "organization_id,dog_id";
+
+/**
+ * WHICH LITTERS ARE ON THE ADAMS FARM RECORD. A litter is ours when the farm
+ * registered it, OR a parent is in our breeding program — a dog of ours, or a
+ * dog we hold a breeding right on. The second clause is how co-litters with a
+ * partner program appear, and the breeding right is what makes it work for a
+ * shared stud: Holly × Gate is registered to Legend Manor, and Gate's home row
+ * is not ours, but Adams Farm holds the right to breed him, so the litter
+ * belongs on this record too. (Legend Manor's site applies the same rule.)
+ */
+export function pqLitterIsOurs(
+  l: Pick<PqLitterRow, "organization_id" | "dam_id" | "sire_id">,
+  orgId: string,
+  ourDogIds: Set<string>,
+  breedingRightDogIds: Set<string>,
+): boolean {
+  const inProgram = (id: string | null) =>
+    id != null && (ourDogIds.has(id) || breedingRightDogIds.has(id));
+  return l.organization_id === orgId || inProgram(l.dam_id) || inProgram(l.sire_id);
+}
 
 /**
  * Fetch the Adams Farm slice of PuppyQ. `cache()` dedupes across a single render
@@ -345,6 +376,7 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     dogs: [],
     allDogs: [],
     litters: [],
+    breedingRightDogIds: new Set(),
     diagnostics: {
       keyKind: supabaseKeyKind,
       url: supabaseUrl,
@@ -368,13 +400,15 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     return empty({ orgId: null, orgName: null });
   }
 
-  const [dogsRes, littersRes] = await Promise.all([
+  const [dogsRes, littersRes, rightsRes] = await Promise.all([
     supabase.from("dogs").select(DOG_COLS),
     supabase.from("litters").select(LITTER_COLS),
+    supabase.from("breeding_rights").select(BREEDING_RIGHT_COLS),
   ]);
 
   if (dogsRes.error) errors.push(`dogs: ${dogsRes.error.message}`);
   if (littersRes.error) errors.push(`litters: ${littersRes.error.message}`);
+  if (rightsRes.error) errors.push(`breeding_rights: ${rightsRes.error.message}`);
 
   const allDogs = (dogsRes.data ?? []) as unknown as PqDog[];
   const litterRows = (littersRes.data ?? []) as unknown as PqLitterRow[];
@@ -384,24 +418,24 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
   const byId = new Map(allDogs.map((d) => [d.id, d]));
   const ours = new Set(dogs.map((d) => d.id));
 
-  // A litter belongs to Adams Farm when the org owns it OR one of its parents is ours
-  // (the latter captures co-litters, e.g. the Spring 2026 litter with Legend Manor).
+  const breedingRightDogIds = new Set(
+    ((rightsRes.data ?? []) as { organization_id: string; dog_id: string }[])
+      .filter((r) => r.organization_id === orgId)
+      .map((r) => r.dog_id),
+  );
+
   const litters: PqLitter[] = litterRows
-    .filter(
-      (l) =>
-        l.organization_id === orgId ||
-        (l.dam_id != null && ours.has(l.dam_id)) ||
-        (l.sire_id != null && ours.has(l.sire_id)),
-    )
+    .filter((l) => pqLitterIsOurs(l, orgId, ours, breedingRightDogIds))
     .map((row) => {
       const dam = row.dam_id ? (byId.get(row.dam_id) ?? null) : null;
       const sire = row.sire_id ? (byId.get(row.sire_id) ?? null) : null;
       const solo = row.organization_id === orgId;
+      const partner = org.candidates.find((o) => o.id === row.organization_id);
       return {
         row,
         id: row.id,
         type: solo ? ("solo" as const) : ("co-litter" as const),
-        coProgram: solo ? null : null, // partner name not resolved for now
+        coProgram: solo ? null : (partner?.name ?? null),
         year: row.whelp_date ? Number(row.whelp_date.slice(0, 4)) : null,
         birthdate: row.whelp_date,
         dam,
@@ -418,6 +452,7 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     dogs,
     allDogs,
     litters,
+    breedingRightDogIds,
     diagnostics: {
       keyKind: supabaseKeyKind,
       url: supabaseUrl,

@@ -13,6 +13,7 @@ import {
   pqSex,
   pqRole,
   pqBreedingLines,
+  pqLitterIsOurs,
   pqPuppyStanding,
   type PqDog,
   type PqLitter,
@@ -126,6 +127,7 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       // Co-litter: the dam belongs to a partner program, the sire is name-only.
       withParents(litter("L3", "H", null, "2026-05-18"), holly, null, "Tarheel's Knox"),
     ],
+    breedingRightDogIds: new Set<string>(),
     diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 4, litterRows: 3, errors: [] },
   };
 
@@ -150,6 +152,20 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
     expect(silasEntries).toHaveLength(1);
     expect(silasEntries[0].litterCount).toBe(2);
   });
+  it("does not flag a shared stud we hold a breeding right on as outside", () => {
+    // Gate: bred of record elsewhere, breeds for both programs. His home row is
+    // another program's, but the recorded breeding right makes him ours.
+    const gate = dog({ id: "G", call_name: "Gate", status: "active", organization_id: "other" });
+    const withGate = {
+      ...pq,
+      allDogs: [...pq.allDogs, gate],
+      litters: [...pq.litters, withParents(litter("L4", "A", "G", "2026-08-19"), macy, gate)],
+      breedingRightDogIds: new Set(["G"]),
+    };
+    const gateEntry = pqBreedingLines(withGate).sires.producing.find((e) => e.dog?.id === "G");
+    expect(gateEntry?.outside).toBe(false);
+  });
+
   it("flags a partner program's dam as outside", () => {
     const hollyEntry = dams.producing.find((e) => e.name === "Holly");
     expect(hollyEntry?.outside).toBe(true);
@@ -173,5 +189,36 @@ describe("pqPuppyStanding", () => {
   });
   it("does not call a transferred dog placed", () => {
     expect(pqPuppyStanding(dog({ id: "1", status: "transferred" }))).toBe("unknown");
+  });
+});
+
+describe("pqLitterIsOurs — which litters are on the record", () => {
+  const ours = new Set(["A", "B"]);
+  const rights = new Set(["G"]);
+  const row = (organization_id: string, dam_id: string | null, sire_id: string | null) => ({
+    organization_id,
+    dam_id,
+    sire_id,
+  });
+
+  it("includes a litter the farm registered, whoever the parents are", () => {
+    expect(pqLitterIsOurs(row("org", "X", "Y"), "org", ours, rights)).toBe(true);
+  });
+
+  it("includes a partner's litter when a dog of ours is a parent", () => {
+    expect(pqLitterIsOurs(row("other", "A", null), "org", ours, rights)).toBe(true);
+  });
+
+  it("includes a partner's litter sired by a stud we hold a breeding right on", () => {
+    // Holly × Gate: registered to Legend Manor, Gate breeds for both programs.
+    expect(pqLitterIsOurs(row("other", "H", "G"), "org", ours, rights)).toBe(true);
+  });
+
+  it("leaves a partner's litter alone when no parent is in our program", () => {
+    expect(pqLitterIsOurs(row("other", "H", "K"), "org", ours, rights)).toBe(false);
+  });
+
+  it("treats a missing parent as not ours rather than crashing", () => {
+    expect(pqLitterIsOurs(row("other", null, null), "org", ours, rights)).toBe(false);
   });
 });
