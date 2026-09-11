@@ -343,6 +343,22 @@ const DOG_COLS =
   "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id";
 const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id";
 const BREEDING_RIGHT_COLS = "organization_id,dog_id";
+const LITTER_LISTING_COLS = "litter_id,organization_id,listed";
+
+/**
+ * A program's stated choice about one litter on ITS OWN site — pawsq
+ * `litter_listings` (migration 67, Douglas's rulings of 2026-09-11: co-posting
+ * is on by default, and either program decides for its own site). A row
+ * overrides pqLitterIsOurs in either direction; no row means the default.
+ * Only rows about this organization count — the partner's choices are about
+ * the partner's site.
+ */
+export function pqListingChoices(
+  rows: { litter_id: string; organization_id: string; listed: boolean }[],
+  orgId: string,
+): Map<string, boolean> {
+  return new Map(rows.filter((r) => r.organization_id === orgId).map((r) => [r.litter_id, r.listed]));
+}
 
 /**
  * WHICH LITTERS ARE ON THE ADAMS FARM RECORD. A litter is ours when the farm
@@ -400,15 +416,20 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     return empty({ orgId: null, orgName: null });
   }
 
-  const [dogsRes, littersRes, rightsRes] = await Promise.all([
+  const [dogsRes, littersRes, rightsRes, listingsRes] = await Promise.all([
     supabase.from("dogs").select(DOG_COLS),
     supabase.from("litters").select(LITTER_COLS),
     supabase.from("breeding_rights").select(BREEDING_RIGHT_COLS),
+    supabase.from("litter_listings").select(LITTER_LISTING_COLS),
   ]);
 
   if (dogsRes.error) errors.push(`dogs: ${dogsRes.error.message}`);
   if (littersRes.error) errors.push(`litters: ${littersRes.error.message}`);
   if (rightsRes.error) errors.push(`breeding_rights: ${rightsRes.error.message}`);
+  // litter_listings arrives with pawsq migration 67. Until it is applied the
+  // select fails, which is recorded here and otherwise means "no choices" —
+  // the default rule carries the site either way.
+  if (listingsRes.error) errors.push(`litter_listings: ${listingsRes.error.message}`);
 
   const allDogs = (dogsRes.data ?? []) as unknown as PqDog[];
   const litterRows = (littersRes.data ?? []) as unknown as PqLitterRow[];
@@ -424,8 +445,16 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
       .map((r) => r.dog_id),
   );
 
+  const listingChoice = pqListingChoices(
+    (listingsRes.data ?? []) as { litter_id: string; organization_id: string; listed: boolean }[],
+    orgId,
+  );
+
   const litters: PqLitter[] = litterRows
-    .filter((l) => pqLitterIsOurs(l, orgId, ours, breedingRightDogIds))
+    .filter(
+      (l) =>
+        listingChoice.get(l.id) ?? pqLitterIsOurs(l, orgId, ours, breedingRightDogIds),
+    )
     .map((row) => {
       const dam = row.dam_id ? (byId.get(row.dam_id) ?? null) : null;
       const sire = row.sire_id ? (byId.get(row.sire_id) ?? null) : null;
