@@ -72,7 +72,7 @@ export default function PuppyQCards() {
       <p className="md:hidden text-[0.72rem] font-semibold tracking-[0.05em] uppercase text-cream/60 mb-3">
         Tap a period to see what we do
       </p>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+      <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
       {phases.map((p) => (
         <div
           key={p.n}

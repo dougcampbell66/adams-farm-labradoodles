@@ -18,6 +18,11 @@ body {
   background-color: var(--color-cream);
   color: var(--color-charcoal);
   line-height: 1.6;
+  /* Nothing may make the page wider than the screen. When something did (the
+     nav brand at a narrow zoomed viewport), phones zoomed the whole page out
+     to fit it. `clip`, not `hidden`: hidden would turn body into a scroll
+     container and break the sticky nav. */
+  overflow-x: clip;
 }
 
 h1, h2, h3 {

@@ -66,7 +66,7 @@ export default function PuppiesPage() {
           </div>
 
           {currentPuppies.length > 0 ? (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
               {currentPuppies.map((p) => (
                 <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
                   <div className="relative aspect-[3/4] w-full bg-cream-panel">

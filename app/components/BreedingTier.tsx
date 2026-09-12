@@ -41,7 +41,7 @@ export default function BreedingTier({
         {blurb && (
           <p className="mt-3 max-w-[620px] text-[0.95rem] leading-[1.65] text-muted">{blurb}</p>
         )}
-        <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 min-[360px]:grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
           {entries.map((e) =>
             e.dog ? (
               <ParentCard key={e.dog.id} dog={e.dog} pq={pq} outside={e.outside} />

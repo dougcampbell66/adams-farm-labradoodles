@@ -44,10 +44,10 @@ export default function Nav() {
 
   return (
     <header className="sticky top-0 z-[100] bg-navy border-b border-white/12">
-      <nav className="max-w-[1160px] mx-auto flex items-center justify-between px-6 py-4">
+      <nav className="max-w-[1160px] mx-auto flex items-center justify-between gap-4 px-6 py-4">
         <Link
           href="/"
-          className="shrink-0 font-heading text-[1.2rem] text-cream tracking-tight"
+          className="min-w-0 font-heading text-[clamp(1rem,5.5vw,1.2rem)] leading-tight text-cream tracking-tight"
           onClick={() => setMobileOpen(false)}
         >
           Adams Farm <em className="not-italic font-semibold text-coral italic">Labradoodles</em>
@@ -124,7 +124,7 @@ export default function Nav() {
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((o) => !o)}
-          className="md:hidden flex flex-col gap-[5px] p-3 -mr-3"
+          className="md:hidden shrink-0 flex flex-col gap-[5px] p-3 -mr-3"
         >
           <span className="block w-[22px] h-[2px] bg-cream rounded" />
           <span className="block w-[22px] h-[2px] bg-cream rounded" />
