@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/app/components/PageHero";
-import { litters, getPuppiesForLitter, pastLitters } from "@/src/data/litters";
+import AvailablePuppies from "@/app/components/AvailablePuppies";
+import { pastLitters } from "@/src/data/litters";
 
 export const metadata: Metadata = {
   title: "Puppies",
@@ -19,21 +19,6 @@ function fmtDate(dateStr: string) {
 }
 
 export default function PuppiesPage() {
-  const activeLitter =
-    litters.find((l) => l.status === "available" || l.status === "reserved") ??
-    null;
-
-  // Adopted puppies stay on the page with their status shown rather than
-  // vanishing — the litter reads as a whole, and "Adopted" is the honest label.
-  // Reserved puppies are still held back until their placement is final.
-  const currentPuppies = activeLitter
-    ? getPuppiesForLitter(activeLitter.id).filter(
-        (p) => p.status === "available" || p.status === "adopted",
-      )
-    : [];
-
-  const availableCount = currentPuppies.filter((p) => p.status === "available").length;
-
   return (
     <main>
       <PageHero
@@ -42,91 +27,8 @@ export default function PuppiesPage() {
         intro="Our current litter, upcoming plans, and every litter we’ve raised — not just the puppies available today."
       />
 
-      {/* ── CURRENT LITTER ────────────────────────────────── */}
-      <section id="current-litter" className="bg-white py-12 md:py-16 px-6">
-        <div className="max-w-[1160px] mx-auto">
-          <div className="mb-7 max-w-[640px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
-              Current Litter
-            </p>
-            <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2">
-              {activeLitter ? activeLitter.title : "Current Litter"}
-            </h2>
-            {activeLitter && (
-              <p className="text-[0.95rem] text-muted leading-[1.65]">
-                Sire: {activeLitter.sireDisplay} · Dam: {activeLitter.damDisplay} ·
-                Born {fmtDate(activeLitter.birthdate)}
-              </p>
-            )}
-            {activeLitter?.id === "spring-2026" && (
-              <p className="text-[0.9rem] italic text-muted mt-2">
-                Bred in partnership with Legend Manor Labradoodles
-              </p>
-            )}
-          </div>
-
-          {currentPuppies.length > 0 ? (
-            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-              {currentPuppies.map((p) => (
-                <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
-                  <div className="relative aspect-[3/4] w-full bg-cream-panel">
-                    <Image
-                      src={p.photo}
-                      alt={p.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2 p-3 sm:p-3.5">
-                    <span className="text-[0.85rem] font-extrabold text-cream">
-                      {p.name}
-                    </span>
-                    {p.collar && (
-                      <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                        {p.collar}
-                      </span>
-                    )}
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                        {p.sex}
-                      </span>
-                      <span
-                        className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${
-                          p.status === "adopted"
-                            ? "bg-white/12 text-cream/70"
-                            : "bg-avail-bg text-avail-text"
-                        }`}
-                      >
-                        {p.status === "adopted" ? "Adopted" : "Available"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : null}
-
-          {availableCount === 0 && (
-            <p className="text-[1rem] text-muted mt-6">
-              All puppies from our current litter are spoken for.{" "}
-              <Link href="/contact" className="text-navy underline">
-                Join our waitlist
-              </Link>{" "}
-              for the next one.
-            </p>
-          )}
-
-          <div className="mt-7">
-            <Link
-              href="/contact"
-              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
-            >
-              Reserve a Puppy
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ── CURRENT LITTER — live from the record ─────────── */}
+      <AvailablePuppies eyebrow="Current Litter" />
 
       {/* ── PLANNED LITTERS ───────────────────────────────── */}
       <section id="planned" className="bg-cream-panel py-12 md:py-16 px-6">

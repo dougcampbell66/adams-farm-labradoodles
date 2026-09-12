@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
-import { litters, getPuppiesForLitter } from "@/src/data/litters";
+import AvailablePuppies from "./components/AvailablePuppies";
 import { getPuppyQ } from "@/lib/puppyq";
 
 // The litter and puppy counts are read from the same PuppyQ record /litters
@@ -80,29 +80,7 @@ const faqs = [
   },
 ];
 
-function fmtLitterDate(iso: string) {
-  return new Date(`${iso}T12:00:00`).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 export default async function Home() {
-  // The current litter is the first one still open — the same rule
-  // app/puppies2/page.tsx uses, so the two pages never disagree about which
-  // litter is "now". Adopted puppies keep their spot with the status shown
-  // rather than vanishing; reserved ones are held back until placement is
-  // final.
-  const currentLitter =
-    litters.find((l) => l.status === "available" || l.status === "reserved") ??
-    null;
-  const currentPuppies = currentLitter
-    ? getPuppiesForLitter(currentLitter.id).filter(
-        (p) => p.status === "available" || p.status === "adopted"
-      )
-    : [];
-
   const pq = await getPuppyQ();
   const litterCount = pq.litters.length;
   const puppyCount = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
@@ -195,97 +173,8 @@ export default async function Home() {
       </section>
       )}
 
-      {/* ── AVAILABLE PUPPIES ───────────────────────────────── */}
-      <section id="puppies" className="bg-white border-b border-line py-12 md:py-16">
-        <div className="max-w-[1160px] mx-auto px-6">
-          <div className="mb-8 max-w-[620px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
-              Available Puppies
-            </p>
-            <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-              {currentLitter
-                ? `Meet Our ${currentLitter.displayTitle}`
-                : "Our Next Litter"}
-            </h2>
-            {currentLitter ? (
-              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
-                Born {fmtLitterDate(currentLitter.birthdate)} to{" "}
-                {currentLitter.damDisplay} and {currentLitter.sireDisplay}, and
-                raised underfoot in the Campbell home from day one.
-              </p>
-            ) : (
-              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
-                No puppies are available right now. Join the waitlist and we’ll
-                reach out when the next litter arrives.
-              </p>
-            )}
-            {/* The parents live on two pages now — a litter has one of each. */}
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              <Link
-                href="/dams"
-                className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
-              >
-                Meet Our Dams →
-              </Link>
-              <Link
-                href="/sires"
-                className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
-              >
-                Meet Our Sires →
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-            {currentPuppies.map((p) => (
-              <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
-                <div className="relative aspect-[3/4] w-full bg-cream-panel">
-                  <Image
-                    src={p.photo}
-                    alt={p.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col gap-2 p-3 sm:p-3.5">
-                  <span className="text-[0.85rem] font-extrabold text-cream">
-                    {p.name}
-                  </span>
-                  {p.collar && (
-                    <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                      {p.collar}
-                    </span>
-                  )}
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                      {p.sex}
-                    </span>
-                    <span
-                      className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${
-                        p.status === "adopted"
-                          ? "bg-white/12 text-cream/70"
-                          : "bg-avail-bg text-avail-text"
-                      }`}
-                    >
-                      {p.status === "adopted" ? "Adopted" : "Available"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8">
-            <Link
-              href="/contact"
-              className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
-            >
-              Reserve a Puppy
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ── AVAILABLE PUPPIES — live from the record ─────────── */}
+      <AvailablePuppies />
 
       {/* ── PUPPYQ PROGRAM ──────────────────────────────────── */}
       <section className="bg-navy py-12 md:py-[72px] border-t border-white/12">
