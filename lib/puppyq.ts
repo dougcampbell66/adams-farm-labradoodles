@@ -131,6 +131,10 @@ interface PqMediaRow {
   kind: string;
   label: string | null;
   sort: number;
+  /** The breeder's decision that this photo shows (pawsq migration 67).
+   *  Anyone on the operation may upload; only a published row reaches
+   *  a website. */
+  published: boolean;
 }
 
 /**
@@ -156,7 +160,8 @@ async function fetchMediaPhotoMap(
 ): Promise<string | null> {
   const { data, error } = await supabase
     .from("media")
-    .select("dog_id,bucket,storage_path,kind,label,sort");
+    .select("dog_id,bucket,storage_path,kind,label,sort,published")
+    .eq("published", true);
   if (error || !data) {
     mediaPhotoByDogId = {};
     return error ? `media: ${error.message}` : null;
