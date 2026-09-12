@@ -137,7 +137,7 @@ export default async function LittersPage() {
           </div>
         </section>
       ) : (
-        <section className="py-16 px-6 bg-cream">
+        <section className="py-12 md:py-16 px-6 bg-cream">
           <div className="max-w-[1160px] mx-auto space-y-14">
             {groups.map((group) => (
               <div key={group.year}>

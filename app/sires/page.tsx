@@ -18,7 +18,7 @@ function OutsideStuds({ entries }: { entries: PqParentEntry[] }) {
   if (entries.length === 0) return null;
 
   return (
-    <section className="bg-navy py-16 px-6">
+    <section className="bg-navy py-12 md:py-16 px-6">
       <div className="max-w-[1160px] mx-auto">
         <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
           Outside Studs · {entries.length}

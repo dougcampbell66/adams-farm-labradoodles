@@ -27,7 +27,7 @@ export default function OurProgramPage() {
   return (
     <main>
       {/* ── HERO — AVSAB LEAD ─────────────────────────────── */}
-      <div className="bg-navy py-16 md:py-20 px-6 border-b border-white/12">
+      <div className="bg-navy py-12 md:py-14 md:py-20 px-6 border-b border-white/12">
         <div className="max-w-[1160px] mx-auto">
           <h1 className="font-heading font-bold text-[clamp(1.5rem,2.6vw,1.9rem)] leading-[1.3] text-cream max-w-[760px]">
             A puppy’s most important weeks for meeting the world are its first three
@@ -54,7 +54,7 @@ export default function OurProgramPage() {
       </div>
 
       {/* ── THE PUPPYQ FRAMEWORK ──────────────────────────── */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 md:py-16 px-6">
         <div className="max-w-[720px] mx-auto">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4">
             The PuppyQ Framework
@@ -68,7 +68,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── FOUR PERIODS ──────────────────────────────────── */}
-      <section className="bg-navy py-16 px-6 border-t border-white/12">
+      <section className="bg-navy py-12 md:py-16 px-6 border-t border-white/12">
         <div className="max-w-[1160px] mx-auto">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-cream mb-3">
             Four periods, birth to adulthood
@@ -82,7 +82,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── EVIDENCE-BASED EARLY SOCIALIZATION ────────────── */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 md:py-16 px-6">
         <div className="max-w-[720px] mx-auto">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-4">
             Evidence-based early socialization
@@ -96,7 +96,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── SOCIALIZATION BENCHMARKS ──────────────────────── */}
-      <section className="bg-cream-panel py-16 px-6">
+      <section className="bg-cream-panel py-12 md:py-16 px-6">
         <div className="max-w-[720px] mx-auto flex flex-col gap-4">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-1">
             PuppyQ Socialization Benchmarks
@@ -127,7 +127,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── PULL-QUOTE BREAK ──────────────────────────────── */}
-      <section className="bg-navy py-20 px-6">
+      <section className="bg-navy py-14 md:py-20 px-6">
         <div className="max-w-[680px] mx-auto text-center">
           <blockquote className="font-heading italic font-medium text-[clamp(1.5rem,3vw,2.1rem)] text-cream leading-[1.55]">
             “Prevention is better than intervention.”
@@ -139,7 +139,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── Q IS FOR QUOTIENT ─────────────────────────────── */}
-      <section className="bg-navy-deep py-16 px-6 border-t border-white/12">
+      <section className="bg-navy-deep py-12 md:py-16 px-6 border-t border-white/12">
         <div className="max-w-[720px] mx-auto flex flex-col gap-4">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-cream mb-1">
             PuppyQ – Q is for Quotient
@@ -168,7 +168,7 @@ export default function OurProgramPage() {
       </section>
 
       {/* ── WHAT EVERY PUPPY GOES HOME WITH ───────────────── */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 md:py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-3.5">
             What every puppy goes home with

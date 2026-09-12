@@ -43,7 +43,7 @@ export default function PuppiesPage() {
       />
 
       {/* ── CURRENT LITTER ────────────────────────────────── */}
-      <section id="current-litter" className="bg-white py-16 px-6">
+      <section id="current-litter" className="bg-white py-12 md:py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
@@ -66,7 +66,7 @@ export default function PuppiesPage() {
           </div>
 
           {currentPuppies.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
               {currentPuppies.map((p) => (
                 <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
                   <div className="relative aspect-[3/4] w-full bg-cream-panel">
@@ -78,19 +78,21 @@ export default function PuppiesPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-col gap-2 p-3.5">
+                  <div className="flex flex-col gap-2 p-3 sm:p-3.5">
                     <span className="text-[0.85rem] font-extrabold text-cream">
                       {p.name}
                     </span>
-                    <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                      {p.collar}
-                    </span>
+                    {p.collar && (
+                      <span className="text-[0.7rem] text-cream/70 -mt-1.5">
+                        {p.collar}
+                      </span>
+                    )}
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
+                      <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                         {p.sex}
                       </span>
                       <span
-                        className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
+                        className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${
                           p.status === "adopted"
                             ? "bg-white/12 text-cream/70"
                             : "bg-avail-bg text-avail-text"
@@ -127,7 +129,7 @@ export default function PuppiesPage() {
       </section>
 
       {/* ── PLANNED LITTERS ───────────────────────────────── */}
-      <section id="planned" className="bg-cream-panel py-16 px-6">
+      <section id="planned" className="bg-cream-panel py-12 md:py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
@@ -150,7 +152,7 @@ export default function PuppiesPage() {
       </section>
 
       {/* ── PAST LITTERS ──────────────────────────────────── */}
-      <section id="past-litters" className="bg-white py-16 px-6">
+      <section id="past-litters" className="bg-white py-12 md:py-16 px-6">
         <div className="max-w-[1160px] mx-auto">
           <div className="mb-7 max-w-[640px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
@@ -187,7 +189,7 @@ export default function PuppiesPage() {
       </section>
 
       {/* ── WAITLIST BAND ─────────────────────────────────── */}
-      <section className="bg-navy py-16 px-6">
+      <section className="bg-navy py-12 md:py-16 px-6">
         <div className="max-w-[1160px] mx-auto flex items-center justify-between gap-8 flex-col md:flex-row md:items-center">
           <div>
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-1.5">

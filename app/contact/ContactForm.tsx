@@ -11,7 +11,7 @@ import {
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-[10px] border border-warm-border bg-white text-charcoal text-[0.95rem] placeholder:text-placeholder-muted focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy transition-colors";
+  "w-full px-4 py-3 rounded-[10px] border border-warm-border bg-white text-charcoal text-[1rem] sm:text-[0.95rem] placeholder:text-placeholder-muted focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy transition-colors";
 
 const labelClass =
   "block font-extrabold text-[0.78rem] uppercase tracking-[0.08em] text-navy mb-1.5";
@@ -189,7 +189,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed self-start"
+        className="bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed self-stretch sm:self-start"
       >
         {status === "submitting" ? "Sending…" : "Send Message"}
       </button>

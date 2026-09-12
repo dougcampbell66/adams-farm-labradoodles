@@ -17,7 +17,7 @@ export default function SafetyAndProtocolsPage() {
         intro="Early socialization, done responsibly — and why waiting carries a greater risk."
       />
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[680px] mx-auto flex flex-col gap-5">
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
             One of the most common questions we hear is about taking puppies out
@@ -58,7 +58,7 @@ export default function SafetyAndProtocolsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[680px] mx-auto flex flex-col gap-5">
           <h2 className="font-heading font-semibold text-[1.3rem] text-coral-dark">
             What &ldquo;responsible&rdquo; means in practice

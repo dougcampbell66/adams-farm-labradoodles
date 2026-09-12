@@ -17,7 +17,7 @@ export default function GuardiansPage() {
         intro="Give one of our breeding dogs a loving, permanent home — and we handle the rest."
       />
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[680px] mx-auto flex flex-col gap-5">
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
             Adams Farm&rsquo;s breeding dogs don&rsquo;t live in a kennel. They live as

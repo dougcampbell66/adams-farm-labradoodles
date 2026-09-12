@@ -17,7 +17,7 @@ export default function AmbassadorsPage() {
         intro="Help us raise calm puppies — by helping them meet the world."
       />
 
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[680px] mx-auto flex flex-col gap-5">
           <p className="text-[1.05rem] text-charcoal leading-[1.78]">
             Ambassadors help us do one of the most important things in raising a

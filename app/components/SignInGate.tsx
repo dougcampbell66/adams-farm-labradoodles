@@ -92,7 +92,7 @@ export function SignInGate({ sent, error, retry }: SignInGateProps) {
                 autoFocus
                 autoComplete="email"
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-warm-border bg-white px-3 py-3 text-[15px] text-navy outline-none placeholder:text-charcoal/40 focus:border-coral focus:ring-2 focus:ring-coral/20"
+                className="w-full rounded-lg border border-warm-border bg-white px-3 py-3 text-[16px] text-navy outline-none placeholder:text-charcoal/40 focus:border-coral focus:ring-2 focus:ring-coral/20"
               />
               <button
                 type="submit"

@@ -126,7 +126,7 @@ export default async function OurPuppiesPage() {
       />
 
       {/* Current / featured litter */}
-      <section className="py-16 px-6 bg-cream">
+      <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[1080px] mx-auto">
           <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
             Most Recent Litter
@@ -162,7 +162,7 @@ export default async function OurPuppiesPage() {
 
       {/* Past litters */}
       {past.length > 0 && (
-        <section className="py-16 px-6 bg-white border-t border-sand-line">
+        <section className="py-12 md:py-16 px-6 bg-white border-t border-sand-line">
           <div className="max-w-[1080px] mx-auto">
             <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
               Past Litters
@@ -180,7 +180,7 @@ export default async function OurPuppiesPage() {
       )}
 
       {/* Waitlist band */}
-      <section className="bg-navy py-16 px-6">
+      <section className="bg-navy py-12 md:py-16 px-6">
         <div className="max-w-[1080px] mx-auto flex items-center justify-between gap-8 flex-col md:flex-row">
           <div>
             <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-1.5">

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
-import { getPuppiesForLitter } from "@/src/data/litters";
+import { litters, getPuppiesForLitter } from "@/src/data/litters";
 import { getPuppyQ } from "@/lib/puppyq";
 
 // The litter and puppy counts are read from the same PuppyQ record /litters
@@ -80,12 +80,28 @@ const faqs = [
   },
 ];
 
+function fmtLitterDate(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export default async function Home() {
-  // Adopted puppies keep their spot with the status shown — this litter is
-  // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
-  const springPuppies = getPuppiesForLitter("spring-2026").filter(
-    (p) => p.status === "available" || p.status === "adopted"
-  );
+  // The current litter is the first one still open — the same rule
+  // app/puppies2/page.tsx uses, so the two pages never disagree about which
+  // litter is "now". Adopted puppies keep their spot with the status shown
+  // rather than vanishing; reserved ones are held back until placement is
+  // final.
+  const currentLitter =
+    litters.find((l) => l.status === "available" || l.status === "reserved") ??
+    null;
+  const currentPuppies = currentLitter
+    ? getPuppiesForLitter(currentLitter.id).filter(
+        (p) => p.status === "available" || p.status === "adopted"
+      )
+    : [];
 
   const pq = await getPuppyQ();
   const litterCount = pq.litters.length;
@@ -108,7 +124,7 @@ export default async function Home() {
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-navy overflow-visible">
         <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10 md:gap-14 items-stretch">
-          <div className="flex flex-col justify-center py-16 md:min-h-[500px]">
+          <div className="flex flex-col justify-center pt-10 pb-8 md:py-16 md:min-h-[500px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
               Australian Labradoodles
             </p>
@@ -121,7 +137,7 @@ export default async function Home() {
             </p>
             <Link
               href="#puppies"
-              className="self-start inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+              className="self-stretch sm:self-start text-center inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
               See available puppies
             </Link>
@@ -147,13 +163,13 @@ export default async function Home() {
         </div>
 
         {/* Circular image — mobile: centered below the text */}
-        <div className="md:hidden flex justify-center pb-14">
-          <div className="relative w-[min(300px,78vw)] h-[min(300px,78vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)]">
+        <div className="md:hidden flex justify-center pb-10">
+          <div className="relative w-[min(220px,60vw)] h-[min(220px,60vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)]">
             <Image
               src="/images/hero-portrait.png"
               alt="A girl holding an Adams Farm Labradoodle puppy"
               fill
-              sizes="300px"
+              sizes="220px"
               className="object-cover"
               style={{ objectPosition: "center top" }}
             />
@@ -164,7 +180,7 @@ export default async function Home() {
       {/* ── STATS BAR ────────────────────────────────────────── */}
       {homeStats.length > 0 && (
       <section className="bg-cream-panel border-b border-warm-border">
-        <div className="max-w-[1160px] mx-auto px-6 py-8 flex flex-col sm:flex-row justify-center gap-8 sm:gap-16">
+        <div className="max-w-[1160px] mx-auto px-6 py-6 sm:py-8 flex flex-row flex-wrap justify-center gap-x-8 gap-y-4 sm:gap-16">
           {homeStats.map((s) => (
             <div key={s.label} className="flex flex-col items-center gap-1">
               <span className="font-heading font-bold text-[clamp(2rem,4vw,2.6rem)] leading-none text-navy">
@@ -180,23 +196,29 @@ export default async function Home() {
       )}
 
       {/* ── AVAILABLE PUPPIES ───────────────────────────────── */}
-      <section id="puppies" className="bg-white border-b border-line py-16">
+      <section id="puppies" className="bg-white border-b border-line py-12 md:py-16">
         <div className="max-w-[1160px] mx-auto px-6">
           <div className="mb-8 max-w-[620px]">
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Available Puppies
             </p>
             <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-              Meet Our Lilo &amp; Stitch May Litter
+              {currentLitter
+                ? `Meet Our ${currentLitter.displayTitle}`
+                : "Our Next Litter"}
             </h2>
-            <p className="text-[0.95rem] text-muted leading-[1.65] mb-2.5">
-              These practically perfect puppies come from Legend Manor’s Holly and
-              Tarheel’s Knox, and are expected to mature into large minis between 20
-              and 25 lbs.
-            </p>
-            <p className="text-[0.85rem] italic text-muted mb-3.5">
-              Bred in partnership with Legend Manor Labradoodles
-            </p>
+            {currentLitter ? (
+              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
+                Born {fmtLitterDate(currentLitter.birthdate)} to{" "}
+                {currentLitter.damDisplay} and {currentLitter.sireDisplay}, and
+                raised underfoot in the Campbell home from day one.
+              </p>
+            ) : (
+              <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
+                No puppies are available right now. Join the waitlist and we’ll
+                reach out when the next litter arrives.
+              </p>
+            )}
             {/* The parents live on two pages now — a litter has one of each. */}
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <Link
@@ -214,8 +236,8 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {springPuppies.map((p) => (
+          <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            {currentPuppies.map((p) => (
               <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
                 <div className="relative aspect-[3/4] w-full bg-cream-panel">
                   <Image
@@ -226,19 +248,21 @@ export default async function Home() {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col gap-2 p-3.5">
+                <div className="flex flex-col gap-2 p-3 sm:p-3.5">
                   <span className="text-[0.85rem] font-extrabold text-cream">
                     {p.name}
                   </span>
-                  <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                    {p.collar}
-                  </span>
+                  {p.collar && (
+                    <span className="text-[0.7rem] text-cream/70 -mt-1.5">
+                      {p.collar}
+                    </span>
+                  )}
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
+                    <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
                       {p.sex}
                     </span>
                     <span
-                      className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
+                      className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${
                         p.status === "adopted"
                           ? "bg-white/12 text-cream/70"
                           : "bg-avail-bg text-avail-text"
@@ -264,7 +288,7 @@ export default async function Home() {
       </section>
 
       {/* ── PUPPYQ PROGRAM ──────────────────────────────────── */}
-      <section className="bg-navy py-16 md:py-[72px] border-t border-white/12">
+      <section className="bg-navy py-12 md:py-[72px] border-t border-white/12">
         <div className="max-w-[1160px] mx-auto px-6">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
             Our Program
@@ -282,8 +306,9 @@ export default async function Home() {
 
           <PuppyQCards />
 
-          {/* Timeline */}
-          <div className="mt-10">
+          {/* Timeline — the SVG labels are illegible below ~640px, and the
+              cards above already name the four periods, so it is desktop-only. */}
+          <div className="mt-10 hidden sm:block">
             <svg
               viewBox="0 0 1000 220"
               xmlns="http://www.w3.org/2000/svg"
@@ -308,9 +333,9 @@ export default async function Home() {
       </section>
 
       {/* ── ABOUT ADAMS FARM ────────────────────────────────── */}
-      <section className="bg-white py-16 md:py-[72px]">
+      <section className="bg-white py-12 md:py-[72px]">
         <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[2.5fr_3fr] gap-12 items-start">
-          <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden relative">
+          <div className="w-full aspect-[4/3] md:aspect-[3/4] rounded-2xl overflow-hidden relative">
             <Image
               src="/images/story/douglas-erika-winnie.jpg"
               alt="Douglas and Erika Campbell with Winnie"
@@ -334,7 +359,7 @@ export default async function Home() {
               program and do something really meaningful in the lives of people and
               dogs.
             </p>
-            <div className="grid sm:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
               {aboutPillars.map((p) => (
                 <div key={p.title}>
                   <h3 className="font-heading font-semibold text-[1rem] text-navy mb-2">
@@ -351,7 +376,7 @@ export default async function Home() {
       </section>
 
       {/* ── TESTIMONIALS ────────────────────────────────────── */}
-      <section id="testimonials" className="bg-navy py-16 md:py-[72px]">
+      <section id="testimonials" className="bg-navy py-12 md:py-[72px]">
         <div className="max-w-[1160px] mx-auto px-6">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
             Testimonials
@@ -373,7 +398,7 @@ export default async function Home() {
       </section>
 
       {/* ── WHY AUSTRALIAN LABRADOODLE (ALAA) ───────────────── */}
-      <section className="bg-white py-16 md:py-[72px]">
+      <section className="bg-white py-12 md:py-[72px]">
         <div className="max-w-[1160px] mx-auto px-6">
           <div className="grid md:grid-cols-[3fr_2.5fr] gap-12 items-center">
             <div>
@@ -402,11 +427,11 @@ export default async function Home() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 md:mt-12">
             {trustCards.map((c) => (
               <div
                 key={c.heading}
-                className="bg-white border border-line rounded-xl p-7 shadow-[0_2px_16px_rgba(0,0,0,0.07)]"
+                className="bg-white border border-line rounded-xl p-5 sm:p-7 shadow-[0_2px_16px_rgba(0,0,0,0.07)]"
               >
                 <h3 className="font-heading font-semibold text-[1rem] text-navy mb-2.5">
                   {c.heading}
@@ -430,7 +455,7 @@ export default async function Home() {
       </section>
 
       {/* ── BREAK QUOTE ─────────────────────────────────────── */}
-      <section className="bg-navy py-20">
+      <section className="bg-navy py-14 md:py-20">
         <div className="max-w-[680px] mx-auto px-6 text-center">
           <blockquote className="font-heading italic font-medium text-[clamp(1.5rem,3vw,2.1rem)] text-cream leading-[1.55]">
             “Dogs are not our whole life, but they make our lives whole.”
@@ -442,7 +467,7 @@ export default async function Home() {
       </section>
 
       {/* ── TRUSTED PARTNERS ────────────────────────────────── */}
-      <section className="bg-white py-16 md:py-[72px] border-t border-b border-line">
+      <section className="bg-white py-12 md:py-[72px] border-t border-b border-line">
         <div className="max-w-[1160px] mx-auto px-6">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
             Trusted Partners
@@ -473,7 +498,7 @@ export default async function Home() {
       </section>
 
       {/* ── JOIN US ─────────────────────────────────────────── */}
-      <section className="bg-navy py-16">
+      <section className="bg-navy py-12 md:py-16">
         <div className="max-w-[1160px] mx-auto px-6">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
             Get Involved
@@ -486,7 +511,7 @@ export default async function Home() {
             and dogs. In our brief time as a breeder, we’ve touched over 15,000 total
             lives. Would you like to help us in our mission?
           </p>
-          <div className="grid md:grid-cols-2 gap-8 max-w-[720px]">
+          <div className="grid md:grid-cols-2 gap-5 md:gap-8 max-w-[720px]">
             {[
               {
                 n: "1",
@@ -505,7 +530,7 @@ export default async function Home() {
             ].map((c) => (
               <div
                 key={c.n}
-                className="bg-white/[0.06] border border-white/12 rounded-xl p-8 hover:bg-white/[0.1] hover:-translate-y-0.5 transition-all"
+                className="bg-white/[0.06] border border-white/12 rounded-xl p-6 sm:p-8 hover:bg-white/[0.1] hover:-translate-y-0.5 transition-all"
               >
                 <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[0.68rem] font-extrabold bg-coral text-navy mb-3.5">
                   {c.n}
@@ -529,7 +554,7 @@ export default async function Home() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────────── */}
-      <section id="faq" className="bg-white py-16 md:py-[72px]">
+      <section id="faq" className="bg-white py-12 md:py-[72px]">
         <div className="max-w-[1160px] mx-auto px-6">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-3">
             FAQ
@@ -561,7 +586,7 @@ export default async function Home() {
       </section>
 
       {/* ── APPLY NOW (red band) ────────────────────────────── */}
-      <section className="bg-coral py-20">
+      <section className="bg-coral py-14 md:py-20">
         <div className="max-w-[1160px] mx-auto px-6 flex flex-col items-center text-center">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-navy/70 mb-3">
             Get Started
