@@ -13,7 +13,7 @@
 
 import { cache } from "react";
 import { getSupabase, supabaseKeyKind, supabaseUrl } from "@/lib/supabase";
-import { pqDogPhoto } from "@/lib/images-pq";
+import { pqDogPhoto, pqPuppyPhoto as puppyFilePhoto } from "@/lib/images-pq";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -113,8 +113,92 @@ function slugify(value: string): string {
     .replace(/^-|-$/g, "");
 }
 
-/** Returns the best available photo URL for a dog, checking call name then registered name. */
-export function pqPhoto(dog: PqDog): string | null {
+// ─── Photos ───────────────────────────────────────────────────────────────────
+//
+// Two sources, in this order:
+//
+// 1. THE RECORD. The `media` table (pawsq migration 11; the file sits in the
+//    public `dog-media` bucket in Supabase Storage). A photo is a fact about a
+//    dog, uploaded once through the platform's Photos page or the Legend
+//    Manor dashboard, and every site that lists the dog reads it from here —
+//    nothing is copied into a repository. Only rows the breeder has marked
+//    `published` reach a website (migration 67: anyone on the operation may
+//    upload, the breeder decides what shows).
+// 2. THE REPOSITORY. `public/images/dogs` and `public/images/puppies`, matched
+//    by name slug — the photos this site shipped with before the record held
+//    any. Kept as the fallback for the dogs whose photos were never moved,
+//    and never consulted for a dog the record has a photo for.
+
+/** One media row as fetched for photo resolution. */
+interface PqMediaRow {
+  dog_id: string | null;
+  bucket: string;
+  storage_path: string;
+  kind: string;
+  label: string | null;
+  sort: number;
+  published: boolean;
+}
+
+/**
+ * Best display photo per dog, from the record. Filled by fetchMediaPhotoMap()
+ * inside getPuppyQ() — module-level so the synchronous pqPhoto() call sites
+ * in server components stay as they are; rebuilt on every fetch, so it can
+ * never outlive an ISR pass by more than one render. The same shape Legend
+ * Manor's site has run since August.
+ */
+let mediaPhotoByDogId: Record<string, string> = {};
+
+/** Public-bucket URL for a stored object. */
+function storageUrl(bucket: string, path: string): string {
+  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/**
+ * Fetch the published media rows and rebuild the per-dog best-photo map.
+ * Preference: a portrait before a gallery shot, then the latest label. On
+ * any error the map is emptied and dogs fall back to the repository's
+ * photos — the error is also recorded in diagnostics, so it is not silent.
+ */
+async function fetchMediaPhotoMap(
+  supabase: NonNullable<ReturnType<typeof getSupabase>>,
+  errors: string[],
+): Promise<void> {
+  const { data, error } = await supabase
+    .from("media")
+    .select("dog_id,bucket,storage_path,kind,label,sort,published")
+    .eq("published", true);
+  if (error || !data) {
+    mediaPhotoByDogId = {};
+    if (error) errors.push(`media: ${error.message}`);
+    return;
+  }
+  const score = (m: PqMediaRow) => (m.kind === "portrait" ? 0 : 1);
+  const best: Record<string, PqMediaRow> = {};
+  for (const row of data as unknown as PqMediaRow[]) {
+    if (!row.dog_id) continue;
+    const cur = best[row.dog_id];
+    if (
+      !cur ||
+      score(row) < score(cur) ||
+      (score(row) === score(cur) &&
+        (row.label ?? "").localeCompare(cur.label ?? "", undefined, { numeric: true }) > 0)
+    ) {
+      best[row.dog_id] = row;
+    }
+  }
+  mediaPhotoByDogId = Object.fromEntries(
+    Object.entries(best).map(([id, m]) => [id, storageUrl(m.bucket, m.storage_path)]),
+  );
+}
+
+/** The record's photo for a dog id, if a published one exists. */
+export function pqMediaPhoto(dogId: string): string | null {
+  return mediaPhotoByDogId[dogId] ?? null;
+}
+
+/** The name slugs a repository photo could be filed under, most specific first. */
+function photoSlugs(dog: PqDog): string[] {
   const candidates: string[] = [];
   if (dog.call_name) candidates.push(slugify(dog.call_name));
   if (dog.registered_name) {
@@ -122,11 +206,56 @@ export function pqPhoto(dog: PqDog): string | null {
     const words = dog.registered_name.trim().split(/\s+/);
     if (words.length > 1) candidates.push(slugify(words[words.length - 1]));
   }
-  for (const slug of candidates) {
+  return candidates;
+}
+
+/** Display photo for a grown dog: the record first, then public/images/dogs. */
+export function pqPhoto(dog: PqDog): string | null {
+  const fromRecord = pqMediaPhoto(dog.id);
+  if (fromRecord) return fromRecord;
+  for (const slug of photoSlugs(dog)) {
     const url = pqDogPhoto(slug);
     if (url) return url;
   }
   return null;
+}
+
+/** Display photo for a puppy: the record first, then public/images/puppies. */
+export function pqPuppyPhoto(dog: PqDog): string | null {
+  const fromRecord = pqMediaPhoto(dog.id);
+  if (fromRecord) return fromRecord;
+  for (const slug of photoSlugs(dog)) {
+    const url = puppyFilePhoto(slug);
+    if (url) return url;
+  }
+  return null;
+}
+
+export type PqAvailability = "available" | "reserved" | "adopted";
+
+/**
+ * What a puppy card may say about a puppy. The record's status is free-form
+ * (the platform writes available / reserved / placed / retained /
+ * transferred; older rows say active), and this maps only the values that
+ * mean something to a visiting family. Anything else gets no badge rather
+ * than a guessed one.
+ */
+export function pqAvailability(puppy: PqDog): PqAvailability | null {
+  const status = (puppy.status ?? "").toLowerCase();
+  if (status === "available" || status === "active") return "available";
+  if (status === "reserved") return "reserved";
+  if (status === "placed") return "adopted";
+  return null;
+}
+
+/** Puppies in the order a family reads them: available, reserved, adopted, then the rest. */
+export function pqPuppiesForDisplay(puppies: PqDog[]): PqDog[] {
+  const rank: Record<string, number> = { available: 0, reserved: 1, adopted: 2 };
+  return [...puppies].sort((a, b) => {
+    const ra = rank[pqAvailability(a) ?? ""] ?? 3;
+    const rb = rank[pqAvailability(b) ?? ""] ?? 3;
+    return ra - rb || pqShortName(a).localeCompare(pqShortName(b));
+  });
 }
 
 // ─── Sex / role derivation ────────────────────────────────────────────────────
@@ -368,9 +497,12 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     return empty({ orgId: null, orgName: null });
   }
 
+  // The media map rides along so pqPhoto() / pqPuppyPhoto() can serve the
+  // record's photos from the same round trip.
   const [dogsRes, littersRes] = await Promise.all([
     supabase.from("dogs").select(DOG_COLS),
     supabase.from("litters").select(LITTER_COLS),
+    fetchMediaPhotoMap(supabase, errors),
   ]);
 
   if (dogsRes.error) errors.push(`dogs: ${dogsRes.error.message}`);

@@ -2,8 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
-import { getPuppiesForLitter } from "@/src/data/litters";
-import { getPuppyQ } from "@/lib/puppyq";
+import PuppyCard from "@/app/components/PuppyCard";
+import {
+  type PqDog,
+  getPuppyQ,
+  pqCurrentLitters,
+  pqName,
+  pqPuppiesForDisplay,
+} from "@/lib/puppyq";
 
 // The litter and puppy counts are read from the same PuppyQ record /litters
 // and /dams use, so the home page can't drift away from them again. Same
@@ -80,14 +86,35 @@ const faqs = [
   },
 ];
 
-export default async function Home() {
-  // Adopted puppies keep their spot with the status shown — this litter is
-  // named for Lilo and Stitch, so dropping Stitch outright would read oddly.
-  const springPuppies = getPuppiesForLitter("spring-2026").filter(
-    (p) => p.status === "available" || p.status === "adopted"
-  );
+function fmtLongDate(iso: string): string {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
+export default async function Home() {
   const pq = await getPuppyQ();
+
+  // The litter on offer: the newest one still carrying an available or
+  // reserved puppy, read from the record like everything else on the page.
+  // Until 2026-09-12 this section read a static file and kept showing the
+  // May litter, with the May photos, while the counts beside it were live.
+  // Adopted puppies keep their spot with the status shown — a litter is
+  // read as a whole, and dropping the placed ones would read oddly.
+  const featured = pqCurrentLitters(pq)[0] ?? null;
+  const featuredPuppies = featured ? pqPuppiesForDisplay(featured.puppies) : [];
+  const parentLabel = (dog: PqDog | null, fallback: string | null) =>
+    dog ? pqName(dog) : fallback;
+  const featuredDam = featured ? parentLabel(featured.dam, featured.damName) : null;
+  const featuredSire = featured ? parentLabel(featured.sire, featured.sireName) : null;
+  // A litter is bred in partnership when the record says so, or when either
+  // parent belongs to another program.
+  const partnered =
+    !!featured &&
+    (featured.type === "co-litter" ||
+      [featured.dam, featured.sire].some((d) => d && d.organization_id !== pq.orgId));
   const litterCount = pq.litters.length;
   const puppyCount = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
 
@@ -186,17 +213,33 @@ export default async function Home() {
             <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
               Available Puppies
             </p>
-            <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-              Meet Our Lilo &amp; Stitch May Litter
-            </h2>
-            <p className="text-[0.95rem] text-muted leading-[1.65] mb-2.5">
-              These practically perfect puppies come from Legend Manor’s Holly and
-              Tarheel’s Knox, and are expected to mature into large minis between 20
-              and 25 lbs.
-            </p>
-            <p className="text-[0.85rem] italic text-muted mb-3.5">
-              Bred in partnership with Legend Manor Labradoodles
-            </p>
+            {featured ? (
+              <>
+                <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
+                  Meet the {featuredDam ?? "—"} &times; {featuredSire ?? "—"} litter
+                </h2>
+                <p className="text-[0.95rem] text-muted leading-[1.65] mb-2.5">
+                  {featured.birthdate ? `Born ${fmtLongDate(featured.birthdate)}. ` : ""}
+                  Raised underfoot from the first day — every puppy weighed and
+                  gently handled, one on one, every single day.
+                </p>
+                {partnered ? (
+                  <p className="text-[0.85rem] italic text-muted mb-3.5">
+                    Bred in partnership with Legend Manor Labradoodles
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
+                  No puppies available right now
+                </h2>
+                <p className="text-[0.95rem] text-muted leading-[1.65] mb-2.5">
+                  The next litter is announced here first. Get in touch to be
+                  on the waiting list.
+                </p>
+              </>
+            )}
             {/* The parents live on two pages now — a litter has one of each. */}
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <Link
@@ -214,50 +257,20 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {springPuppies.map((p) => (
-              <div key={p.id} className="bg-navy rounded-xl overflow-hidden">
-                <div className="relative aspect-[3/4] w-full bg-cream-panel">
-                  <Image
-                    src={p.photo}
-                    alt={p.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col gap-2 p-3.5">
-                  <span className="text-[0.85rem] font-extrabold text-cream">
-                    {p.name}
-                  </span>
-                  <span className="text-[0.7rem] text-cream/70 -mt-1.5">
-                    {p.collar}
-                  </span>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                      {p.sex}
-                    </span>
-                    <span
-                      className={`text-[0.65rem] uppercase tracking-[0.07em] px-2.5 py-[3px] rounded-full font-extrabold ${
-                        p.status === "adopted"
-                          ? "bg-white/12 text-cream/70"
-                          : "bg-avail-bg text-avail-text"
-                      }`}
-                    >
-                      {p.status === "adopted" ? "Adopted" : "Available"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {featured && featuredPuppies.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {featuredPuppies.map((p) => (
+                <PuppyCard key={p.id} puppy={p} litter={featured} />
+              ))}
+            </div>
+          ) : null}
 
           <div className="mt-8">
             <Link
               href="/contact"
               className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
             >
-              Reserve a Puppy
+              {featured ? "Reserve a Puppy" : "Join the waiting list"}
             </Link>
           </div>
         </div>

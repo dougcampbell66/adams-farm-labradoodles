@@ -89,6 +89,15 @@ the env set they render an honest empty state, not an error.
 
 `lib/puppyq.ts` fetches the whole record once per render (deduped by
 React `cache`) and derives the Adams Farm slice by `organization_id`.
+Photos come from the record too, since 2026-09-12: the `media` table's
+published rows (Supabase Storage, `dog-media` bucket), uploaded once
+through the platform's Photos page (`/app/photos`) or the Legend Manor
+dashboard and shown on every site that lists the dog. The repository's
+`public/images` photos are the fallback for dogs the record has none
+for. The home page's Available Puppies section and the featured litter
+on Our Puppies share `app/components/PuppyCard.tsx` and read the newest
+litter with an available or reserved puppy — nothing about a litter is
+written into this repo any more.
 Its header records the schema facts that bite:
 
 - **There is no `puppies` table.** A puppy is a `dogs` row with a

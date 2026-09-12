@@ -57,11 +57,13 @@ setting first.
 
 ## ⏭ Next — what still looks unfinished (my recommendation)
 
-1. **Home page "Available Puppies" preview** still reads from the static
-   file `src/data/litters.ts`, not live pawsq — only the counts strip above
-   it was switched over. Worth aligning once there's a live litter to show
-   there; right now the cards can show stale or placeholder puppies even
-   though the count next to them is real.
+1. ~~**Home page "Available Puppies" preview** still reads from the static
+   file~~ Done 2026-09-12: the section reads the newest litter still
+   carrying an available or reserved puppy, and the cards show the photos
+   the record holds (the `media` table, uploaded through the platform's
+   Photos page or the Legend Manor dashboard). A puppy with no published
+   photo yet shows "Photo coming soon". The litter blurb is generic until
+   Douglas writes this litter's own.
 2. **Card colors.** Several sections — the Available Puppies cards, the
    Litters page cards — still use plain white rather than the warm
    `#EDE3D0` panel tone used elsewhere. Low risk, unblocked, no decision

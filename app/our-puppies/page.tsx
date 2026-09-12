@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/app/components/PageHero";
+import PuppyCard from "@/app/components/PuppyCard";
 import {
   getPuppyQ,
   pqName,
+  pqPuppiesForDisplay,
   pqShortName,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -81,29 +83,31 @@ function LitterCard({
             {litter.puppies.length} pup
             {litter.puppies.length !== 1 ? "s" : ""}
           </p>
-          <div className="flex flex-wrap gap-2">
-            {litter.puppies.map((p) => (
-              <div
-                key={p.id}
-                className={`rounded-lg px-3.5 py-2 text-[0.83rem] ${
-                  featured
-                    ? "bg-cream/10 text-cream"
-                    : "bg-navy/8 text-navy"
-                }`}
-              >
-                <span className="font-semibold">{pqShortName(p)}</span>
-                {p.color && (
-                  <span
-                    className={`ml-1.5 text-[0.75rem] capitalize ${
-                      featured ? "text-cream/55" : "text-navy/50"
-                    }`}
-                  >
-                    · {p.color}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+          {featured ? (
+            // The litter on offer gets the photo cards — the same ones the
+            // home page shows, from the same record.
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {pqPuppiesForDisplay(litter.puppies).map((p) => (
+                <PuppyCard key={p.id} puppy={p} litter={litter} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {litter.puppies.map((p) => (
+                <div
+                  key={p.id}
+                  className="rounded-lg px-3.5 py-2 text-[0.83rem] bg-navy/8 text-navy"
+                >
+                  <span className="font-semibold">{pqShortName(p)}</span>
+                  {p.color && (
+                    <span className="ml-1.5 text-[0.75rem] capitalize text-navy/50">
+                      · {p.color}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

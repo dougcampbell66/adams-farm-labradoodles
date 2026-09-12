@@ -10,6 +10,15 @@ const PUPPYQ_APP = "https://pawsq-app.vercel.app";
 const nextConfig: NextConfig = {
   serverExternalPackages: ["nodemailer"],
 
+  // Photos come from the record now — Supabase Storage's public dog-media
+  // bucket (lib/puppyq.ts, "Photos") — and next/image refuses a remote host
+  // it has not been told about.
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+    ],
+  },
+
   async rewrites() {
     // None of these paths exist on this site, so nothing is shadowed. Our own
     // sign-in (the /forever-families gate) lives under /api/auth/*, which no

@@ -14,6 +14,9 @@ import {
   pqRole,
   pqBreedingLines,
   pqPuppyStanding,
+  pqAvailability,
+  pqPuppiesForDisplay,
+  pqPuppyPhoto,
   type PqDog,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -173,5 +176,46 @@ describe("pqPuppyStanding", () => {
   });
   it("does not call a transferred dog placed", () => {
     expect(pqPuppyStanding(dog({ id: "1", status: "transferred" }))).toBe("unknown");
+  });
+});
+
+// ─── Photos and availability (2026-09-12) ─────────────────────────────────────
+describe("pqAvailability — only what the record's status honestly means", () => {
+  it("maps the platform's statuses to what a family may be told", () => {
+    expect(pqAvailability(dog({ id: "1", status: "available" }))).toBe("available");
+    expect(pqAvailability(dog({ id: "1", status: "Reserved" }))).toBe("reserved");
+    expect(pqAvailability(dog({ id: "1", status: "placed" }))).toBe("adopted");
+  });
+  it("reads the older 'active' as available", () => {
+    expect(pqAvailability(dog({ id: "1", status: "active" }))).toBe("available");
+  });
+  it("gives no badge for retained, transferred, deceased or unset", () => {
+    for (const status of ["retained", "transferred", "deceased", null]) {
+      expect(pqAvailability(dog({ id: "1", status }))).toBeNull();
+    }
+  });
+});
+
+describe("pqPuppiesForDisplay — available first, then reserved, then adopted", () => {
+  it("orders by availability and then by name", () => {
+    const pups = [
+      dog({ id: "a", call_name: "Zed", status: "placed" }),
+      dog({ id: "b", call_name: "Bea", status: "reserved" }),
+      dog({ id: "c", call_name: "Cal", status: "available" }),
+      dog({ id: "d", call_name: "Abe", status: "available" }),
+      dog({ id: "e", call_name: "Mo", status: "retained" }),
+    ];
+    expect(pqPuppiesForDisplay(pups).map((p) => p.id)).toEqual(["d", "c", "b", "a", "e"]);
+  });
+  it("does not reorder the caller's array", () => {
+    const pups = [dog({ id: "a", status: "placed" }), dog({ id: "b", status: "available" })];
+    pqPuppiesForDisplay(pups);
+    expect(pups.map((p) => p.id)).toEqual(["a", "b"]);
+  });
+});
+
+describe("pqPuppyPhoto — the record first, the repository second, nothing invented", () => {
+  it("returns null for a puppy the record and the repository both lack", () => {
+    expect(pqPuppyPhoto(dog({ id: "no-such", call_name: "Nobody Here" }))).toBeNull();
   });
 });
