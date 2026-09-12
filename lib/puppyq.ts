@@ -121,8 +121,87 @@ function slugify(value: string): string {
     .replace(/^-|-$/g, "");
 }
 
-/** Returns the best available photo URL for a dog, checking call name then registered name. */
+// ─── Media (the database's photos) ───────────────────────────────────────────
+
+/** One media row, as fetched for photo resolution. */
+interface PqMediaRow {
+  dog_id: string | null;
+  bucket: string;
+  storage_path: string;
+  kind: string;
+  label: string | null;
+  sort: number;
+}
+
+/**
+ * Best photo per dog from the media table — the same Supabase Storage rows
+ * Legend Manor's site reads, so one upload (through that site's dashboard)
+ * shows on both. Rebuilt on every fetch; module-level so the synchronous
+ * pqPuppyPhoto() call sites in server components stay simple.
+ */
+let mediaPhotoByDogId: Record<string, string> = {};
+
+function storageUrl(bucket: string, path: string): string {
+  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/**
+ * Preference mirrors Legend Manor's reader: portraits before gallery shots,
+ * then the highest label (numeric-aware, so "molly-8wk" < "molly-10wk" and
+ * the latest age wins). On any error the map is emptied and puppies render
+ * without photos — visible, never papered over.
+ */
+async function fetchMediaPhotoMap(
+  supabase: NonNullable<ReturnType<typeof getSupabase>>,
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("media")
+    .select("dog_id,bucket,storage_path,kind,label,sort");
+  if (error || !data) {
+    mediaPhotoByDogId = {};
+    return error ? `media: ${error.message}` : null;
+  }
+  const score = (m: PqMediaRow) => (m.kind === "portrait" ? 0 : 1);
+  const best: Record<string, PqMediaRow> = {};
+  for (const row of data as unknown as PqMediaRow[]) {
+    if (!row.dog_id) continue;
+    const cur = best[row.dog_id];
+    if (
+      !cur ||
+      score(row) < score(cur) ||
+      (score(row) === score(cur) &&
+        (row.label ?? "").localeCompare(cur.label ?? "", undefined, { numeric: true }) > 0)
+    ) {
+      best[row.dog_id] = row;
+    }
+  }
+  mediaPhotoByDogId = Object.fromEntries(
+    Object.entries(best).map(([id, m]) => [id, storageUrl(m.bucket, m.storage_path)]),
+  );
+  return null;
+}
+
+/** The database's photo for a dog id, if the media table holds one. */
+export function pqMediaPhoto(dogId: string): string | null {
+  return mediaPhotoByDogId[dogId] ?? null;
+}
+
+/**
+ * A puppy's photo comes from the media table and nowhere else. No file in
+ * this repo stands in for it: a puppy without an upload shows a placeholder,
+ * so a missing photo is visible rather than quietly papered over.
+ */
+export function pqPuppyPhoto(puppy: PqDog): string | null {
+  return pqMediaPhoto(puppy.id);
+}
+
+/**
+ * Photo for a grown dog: the media table first, then the photos bundled in
+ * public/images/dogs by call name then registered name.
+ */
 export function pqPhoto(dog: PqDog): string | null {
+  const fromMedia = pqMediaPhoto(dog.id);
+  if (fromMedia) return fromMedia;
   const candidates: string[] = [];
   if (dog.call_name) candidates.push(slugify(dog.call_name));
   if (dog.registered_name) {
@@ -252,23 +331,46 @@ export function pqBreedingLines(pq: PuppyQ) {
 
 // ─── Puppy helpers ────────────────────────────────────────────────────────────
 
-export type PqPuppyStanding = "placed" | "in-program" | "unknown";
+export type PqPuppyStanding =
+  | "available"
+  | "reserved"
+  | "retained"
+  | "placed"
+  | "in-program"
+  | "unknown";
 
 /**
- * A puppy's standing in the record. PuppyQ tracks placement, not availability —
- * there is no 'available' — so the labels stop at what's true.
- *
- * 'retained' and 'reserved' count as in-program: the record uses them for
- * puppies the farm kept and puppies not yet gone to their family, and reading
- * them as "unknown" left every litter looking finished the moment its first
- * puppies were placed. 'transferred' stays unknown — that dog left for another
- * program, which is neither a placement with a family nor a puppy still here.
+ * A puppy's standing, read from the free-form `status` column. The record
+ * writes 'available', 'reserved', 'retained', 'placed', 'transferred' and
+ * 'active'; each that says something about placement gets its own standing
+ * so a card can say exactly that. Anything else, null included, is unknown.
+ * 'transferred' stays unknown — that dog left for another program, which is
+ * neither a placement with a family nor a puppy still here.
  */
 export function pqPuppyStanding(puppy: PqDog): PqPuppyStanding {
-  const status = (puppy.status ?? "").toLowerCase();
+  const status = (puppy.status ?? "").toLowerCase().trim();
+  if (status === "available") return "available";
+  if (status === "reserved") return "reserved";
+  if (status === "retained") return "retained";
   if (status === "placed") return "placed";
-  if (status === "active" || status === "retained" || status === "reserved") return "in-program";
+  if (status === "active") return "in-program";
   return "unknown";
+}
+
+/** True unless the record says this puppy has gone home. */
+export function pqPuppyNotPlaced(puppy: PqDog): boolean {
+  return pqPuppyStanding(puppy) !== "placed";
+}
+
+/**
+ * True when the record says a family can ask about this puppy: available,
+ * reserved (a place may open), or simply active in the program. A retained
+ * puppy is staying, a placed one has gone, and an unmapped status says
+ * nothing — none of those belongs under an "Available Puppies" heading.
+ */
+export function pqPuppyOffered(puppy: PqDog): boolean {
+  const s = pqPuppyStanding(puppy);
+  return s === "available" || s === "reserved" || s === "in-program";
 }
 
 function monthsAgo(iso: string | null, now: Date): number {
@@ -280,11 +382,29 @@ function monthsAgo(iso: string | null, now: Date): number {
 
 const CURRENT_WINDOW_MONTHS = 12;
 
+/** Whelped within the window and still holding a puppy not marked placed. */
 export function pqCurrentLitters(pq: PuppyQ, now = new Date()): PqLitter[] {
   return pq.litters.filter(
     (l) =>
       monthsAgo(l.birthdate, now) <= CURRENT_WINDOW_MONTHS &&
-      l.puppies.some((p) => pqPuppyStanding(p) === "in-program"),
+      l.puppies.some(pqPuppyNotPlaced),
+  );
+}
+
+/**
+ * Puppies the record offers from current litters, newest litter first —
+ * the home page's Available Puppies. Each carries its litter so a card can
+ * say where it comes from. Offered puppies first within a litter, by name.
+ */
+export function pqAvailablePuppies(
+  pq: PuppyQ,
+  now = new Date(),
+): { puppy: PqDog; litter: PqLitter }[] {
+  return pqCurrentLitters(pq, now).flatMap((litter) =>
+    [...litter.puppies]
+      .filter(pqPuppyOffered)
+      .sort((a, b) => pqShortName(a).localeCompare(pqShortName(b)))
+      .map((puppy) => ({ puppy, litter })),
   );
 }
 
@@ -400,15 +520,18 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     return empty({ orgId: null, orgName: null });
   }
 
-  const [dogsRes, littersRes, rightsRes] = await Promise.all([
+  // The media map rides along so puppy photos come from the database.
+  const [dogsRes, littersRes, rightsRes, mediaError] = await Promise.all([
     supabase.from("dogs").select(DOG_COLS),
     supabase.from("litters").select(LITTER_COLS),
     supabase.from("breeding_rights").select(BREEDING_RIGHT_COLS),
+    fetchMediaPhotoMap(supabase),
   ]);
 
   if (dogsRes.error) errors.push(`dogs: ${dogsRes.error.message}`);
   if (littersRes.error) errors.push(`litters: ${littersRes.error.message}`);
   if (rightsRes.error) errors.push(`breeding_rights: ${rightsRes.error.message}`);
+  if (mediaError) errors.push(mediaError);
 
   const allDogs = (dogsRes.data ?? []) as unknown as PqDog[];
   const litterRows = (littersRes.data ?? []) as unknown as PqLitterRow[];

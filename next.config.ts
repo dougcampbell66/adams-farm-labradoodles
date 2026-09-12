@@ -10,6 +10,14 @@ const PUPPYQ_APP = "https://pawsq-app.vercel.app";
 const nextConfig: NextConfig = {
   serverExternalPackages: ["nodemailer"],
 
+  // Puppy photos are served from the shared database's public Storage bucket
+  // (lib/puppyq.ts, pqPuppyPhoto). Nothing else remote is optimised.
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+    ],
+  },
+
   async rewrites() {
     // None of these paths exist on this site, so nothing is shadowed. Our own
     // sign-in (the /forever-families gate) lives under /api/auth/*, which no

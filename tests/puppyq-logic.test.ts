@@ -15,6 +15,9 @@ import {
   pqBreedingLines,
   pqLitterIsOurs,
   pqPuppyStanding,
+  pqPuppyOffered,
+  pqAvailablePuppies,
+  pqCurrentLitters,
   type PqDog,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -178,17 +181,59 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
 });
 
 describe("pqPuppyStanding", () => {
-  it("maps status to standing", () => {
+  it("maps each status the record writes to its own standing", () => {
     expect(pqPuppyStanding(dog({ id: "1", status: "placed" }))).toBe("placed");
     expect(pqPuppyStanding(dog({ id: "1", status: "active" }))).toBe("in-program");
+    expect(pqPuppyStanding(dog({ id: "1", status: "available" }))).toBe("available");
+    expect(pqPuppyStanding(dog({ id: "1", status: "reserved" }))).toBe("reserved");
+    expect(pqPuppyStanding(dog({ id: "1", status: "retained" }))).toBe("retained");
     expect(pqPuppyStanding(dog({ id: "1", status: null }))).toBe("unknown");
-  });
-  it("counts a retained or reserved puppy as still in the program", () => {
-    expect(pqPuppyStanding(dog({ id: "1", status: "retained" }))).toBe("in-program");
-    expect(pqPuppyStanding(dog({ id: "1", status: "reserved" }))).toBe("in-program");
   });
   it("does not call a transferred dog placed", () => {
     expect(pqPuppyStanding(dog({ id: "1", status: "transferred" }))).toBe("unknown");
+  });
+  it("offers available, reserved and active puppies — not retained, placed or unknown", () => {
+    const offered = (status: string | null) => pqPuppyOffered(dog({ id: "1", status }));
+    expect(offered("available")).toBe(true);
+    expect(offered("reserved")).toBe(true);
+    expect(offered("active")).toBe(true);
+    expect(offered("retained")).toBe(false);
+    expect(offered("placed")).toBe(false);
+    expect(offered(null)).toBe(false);
+  });
+});
+
+describe("pqAvailablePuppies — the home page's cards", () => {
+  const now = new Date("2026-09-12T12:00:00Z");
+  const pup = (id: string, litter_id: string, status: string | null, call_name: string) =>
+    dog({ id, litter_id, status, call_name });
+  const withPups = (l: PqLitter, puppies: PqDog[]): PqLitter => ({ ...l, puppies });
+  const pq = {
+    orgId: "org",
+    dogs: [],
+    allDogs: [],
+    litters: [
+      // A three-week-old litter whose puppies carry 'available', not 'active'.
+      withPups(litter("L1", "A", "B", "2026-08-19"), [
+        pup("p1", "L1", "available", "Max"),
+        pup("p2", "L1", "retained", "Sadie"),
+        pup("p3", "L1", "placed", "Rocky"),
+      ]),
+      // Last year's litter: outside the window, whatever its statuses say.
+      withPups(litter("L2", "A", "B", "2025-01-08"), [pup("p4", "L2", "available", "Old")]),
+      // Every puppy placed: not current.
+      withPups(litter("L3", "A", "B", "2026-05-18"), [pup("p5", "L3", "placed", "Gone")]),
+    ],
+    breedingRightDogIds: new Set<string>(),
+    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 3, errors: [] },
+  };
+
+  it("counts a recent litter as current when any puppy is not placed", () => {
+    expect(pqCurrentLitters(pq, now).map((l) => l.id)).toEqual(["L1"]);
+  });
+  it("lists only the puppies the record offers, with their litter", () => {
+    const names = pqAvailablePuppies(pq, now).map((e) => `${e.puppy.call_name}@${e.litter.id}`);
+    expect(names).toEqual(["Max@L1"]);
   });
 });
 
