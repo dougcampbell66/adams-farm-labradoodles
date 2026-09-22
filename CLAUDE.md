@@ -117,9 +117,10 @@ that makes one rule load-bearing:
 > fallback.** That key bypasses RLS and must never sit behind a form
 > anyone on the internet can submit.
 
-The lead path uses the anon key only, whose grant is INSERT-only on
-named columns. Nobody holding it can read back a list of names and
-emails.
+The submission path uses the anon key only, which since pawsq migration
+66 holds no table grant at all — just EXECUTE on one function,
+`record_form_submission`, which returns an inquiry id and nothing else.
+Nobody holding it can read back a list of names and emails.
 
 ---
 
@@ -132,8 +133,14 @@ parsing, validation, composing the name — and hands the rest to
 
 ```
 /api/contact  →  lib/platform.ts  →  pawsq-app /api/platform/intake
-                                      screen → store in `leads` → notify
+                                      screen → record the person → notify
 ```
+
+"Record the person" is pawsq's `record_form_submission` function
+(migration 66): one call creates the contact, the inquiry, and an Adams
+Farm link in `contact_organizations` at stage `lead`. There is no `leads`
+table any more. The wire value `store: "leads"` in `lib/platform.ts` is
+the unchanged contract; the platform reads it as that call.
 
 The notification now sends from `adamsfarmlabradoodles@pawsq.com`. **This
 site sends no email at all** — `lib/send-email.ts` is a platform client,
@@ -145,9 +152,9 @@ next one:
 - a `block` verdict means the platform kept nothing, and the bot is
   answered exactly as a person would be;
 - `stored || emailed` → the visitor sees success;
-- platform unreachable → **the fallback**: `lib/leads.ts` writes the lead
-  directly with the anon key, unscreened but stored and logged loudly. A
-  rare unscreened row beats a lost enquiry;
+- platform unreachable → **the fallback**: `lib/leads.ts` calls the same
+  function directly with the anon key, unscreened but stored and logged
+  loudly. A rare unscreened row beats a lost enquiry;
 - only a total loss shows an error, because asking someone to send their
   message twice over our outage would be our failure displayed as theirs.
 
@@ -164,9 +171,12 @@ verbatim copy of that screener. They no longer do, and should not again.
 
 ## Nothing here promotes a lead
 
-A submission arrives with status `new` and becomes a contact only when a
-human says so, in the Hub's triage inbox. That is deliberate: the intake
-table has held a bot row since before it was under version control.
+A submission arrives as a contact at stage `lead` on the Adams Farm link,
+and a human moves the stage in the Hub's triage inbox — to `contact`,
+`customer`, `declined` or `spam`. Nothing this site can post arrives
+already triaged; the stage is not a parameter of the function. That is
+deliberate: the intake path has taken a bot row since before it was
+under version control.
 
 ---
 

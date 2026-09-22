@@ -41,18 +41,21 @@ the live-data pages (`/dams`, `/sires`, `/litters`, `/our-puppies`,
 
 `app/contact/ContactForm.tsx` → `POST /api/contact` → **the pawsq platform**
 (`lib/platform.ts` → pawsq-app `/api/platform/intake`), which screens the
-submission, stores it in `leads`, and sends the notification from
-`adamsfarmlabradoodles@pawsq.com`. This route keeps what is the site's own:
-parsing, validation, composing the name, and answering the visitor.
+submission, records the person through pawsq's `record_form_submission`
+function (a contact, an inquiry, and an Adams Farm link at stage `lead` —
+pawsq migration 66; there is no `leads` table any more), and sends the
+notification from `adamsfarmlabradoodles@pawsq.com`. This route keeps what
+is the site's own: parsing, validation, composing the name, and answering
+the visitor.
 
-If the platform is unreachable the site **falls back** to writing the lead
-directly with the anon key (`lib/leads.ts`) — unscreened, but stored and
-logged loudly. A rare unscreened row beats a lost enquiry. Only a total loss —
-no platform, no fallback row — shows the visitor an error, because asking
-someone to send their message twice over our outage would be our failure
-displayed as theirs.
+If the platform is unreachable the site **falls back** to calling that same
+function directly with the anon key (`lib/leads.ts`) — unscreened, but stored
+and logged loudly. A rare unscreened row beats a lost enquiry. Only a total
+loss — no platform, no fallback row — shows the visitor an error, because
+asking someone to send their message twice over our outage would be our
+failure displayed as theirs.
 
-Rows are told apart by `source_brand = 'adams_farm'` and
+Inquiries are told apart by `source_brand = 'adams_farm'` and
 `source_form = 'contact_form'`, both set server-side in `lib/brand.ts` and
 never from a client value.
 
@@ -66,11 +69,11 @@ every brand — which is right for the read-only server components that render
 submit. With no anon key configured the form still emails, logs loudly, and
 writes no row. That is the correct degradation.
 
-The anon role can only INSERT, on a named column list (pawsq migration 48 set
-the current one; 53 renamed the table to `leads` and 54 dropped the old
-compatibility view, so `leads` is now the only name that works). Sending a
-column outside that list fails the whole insert, so `lib/leads.ts` builds the
-row explicitly — client input is never spread into the payload.
+The anon role holds no table grant at all (pawsq migration 66 dropped `leads`
+and the INSERT grant with it). Its one privilege is EXECUTE on
+`record_form_submission`, which returns an inquiry id and nothing else — it
+cannot read a row back. `lib/leads.ts` names the function's parameters
+explicitly — client input is never spread into the payload.
 
 ### Spam screening
 

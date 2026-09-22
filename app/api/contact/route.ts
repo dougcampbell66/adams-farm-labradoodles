@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fullName } from "@/lib/name";
-import { insertCorporateLead } from "@/lib/leads";
+import { recordFormSubmission } from "@/lib/leads";
 import { SOURCE, provenance } from "@/lib/brand";
 import { HONEYPOT_FIELD, STARTED_FIELD } from "@/lib/decoy";
 import { platformIntake } from "@/lib/platform";
@@ -11,10 +11,12 @@ import { optInPacket, visitorIp, MARKETING_OPT_IN_WORDING } from "@/lib/consent"
  *
  * Since 2026-08-30 the pipeline behind this route lives on the pawsq
  * platform (pawsq-app's /api/platform/intake): one call screens the
- * submission, stores it in `leads` under `source_brand = 'adams_farm'`,
- * and sends the notification email from adamsfarmlabradoodles@pawsq.com.
- * This route keeps what is the site's own — parsing, composing the name
- * (never splitting one), validation, and answering the visitor.
+ * submission, records the person through `record_form_submission` (pawsq
+ * migration 66 — a contact, an inquiry, and an Adams Farm link at stage
+ * `lead`, under `source_brand = 'adams_farm'`), and sends the
+ * notification email from adamsfarmlabradoodles@pawsq.com. This route
+ * keeps what is the site's own — parsing, composing the name (never
+ * splitting one), validation, and answering the visitor.
  *
  * The old resilience contract survives the move, one level up:
  *
@@ -23,15 +25,17 @@ import { optInPacket, visitorIp, MARKETING_OPT_IN_WORDING } from "@/lib/consent"
  *     free tuning information.
  *   - stored || emailed → the enquiry is somewhere a human will find it;
  *     the visitor sees success.
- *   - The platform unreachable → the FALLBACK: this site still writes the
- *     lead directly (lib/leads.ts, anon key, unscreened but stored and
- *     logged loudly). A rare unscreened row beats a lost enquiry.
+ *   - The platform unreachable → the FALLBACK: this site still records
+ *     the submission directly (lib/leads.ts, anon key, unscreened but
+ *     stored and logged loudly). A rare unscreened row beats a lost
+ *     enquiry.
  *   - Only a total loss — no platform, no fallback row — shows an error,
  *     because asking someone to send their message twice over our outage
  *     would be our failure displayed as theirs.
  *
  * What it still deliberately does NOT do is promote. A submission arrives
- * `new` and becomes a contact only when a human says so.
+ * as a contact at stage `lead` on the Adams Farm link, and a human moves
+ * the stage in the Hub.
  */
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -132,7 +136,7 @@ export async function POST(request: Request) {
   // not lose it because our own endpoint was unreachable — the packet is
   // built here only because there is nobody to ask when the platform is
   // down (lib/consent.ts).
-  const stored = await insertCorporateLead({
+  const stored = await recordFormSubmission({
     name,
     first_name: firstName || null,
     last_name: lastName || null,

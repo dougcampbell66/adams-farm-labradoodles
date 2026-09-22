@@ -3,12 +3,13 @@
  *
  * Outbound email left this site on 2026-08-30 (pawsq docs/EMAIL.md): the
  * platform (pawsq-app) now runs the whole intake pipeline — spam
- * screening, the anon-key insert into `leads`, and the operator
- * notification — and sends the magic-link email from this brand's
- * @pawsq.com identity. This site keeps what is genuinely its own: the
- * form UX, validation, name composition, its sign-in logic, and a
- * direct-write FALLBACK so a lead survives even a platform outage
- * (lib/leads.ts).
+ * screening, recording the person through pawsq's
+ * `record_form_submission` function (a contact, an inquiry and a brand
+ * link at stage `lead`; migration 66), and the operator notification —
+ * and sends the magic-link email from this brand's @pawsq.com identity.
+ * This site keeps what is genuinely its own: the form UX, validation,
+ * name composition, its sign-in logic, and a direct-write FALLBACK so a
+ * submission survives even a platform outage (lib/leads.ts).
  *
  * Server-only. PAWSQ_PLATFORM_URL is the platform deployment's origin;
  * PAWSQ_PLATFORM_KEY is the shared server-to-server secret, presented as
@@ -86,6 +87,11 @@ export interface IntakePayload {
     text?: string;
     identity?: string;
   };
+  /**
+   * The wire value `"leads"` is the contract and is unchanged by pawsq
+   * migration 66: the platform now reads it as "record the person
+   * through `record_form_submission`" rather than as a table name.
+   */
   store: "leads" | "quiz_responses" | null;
   row: Record<string, unknown> | null;
   notification: {
