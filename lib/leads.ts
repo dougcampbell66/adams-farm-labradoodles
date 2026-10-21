@@ -3,52 +3,69 @@ import { BRAND_KEY, type SourceForm } from "@/lib/brand";
 import type { OptInPacket } from "@/lib/consent";
 
 /**
- * The FALLBACK insert path into pawsq's shared `leads` table (named
- * `corporate_leads` until pawsq migration 53) — used only when the
- * platform intake endpoint is unreachable, so the enquiry still lands
- * unscreened rather than being lost. The primary path is lib/platform.ts.
+ * The FALLBACK recording — used only when the platform intake endpoint
+ * (lib/platform.ts) is unreachable, so the enquiry still lands rather
+ * than being lost. Since pawsq migration 85 (2026-10-18) there is no
+ * `leads` table: a form submission IS a contact. The one thing anon may
+ * do to a person is call `record_form_submission()`, which writes the
+ * person, their relationship with this brand at lifecycle stage `lead`,
+ * the enquiry and the opt-in consent row in one transaction, and reads
+ * nothing back but the ids of what it wrote. That is what this calls,
+ * with the same anon key the old INSERT used — the privilege a public
+ * form always had, and no more.
  *
- * ─────────────────────────────────────────────────────────────────────
+ * What the fallback cannot do: screen (the screener is the platform's),
+ * notify (the platform's mailer), or send the receipt. An enquiry
+ * recorded this way is complete in the database and visible in the Hub's
+ * inbox as waiting; it is only the email legs that the outage costs.
+ *
  * THE ANON KEY, AND ONLY THE ANON KEY
- * ─────────────────────────────────────────────────────────────────────
+ *
  * This module deliberately does NOT use `lib/supabase.ts`. That client
- * prefers `SUPABASE_SERVICE_ROLE_KEY`, which carries BYPASSRLS — it can
- * read and write every row in every table for every brand. It is correct
- * for the read-only server components that render /dams and /litters, and
- * it must never sit behind a form any visitor on the internet can submit.
+ * prefers `SUPABASE_SERVICE_ROLE_KEY`, which carries BYPASSRLS — correct
+ * for the read-only server components that render /dams and /litters,
+ * and never to sit behind a form any visitor on the internet can submit.
+ * The secret key is not consulted here even as a fallback. If only the
+ * secret key is configured this returns false and the enquiry is lost to
+ * the database — degraded, logged whole, and the right failure.
  *
- * So the key is read here, separately, and the secret key is not consulted
- * even as a fallback. If only the secret key is configured this returns
- * false and the lead travels by email alone — degraded, and the right
- * failure. A form that silently escalated to a BYPASSRLS credential would
- * be the wrong one.
- *
- * ─────────────────────────────────────────────────────────────────────
- * WHAT THE ANON ROLE MAY ACTUALLY DO
- * ─────────────────────────────────────────────────────────────────────
- * pawsq migration 19 gave `corporate_leads` a single policy — INSERT, for
- * anon, and nothing else — and narrowed the underlying privilege to match,
- * so the published key cannot read a list of names, emails and phone
- * numbers back out. Migration 20 narrowed it further to a COLUMN-LEVEL
- * grant, so a submitter cannot post a lead that arrives already triaged.
- *
- * That makes the column list load-bearing: sending a key outside it fails
- * the whole insert. The row below is built explicitly, field by field —
- * client input is never spread into the payload. As of migrations 48 and
- * 56 the granted columns are:
- *
- *   id, created_at, name, first_name, last_name, company, district,
- *   email, phone, event_type, message, source_brand, source_form,
- *   location, preferred_date, preferred_time, event_name, event_dates,
- *   expected_attendance, enquirer_role, answers, marketing_opt_in
- *
- * This form sends eight of them. `status`, `contact_id`, `inquiry_id`,
- * `triaged_at` and `triage_notes` are ungranted on purpose and fall to
- * their defaults — a submission arrives `new` and a human triages it.
- *
- * Never throws: returns whether the row landed, so the caller can fall
- * back to the email safety net.
+ * Never throws: returns whether the person was recorded.
  */
+/**
+ * The door's named fields, as the `p_` parameters of
+ * `record_form_submission` (pawsq migration 85). Built explicitly: the
+ * function takes exactly these, and a stray key would fail the call.
+ */
+const DOOR_FIELDS = [
+  "name", "first_name", "last_name", "email", "phone", "company", "district",
+  "event_type", "message", "location", "preferred_date", "preferred_time",
+  "event_name", "event_dates", "expected_attendance", "enquirer_role", "answers",
+] as const;
+
+export function doorArgs(
+  row: Record<string, unknown>,
+  form: string,
+  optIn: unknown,
+): Record<string, unknown> {
+  const args: Record<string, unknown> = { p_brand: BRAND_KEY, p_form: form };
+  for (const k of DOOR_FIELDS) {
+    const v = row[k];
+    if (v === undefined || v === null || v === "") continue;
+    args[`p_${k}`] = k === "answers" ? v : String(v);
+  }
+  // The packet, or null: the door writes the form_opt_in consent row from
+  // it in the same transaction (R11 step 5). Nothing else about consent is
+  // this site's to say.
+  args.p_marketing_opt_in = optIn && typeof optIn === "object" ? optIn : null;
+  // Unscreened on purpose — this path runs only when the platform, which
+  // holds the screener, is unreachable — and recorded rather than held: a
+  // real enquiry must not wait 90 days on a human because our endpoint
+  // was down. The notification is lost with the platform; the Hub's inbox
+  // shows the enquiry as waiting.
+  args.p_spam_reasons = null;
+  return args;
+}
+
 export type CorporateLead = {
   /** Composed by the route from the two parts — never split. See lib/name.ts. */
   name: string;
@@ -91,27 +108,26 @@ export async function insertCorporateLead(lead: CorporateLead): Promise<boolean>
     return false;
   }
 
-  const row = {
-    name: lead.name,
-    first_name: lead.first_name || null,
-    last_name: lead.last_name || null,
-    email: lead.email,
-    phone: lead.phone || null,
-    message: lead.message || null,
-    // Written server-side, never from a client value. The brand answers
-    // "whose visitor was this", the form "what were they doing".
-    source_brand: BRAND_KEY,
-    source_form: lead.source_form,
-    marketing_opt_in: lead.marketing_opt_in ?? null,
-  };
+  const args = doorArgs(
+    {
+      name: lead.name,
+      first_name: lead.first_name,
+      last_name: lead.last_name,
+      email: lead.email,
+      phone: lead.phone,
+      message: lead.message,
+    },
+    lead.source_form,
+    lead.marketing_opt_in ?? null,
+  );
 
   try {
     const supabase = createClient(url, anonKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const { error } = await supabase.from("leads").insert(row);
+    const { data, error } = await supabase.rpc("record_form_submission", args);
     if (error) {
-      console.error("[leads] insert failed", {
+      console.error("[leads] fallback recording failed", {
         ...leadsConfig,
         message: error.message,
         code: error.code,
@@ -120,11 +136,16 @@ export async function insertCorporateLead(lead: CorporateLead): Promise<boolean>
       });
       return false;
     }
+    const outcome = (data as { outcome?: string } | null)?.outcome;
+    if (outcome !== "recorded") {
+      console.error("[leads] fallback recording answered unexpectedly", { ...leadsConfig, outcome });
+      return false;
+    }
     return true;
   } catch (thrown) {
     // A transport-level failure (DNS, TLS, connection reset) rejects rather
     // than returning an error object.
-    console.error("[leads] insert threw", {
+    console.error("[leads] fallback recording threw", {
       ...leadsConfig,
       message: (thrown as Error)?.message,
     });

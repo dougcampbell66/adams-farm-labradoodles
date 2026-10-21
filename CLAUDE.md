@@ -19,7 +19,7 @@ The short version is below.
 |---|---|
 | `pawsq` | **The engine.** The database schema lives there and **only** there |
 | `pawsq-app` | **The platform.** Serves `/app` on this domain; also sends all our email |
-| `pawsq-hub` | The owner console (service key). Lead triage and promotion happen there |
+| `pawsq-hub` | The owner console (service key). Its inbox shows enquiries with their stage, and releases held submissions |
 | **this repo** | Adams Farm's public pages, its own `/forever-families` gate, and the contact form |
 | `legend-manor-labradoodles` | The sibling breeding brand |
 | `puppy-therapy`, `school-dogs` | The events brands |
@@ -132,7 +132,7 @@ parsing, validation, composing the name — and hands the rest to
 
 ```
 /api/contact  →  lib/platform.ts  →  pawsq-app /api/platform/intake
-                                      screen → store in `leads` → notify
+                                      screen → record the person → receipt → notify
 ```
 
 The notification now sends from `adamsfarmlabradoodles@pawsq.com`. **This
@@ -145,9 +145,10 @@ next one:
 - a `block` verdict means the platform kept nothing, and the bot is
   answered exactly as a person would be;
 - `stored || emailed` → the visitor sees success;
-- platform unreachable → **the fallback**: `lib/leads.ts` writes the lead
-  directly with the anon key, unscreened but stored and logged loudly. A
-  rare unscreened row beats a lost enquiry;
+- platform unreachable → **the fallback**: `lib/leads.ts` records the
+  person directly through `record_form_submission()` with the anon key,
+  unscreened but stored and logged loudly. A rare unscreened row beats a
+  lost enquiry. No receipt and no notification go out on this path;
 - only a total loss shows an error, because asking someone to send their
   message twice over our outage would be our failure displayed as theirs.
 
@@ -162,11 +163,16 @@ verbatim copy of that screener. They no longer do, and should not again.
 
 ---
 
-## Nothing here promotes a lead
+## A submission is a contact
 
-A submission arrives with status `new` and becomes a contact only when a
-human says so, in the Hub's triage inbox. That is deliberate: the intake
-table has held a bot row since before it was under version control.
+Since pawsq migration 85 (2026-10-18) there is no `leads` table and no
+promotion step. A clean submission is recorded as a contact, a
+relationship with this brand at lifecycle stage `lead`, the enquiry and
+the opt-in consent row in one transaction (`record_form_submission()`,
+the only thing the anon key may do to a person); a submission the
+platform's screen flags is held as possible spam, never a contact, until
+a human releases it in the Hub. The platform sends the person a receipt
+on this brand's approved template, when one is approved.
 
 ---
 
