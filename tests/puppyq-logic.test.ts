@@ -223,17 +223,21 @@ describe("pqAvailablePuppies — the home page's cards", () => {
       withPups(litter("L2", "A", "B", "2025-01-08"), [pup("p4", "L2", "available", "Old")]),
       // Every puppy placed: not current.
       withPups(litter("L3", "A", "B", "2026-05-18"), [pup("p5", "L3", "placed", "Gone")]),
+      // Only a retained puppy left: staying, not offered, so not current.
+      withPups(litter("L4", "A", "B", "2026-02-24"), [pup("p6", "L4", "retained", "Kept")]),
+      // An older current litter than L1: it leads.
+      withPups(litter("L5", "A", "B", "2026-07-01"), [pup("p7", "L5", "reserved", "Bea")]),
     ],
     breedingRightDogIds: new Set<string>(),
-    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 3, errors: [] },
+    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 5, errors: [] },
   };
 
-  it("counts a recent litter as current when any puppy is not placed", () => {
-    expect(pqCurrentLitters(pq, now).map((l) => l.id)).toEqual(["L1"]);
+  it("counts a recent litter as current only while it offers a puppy, oldest first", () => {
+    expect(pqCurrentLitters(pq, now).map((l) => l.id)).toEqual(["L5", "L1"]);
   });
   it("lists only the puppies the record offers, with their litter", () => {
     const names = pqAvailablePuppies(pq, now).map((e) => `${e.puppy.call_name}@${e.litter.id}`);
-    expect(names).toEqual(["Max@L1"]);
+    expect(names).toEqual(["Bea@L5", "Max@L1"]);
   });
 });
 
