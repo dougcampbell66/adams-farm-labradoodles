@@ -176,6 +176,26 @@ on this brand's approved template, when one is approved.
 
 ---
 
+## The Puppies page follows Legend Manor's
+
+**DECIDED, Douglas 2026-10-24** (`pawsq/docs/DECISIONS-2026-10-24.md`
+P1–P10, and the Puppies page section of `pawsq/docs/BREEDER-SITE.md`):
+Legend Manor's Puppies page is the layout every ALAA breeder site
+follows, and `/puppies` here matches it in Adams Farm's colours. Do not
+let the two drift: a change to what the page shows is a change to the
+ruling, made on both sites.
+
+- `/puppies` (`/our-puppies` redirects to it): hero, then **Available
+  Puppies**, then the litters with none left as one-row cards
+  (`LitterRow`), then how placement works.
+- Available Puppies (`AvailablePuppies`, shared with the home page)
+  shows **only puppies listed Available**, grouped by litter, oldest
+  first. Each litter opens with its theme name (`pqLitterTitle`), then
+  dam and sire by call name, each linked to its card on `/dams` or
+  `/sires` (`pqParentHref`) — this site has no page per dog.
+- `/litters/[id]` shows every puppy with its photo and status.
+- Puppy grids: 1 column on a phone, 3 on a tablet, 4 on a computer.
+
 ## Conventions
 
 - `app/components/` holds the site's components. `src/data/` holds fixed
