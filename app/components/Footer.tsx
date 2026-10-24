@@ -3,12 +3,12 @@ import Image from "next/image";
 
 const siteLinks = [
   { label: "Home", href: "/" },
+  { label: "Puppies", href: "/puppies" },
   { label: "Dams", href: "/dams" },
   { label: "Sires", href: "/sires" },
   { label: "Litters", href: "/litters" },
   { label: "Our program", href: "/our-program" },
   { label: "Guardians", href: "/guardians" },
-  { label: "Puppies", href: "/puppies" },
   { label: "Testimonials", href: "/#testimonials" },
   { label: "FAQ", href: "/#faq" },
 ];
