@@ -130,7 +130,7 @@ export default async function AvailablePuppies({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 p-5 sm:p-6">
+              <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 p-5 sm:p-6">
                 {puppies.map((puppy) => {
                   const name = pqShortName(puppy);
                   const photo = pqPuppyPhoto(puppy);
@@ -144,7 +144,7 @@ export default async function AvailablePuppies({
                             src={photo}
                             alt={name}
                             fill
-                            sizes="(max-width: 768px) 50vw, 33vw"
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             className="object-cover object-top"
                           />
                         ) : (
