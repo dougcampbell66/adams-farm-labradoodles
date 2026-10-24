@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   getPuppyQ,
   pqAvailablePuppies,
+  pqCoBreeders,
   pqLitterTitle,
   pqParentHref,
   pqPuppyPhoto,
@@ -18,9 +19,9 @@ import {
 const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
   available: { label: "Available", cls: "bg-avail-bg text-avail-text" },
   reserved: { label: "Reserved", cls: "bg-coral text-navy" },
-  "in-program": { label: "In program", cls: "bg-avail-bg text-avail-text" },
+  "in-program": { label: "Active", cls: "bg-avail-bg text-avail-text" },
   retained: { label: "Retained", cls: "bg-white/12 text-cream/70" },
-  placed: { label: "Placed", cls: "bg-white/12 text-cream/70" },
+  placed: { label: "Adopted", cls: "bg-white/12 text-cream/70" },
   unknown: { label: "On record", cls: "bg-white/12 text-cream/70" },
 };
 
@@ -111,6 +112,11 @@ export default async function AvailablePuppies({
                   >
                     {pqLitterTitle(litter)}
                   </Link>
+                  {pqCoBreeders(litter, pq).length > 0 ? (
+                    <p className="mt-0.5 text-[0.78rem] font-extrabold uppercase tracking-[0.08em] text-coral-dark">
+                      Co-bred with {pqCoBreeders(litter, pq).join(" and ")}
+                    </p>
+                  ) : null}
                   <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
                     <Parent role="Dam" dog={litter.dam} name={litter.damName} pq={pq} />
                     <Parent role="Sire" dog={litter.sire} name={litter.sireName} pq={pq} />

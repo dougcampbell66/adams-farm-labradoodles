@@ -17,6 +17,7 @@ import {
   pqPuppyStanding,
   pqPuppyOffered,
   pqAvailablePuppies,
+  pqCoBreeders,
   pqCurrentLitters,
   pqLitterTitle,
   type PqDog,
@@ -133,6 +134,8 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       withParents(litter("L3", "H", null, "2026-05-18"), holly, null, "Tarheel's Knox"),
     ],
     breedingRightDogIds: new Set<string>(),
+    rightHoldersByDog: {},
+    orgNames: {},
     diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 4, litterRows: 3, errors: [] },
   };
 
@@ -166,6 +169,8 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       allDogs: [...pq.allDogs, gate],
       litters: [...pq.litters, withParents(litter("L4", "A", "G", "2026-08-19"), macy, gate)],
       breedingRightDogIds: new Set(["G"]),
+      rightHoldersByDog: {},
+      orgNames: {},
     };
     const gateEntry = pqBreedingLines(withGate).sires.producing.find((e) => e.dog?.id === "G");
     expect(gateEntry?.outside).toBe(false);
@@ -233,6 +238,8 @@ describe("pqAvailablePuppies — the home page's cards", () => {
       withPups(litter("L6", "A", "B", "2026-06-10"), [pup("p8", "L6", "available", "Ada")]),
     ],
     breedingRightDogIds: new Set<string>(),
+    rightHoldersByDog: {},
+    orgNames: {},
     diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 6, errors: [] },
   };
 
@@ -261,6 +268,28 @@ describe("pqLitterTitle — a litter's heading on the Puppies page", () => {
   });
   it("ignores an imported litter's generated name, falling back to dam × sire", () => {
     expect(pqLitterTitle(withRow({ name: "Legend Manor's Holly 2026-05-18", source: "alaa" }))).toBe("Lia × Gate");
+  });
+});
+
+describe("pqCoBreeders — the partner program a litter is co-bred with", () => {
+  const pq = {
+    orgId: "AF",
+    orgNames: { AF: "Adams Farm Labradoodles", LM: "Legend Manor Labradoodles", K: "Outside Kennel" },
+    // Gate's right is held by both programs; Macy's by ours alone.
+    rightHoldersByDog: { GATE: ["AF", "LM"], MACY: ["AF"] } as Record<string, string[]>,
+  };
+  const withOrg = (org: string, dam: string | null, sire: string | null): PqLitter => {
+    const l = litter("L", dam, sire, "2026-08-19");
+    return { ...l, row: { ...l.row, organization_id: org } };
+  };
+  it("names the partner holding a right on a parent of our own litter", () => {
+    expect(pqCoBreeders(withOrg("AF", "MACY", "GATE"), pq)).toEqual(["Legend Manor Labradoodles"]);
+  });
+  it("names the program whose litter it is", () => {
+    expect(pqCoBreeders(withOrg("LM", "LIA", "GATE"), pq)).toEqual(["Legend Manor Labradoodles"]);
+  });
+  it("names no one for our own litter with no shared parent", () => {
+    expect(pqCoBreeders(withOrg("AF", "MACY", "KNOX"), pq)).toEqual([]);
   });
 });
 
