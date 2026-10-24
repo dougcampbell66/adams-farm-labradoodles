@@ -7,6 +7,7 @@ import {
   pqPuppyStanding,
   pqSex,
   pqShortName,
+  type PqDog,
   type PqLitter,
   type PqPuppyStanding,
 } from "@/lib/puppyq";
@@ -42,7 +43,7 @@ function litterTitle(litter: PqLitter): string {
 /**
  * Available Puppies — live from the record, shared by the home page and
  * /puppies2. Every puppy the record offers (pqPuppyOffered) from a current
- * litter, with its photo from the media table. A puppy with no upload yet
+ * litter, grouped by litter oldest first, with its photo from the media table. A puppy with no upload yet
  * shows a placeholder rather than a stand-in from this repo. Sex is shown only
  * when the record holds it; it is null on most puppy rows and is never
  * guessed from a name.
@@ -54,7 +55,17 @@ export default async function AvailablePuppies({
 }) {
   const pq = await getPuppyQ();
   const entries = pqAvailablePuppies(pq);
-  const litters = [...new Map(entries.map((e) => [e.litter.id, e.litter])).values()];
+  // Grouped by litter, oldest first — pqAvailablePuppies' order, which a Map
+  // keeps — so a family sees which puppies are littermates (Douglas,
+  // 2026-10-24).
+  const byLitter = new Map<string, { litter: PqLitter; puppies: PqDog[] }>();
+  for (const { puppy, litter } of entries) {
+    const group = byLitter.get(litter.id) ?? { litter, puppies: [] };
+    group.puppies.push(puppy);
+    byLitter.set(litter.id, group);
+  }
+  const groups = [...byLitter.values()];
+  const litters = groups.map((g) => g.litter);
   const lead = litters[0] ?? null;
 
   return (
@@ -96,57 +107,72 @@ export default async function AvailablePuppies({
           </div>
         </div>
 
-        {entries.length > 0 && (
-          <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-            {entries.map(({ puppy, litter }) => {
-              const name = pqShortName(puppy);
-              const photo = pqPuppyPhoto(puppy);
-              const sex = pqSex(puppy, pq.litters);
-              const s = STANDING[pqPuppyStanding(puppy)];
-              return (
-                <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
-                  <div className="relative aspect-[3/4] w-full bg-photo-placeholder">
-                    {photo ? (
-                      <Image
-                        src={photo}
-                        alt={name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 33vw"
-                        className="object-cover object-top"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
-                          Photo
-                          <br />
-                          coming soon
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2 p-3 sm:p-3.5">
-                    <span className="text-[0.85rem] font-extrabold text-cream">{name}</span>
-                    <span className="text-[0.7rem] text-cream/70 -mt-1.5 capitalize">
-                      {[puppy.color, litters.length > 1 ? litterTitle(litter) : null]
-                        .filter(Boolean)
-                        .join(" · ")}
+        {groups.length > 0 && (
+          <div className="space-y-10">
+            {groups.map(({ litter, puppies }) => (
+              <div key={litter.id}>
+                {groups.length > 1 && (
+                  <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-2">
+                    <h3 className="font-heading font-bold text-[1.2rem] text-navy">
+                      {litterTitle(litter)}
+                    </h3>
+                    <span className="text-[0.8rem] text-muted">
+                      {litter.birthdate ? `Born ${fmtDate(litter.birthdate)} · ` : ""}
+                      {puppies.length} available
                     </span>
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {sex && (
-                        <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                          {sex}
-                        </span>
-                      )}
-                      <span
-                        className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${s.cls}`}
-                      >
-                        {s.label}
-                      </span>
-                    </div>
                   </div>
+                )}
+                <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+                  {puppies.map((puppy) => {
+                    const name = pqShortName(puppy);
+                    const photo = pqPuppyPhoto(puppy);
+                    const sex = pqSex(puppy, pq.litters);
+                    const s = STANDING[pqPuppyStanding(puppy)];
+                    return (
+                      <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
+                        <div className="relative aspect-[3/4] w-full bg-photo-placeholder">
+                          {photo ? (
+                            <Image
+                              src={photo}
+                              alt={name}
+                              fill
+                              sizes="(max-width: 768px) 50vw, 33vw"
+                              className="object-cover object-top"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
+                                Photo
+                                <br />
+                                coming soon
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2 p-3 sm:p-3.5">
+                          <span className="text-[0.85rem] font-extrabold text-cream">{name}</span>
+                          <span className="text-[0.7rem] text-cream/70 -mt-1.5 capitalize">
+                            {puppy.color}
+                          </span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {sex && (
+                              <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
+                                {sex}
+                              </span>
+                            )}
+                            <span
+                              className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${s.cls}`}
+                            >
+                              {s.label}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
 

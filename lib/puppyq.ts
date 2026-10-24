@@ -387,17 +387,25 @@ function monthsAgo(iso: string | null, now: Date): number {
 
 const CURRENT_WINDOW_MONTHS = 12;
 
-/** Whelped within the window and still holding a puppy not marked placed. */
+/**
+ * Whelped within the window and still holding a puppy the record offers
+ * (pqPuppyOffered), oldest litter first. The puppies pages are for puppies a
+ * family can ask about (Douglas, 2026-10-24): a retained puppy is staying and
+ * a placed one has gone, so a litter left with only those belongs to the
+ * track record, not the current program.
+ */
 export function pqCurrentLitters(pq: PuppyQ, now = new Date()): PqLitter[] {
-  return pq.litters.filter(
-    (l) =>
-      monthsAgo(l.birthdate, now) <= CURRENT_WINDOW_MONTHS &&
-      l.puppies.some(pqPuppyNotPlaced),
-  );
+  return pq.litters
+    .filter(
+      (l) =>
+        monthsAgo(l.birthdate, now) <= CURRENT_WINDOW_MONTHS &&
+        l.puppies.some(pqPuppyOffered),
+    )
+    .sort((a, b) => (a.birthdate ?? "").localeCompare(b.birthdate ?? ""));
 }
 
 /**
- * Puppies the record offers from current litters, newest litter first —
+ * Puppies the record offers from current litters, oldest litter first —
  * the home page's Available Puppies. Each carries its litter so a card can
  * say where it comes from. Offered puppies first within a litter, by name.
  */

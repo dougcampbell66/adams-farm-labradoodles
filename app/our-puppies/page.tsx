@@ -3,7 +3,11 @@ import Link from "next/link";
 import PageHero from "@/app/components/PageHero";
 import {
   getPuppyQ,
+  pqCurrentLitters,
   pqName,
+  pqPastLitters,
+  pqPuppyOffered,
+  pqPuppyStanding,
   pqShortName,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -25,6 +29,12 @@ function fmtDate(iso: string | null) {
   });
 }
 
+/**
+ * One litter. A featured (current) card lists only the puppies the record
+ * offers, each with its standing — the page is for puppies a family can ask
+ * about, so a retained or placed puppy is not on it (Douglas, 2026-10-24). A
+ * past card is the track record and lists the litter as it was.
+ */
 function LitterCard({
   litter,
   featured = false,
@@ -32,6 +42,7 @@ function LitterCard({
   litter: PqLitter;
   featured?: boolean;
 }) {
+  const puppies = featured ? litter.puppies.filter(pqPuppyOffered) : litter.puppies;
   const damLabel = litter.dam
     ? pqName(litter.dam)
     : litter.damName ?? "Unknown dam";
@@ -71,18 +82,17 @@ function LitterCard({
       </div>
 
       {/* Puppies */}
-      {litter.puppies.length > 0 && (
+      {puppies.length > 0 && (
         <div>
           <p
             className={`text-[0.68rem] font-extrabold uppercase tracking-[0.1em] mb-3 ${
               featured ? "text-cream/60" : "text-navy/50"
             }`}
           >
-            {litter.puppies.length} pup
-            {litter.puppies.length !== 1 ? "s" : ""}
+            {puppies.length} {featured ? "available" : `pup${puppies.length !== 1 ? "s" : ""}`}
           </p>
           <div className="flex flex-wrap gap-2">
-            {litter.puppies.map((p) => (
+            {puppies.map((p) => (
               <div
                 key={p.id}
                 className={`rounded-lg px-3.5 py-2 text-[0.83rem] ${
@@ -101,6 +111,9 @@ function LitterCard({
                     · {p.color}
                   </span>
                 )}
+                {featured && pqPuppyStanding(p) === "reserved" && (
+                  <span className="ml-1.5 text-[0.75rem] text-coral">· Reserved</span>
+                )}
               </div>
             ))}
           </div>
@@ -113,9 +126,10 @@ function LitterCard({
 export default async function OurPuppiesPage() {
   const pq = await getPuppyQ();
 
-  // Litters are already sorted most-recent first by getPuppyQ().
-  // Treat the single most recent litter as "current program"; the rest are history.
-  const [current, ...past] = pq.litters;
+  // Current: every litter still offering a puppy, oldest first. The rest —
+  // newest first, as getPuppyQ() sorts them — are the track record.
+  const current = pqCurrentLitters(pq);
+  const past = pqPastLitters(pq);
 
   return (
     <main>
@@ -129,18 +143,22 @@ export default async function OurPuppiesPage() {
       <section className="py-12 md:py-16 px-6 bg-cream">
         <div className="max-w-[1080px] mx-auto">
           <p className="text-[0.72rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-2">
-            Most Recent Litter
+            Available Puppies
           </p>
           <h2 className="font-heading font-bold text-[clamp(1.6rem,3vw,1.9rem)] text-navy mb-8">
             Current Program
           </h2>
 
-          {current ? (
-            <LitterCard litter={current} featured />
+          {current.length > 0 ? (
+            <div className="space-y-6">
+              {current.map((l) => (
+                <LitterCard key={l.id} litter={l} featured />
+              ))}
+            </div>
           ) : (
             <div className="border-[1.5px] border-dashed border-warm-border rounded-xl px-7 py-9 text-center max-w-[540px]">
               <p className="text-[1rem] text-navy/60 leading-[1.7]">
-                No litters on record yet. Check back soon, or{" "}
+                No puppies are available right now. Check back soon, or{" "}
                 <Link href="/contact" className="text-navy underline">
                   join our waitlist
                 </Link>
