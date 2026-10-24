@@ -3,6 +3,8 @@ import Link from "next/link";
 import {
   getPuppyQ,
   pqAvailablePuppies,
+  pqLitterPairing,
+  pqParentHref,
   pqPuppyPhoto,
   pqPuppyStanding,
   pqSex,
@@ -10,6 +12,7 @@ import {
   type PqDog,
   type PqLitter,
   type PqPuppyStanding,
+  type PuppyQ,
 } from "@/lib/puppyq";
 
 const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
@@ -30,34 +33,43 @@ function fmtDate(iso: string | null) {
   });
 }
 
-/** "Macy & Gate August Litter" — short names and the whelp month. */
-function litterTitle(litter: PqLitter): string {
-  const dam = litter.dam ? pqShortName(litter.dam) : (litter.damName ?? "Unknown dam");
-  const sire = litter.sire ? pqShortName(litter.sire) : (litter.sireName ?? "Unknown sire");
-  const month = litter.birthdate
-    ? new Date(`${litter.birthdate}T12:00:00`).toLocaleDateString("en-US", { month: "long" })
-    : null;
-  return `${dam} & ${sire}${month ? ` ${month}` : ""} Litter`;
+/** A parent by call name, linked to its card on /dams or /sires when it has one. */
+function Parent({ role, dog, name, pq }: { role: string; dog: PqDog | null; name: string | null; pq: PuppyQ }) {
+  const label = dog ? pqShortName(dog) : (name ?? "Not recorded");
+  const href = pqParentHref(dog, pq);
+  return (
+    <span className="text-[0.85rem] text-muted">
+      <span className="text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-navy/50">{role} </span>
+      {href ? (
+        <Link href={href} className="font-extrabold text-navy underline-offset-4 hover:text-coral-dark hover:underline">
+          {label} →
+        </Link>
+      ) : (
+        <span className="font-extrabold text-navy">{label}</span>
+      )}
+    </span>
+  );
 }
 
 /**
- * Available Puppies — live from the record, shared by the home page and
- * /puppies2. Every puppy the record offers (pqPuppyOffered) from a current
- * litter, grouped by litter oldest first, with its photo from the media table. A puppy with no upload yet
- * shows a placeholder rather than a stand-in from this repo. Sex is shown only
- * when the record holds it; it is null on most puppy rows and is never
- * guessed from a name.
+ * Available Puppies — the first section under the hero on the home page and
+ * the Puppies page, laid out as Legend Manor's is (Douglas, 2026-10-24).
+ *
+ * The puppies listed Available (pqAvailablePuppies), litter by litter, oldest
+ * litter first. Each litter is headed by its dam × sire by call name, linked
+ * to the litter's page, with a link to each parent's card; each puppy is a
+ * card with its photo from the media table (a placeholder when it has none),
+ * name, colour, sex when the record holds it — null on most rows and never
+ * guessed from a name — and status.
  */
 export default async function AvailablePuppies({
-  eyebrow = "Available Puppies",
+  heading = "Ready for the right home.",
 }: {
-  eyebrow?: string;
+  heading?: string;
 }) {
   const pq = await getPuppyQ();
   const entries = pqAvailablePuppies(pq);
-  // Grouped by litter, oldest first — pqAvailablePuppies' order, which a Map
-  // keeps — so a family sees which puppies are littermates (Douglas,
-  // 2026-10-24).
+  // pqAvailablePuppies is already oldest litter first; a Map keeps that order.
   const byLitter = new Map<string, { litter: PqLitter; puppies: PqDog[] }>();
   for (const { puppy, litter } of entries) {
     const group = byLitter.get(litter.id) ?? { litter, puppies: [] };
@@ -65,123 +77,115 @@ export default async function AvailablePuppies({
     byLitter.set(litter.id, group);
   }
   const groups = [...byLitter.values()];
-  const litters = groups.map((g) => g.litter);
-  const lead = litters[0] ?? null;
+  const intro =
+    groups.length === 0
+      ? "No puppies are available right now. Join the waitlist and we’ll reach out when the next litter arrives."
+      : groups.length === 1
+        ? `${pqLitterPairing(groups[0].litter)}, born ${fmtDate(groups[0].litter.birthdate)}.`
+        : `${groups.length} litters, oldest first.`;
 
   return (
     <section id="puppies" className="bg-white border-b border-line py-12 md:py-16">
       <div className="max-w-[1160px] mx-auto px-6">
         <div className="mb-8 max-w-[620px]">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
-            {eyebrow}
+            Available Puppies{entries.length > 0 ? ` · ${entries.length}` : ""}
           </p>
           <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-            {lead ? `Meet Our ${litterTitle(lead)}` : "Our Next Litter"}
+            {heading}
           </h2>
-          {lead ? (
-            <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
-              {lead.birthdate ? `Born ${fmtDate(lead.birthdate)} to ` : "Out of "}
-              {lead.damName ?? "an unrecorded dam"} and {lead.sireName ?? "an unrecorded sire"}
-              {litters.length > 1 ? `, with ${litters.length - 1} more current litter${litters.length > 2 ? "s" : ""} below` : ""}
-              , and raised underfoot in the Campbell home from day one.
-            </p>
-          ) : (
-            <p className="text-[0.95rem] text-muted leading-[1.65] mb-3.5">
-              No puppies are available right now. Join the waitlist and we’ll reach out when the
-              next litter arrives.
-            </p>
-          )}
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link
-              href="/dams"
-              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
-            >
-              Meet Our Dams →
-            </Link>
-            <Link
-              href="/sires"
-              className="text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
-            >
-              Meet Our Sires →
-            </Link>
-          </div>
+          <p className="text-[0.95rem] text-muted leading-[1.65]">{intro}</p>
         </div>
 
-        {groups.length > 0 && (
-          <div className="space-y-10">
-            {groups.map(({ litter, puppies }) => (
-              <div key={litter.id}>
-                {groups.length > 1 && (
-                  <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-2">
-                    <h3 className="font-heading font-bold text-[1.2rem] text-navy">
-                      {litterTitle(litter)}
-                    </h3>
-                    <span className="text-[0.8rem] text-muted">
-                      {litter.birthdate ? `Born ${fmtDate(litter.birthdate)} · ` : ""}
-                      {puppies.length} available
-                    </span>
+        <div className="space-y-8">
+          {groups.map(({ litter, puppies }) => (
+            <div key={litter.id} className="rounded-[18px] border border-warm-border overflow-hidden">
+              <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3 border-b border-line bg-cream px-5 py-4 sm:px-6">
+                <div>
+                  <Link
+                    href={`/litters/${litter.id}`}
+                    className="font-heading font-bold text-[1.3rem] text-navy hover:text-coral-dark transition-colors"
+                  >
+                    {pqLitterPairing(litter)}
+                  </Link>
+                  <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
+                    <Parent role="Dam" dog={litter.dam} name={litter.damName} pq={pq} />
+                    <Parent role="Sire" dog={litter.sire} name={litter.sireName} pq={pq} />
                   </div>
-                )}
-                <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-                  {puppies.map((puppy) => {
-                    const name = pqShortName(puppy);
-                    const photo = pqPuppyPhoto(puppy);
-                    const sex = pqSex(puppy, pq.litters);
-                    const s = STANDING[pqPuppyStanding(puppy)];
-                    return (
-                      <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
-                        <div className="relative aspect-[3/4] w-full bg-photo-placeholder">
-                          {photo ? (
-                            <Image
-                              src={photo}
-                              alt={name}
-                              fill
-                              sizes="(max-width: 768px) 50vw, 33vw"
-                              className="object-cover object-top"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
-                                Photo
-                                <br />
-                                coming soon
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-2 p-3 sm:p-3.5">
-                          <span className="text-[0.85rem] font-extrabold text-cream">{name}</span>
-                          <span className="text-[0.7rem] text-cream/70 -mt-1.5 capitalize">
-                            {puppy.color}
-                          </span>
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {sex && (
-                              <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                                {sex}
-                              </span>
-                            )}
-                            <span
-                              className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${s.cls}`}
-                            >
-                              {s.label}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                </div>
+                <div className="text-right">
+                  <div className="text-[0.8rem] text-muted">
+                    {litter.birthdate ? `Born ${fmtDate(litter.birthdate)} · ` : ""}
+                    {puppies.length} available
+                  </div>
+                  <Link
+                    href={`/litters/${litter.id}`}
+                    className="mt-1 inline-block text-[0.85rem] font-extrabold text-navy border-b-[1.5px] border-coral pb-[2px] hover:text-coral-dark transition-colors"
+                  >
+                    View the litter →
+                  </Link>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+
+              <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 p-5 sm:p-6">
+                {puppies.map((puppy) => {
+                  const name = pqShortName(puppy);
+                  const photo = pqPuppyPhoto(puppy);
+                  const sex = pqSex(puppy, pq.litters);
+                  const s = STANDING[pqPuppyStanding(puppy)];
+                  return (
+                    <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
+                      <div className="relative aspect-[3/4] w-full bg-photo-placeholder">
+                        {photo ? (
+                          <Image
+                            src={photo}
+                            alt={name}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                            className="object-cover object-top"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
+                              Photo
+                              <br />
+                              coming soon
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2 p-3 sm:p-3.5">
+                        <span className="text-[0.85rem] font-extrabold text-cream">{name}</span>
+                        {puppy.color ? (
+                          <span className="text-[0.7rem] text-cream/70 -mt-1.5 capitalize">{puppy.color}</span>
+                        ) : null}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {sex && (
+                            <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
+                              {sex}
+                            </span>
+                          )}
+                          <span
+                            className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${s.cls}`}
+                          >
+                            {s.label}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="mt-8">
           <Link
             href="/contact"
             className="inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
           >
-            {entries.length > 0 ? "Reserve a Puppy" : "Join the Waitlist"}
+            {entries.length > 0 ? "Ask about a puppy" : "Join the Waitlist"}
           </Link>
         </div>
       </div>

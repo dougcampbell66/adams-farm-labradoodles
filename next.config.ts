@@ -40,6 +40,9 @@ const nextConfig: NextConfig = {
       // /sires is one click away in the nav. Permanent (308) — the page is not
       // coming back, so search engines should consolidate onto /dams.
       { source: "/our-dogs", destination: "/dams", permanent: true },
+      // /our-puppies became /puppies when the page took Legend Manor's layout
+      // (2026-10-24). Permanent, so old links and search results land on it.
+      { source: "/our-puppies", destination: "/puppies", permanent: true },
     ];
   },
 };

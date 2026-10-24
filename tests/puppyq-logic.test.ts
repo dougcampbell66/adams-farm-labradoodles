@@ -69,6 +69,7 @@ describe("pqName / pqShortName", () => {
   });
   it("shortens the possessive-free kennel prefix the live record uses", () => {
     expect(pqShortName(dog({ id: "1", registered_name: "Adams Farm Madison" }))).toBe("Madison");
+    expect(pqShortName(dog({ id: "1", registered_name: "Legend Manor Prancer" }))).toBe("Prancer");
   });
   it("leaves an unrelated registered name alone", () => {
     expect(pqShortName(dog({ id: "1", registered_name: "Tarheel's Knox" }))).toBe("Knox");
@@ -225,19 +226,21 @@ describe("pqAvailablePuppies — the home page's cards", () => {
       withPups(litter("L3", "A", "B", "2026-05-18"), [pup("p5", "L3", "placed", "Gone")]),
       // Only a retained puppy left: staying, not offered, so not current.
       withPups(litter("L4", "A", "B", "2026-02-24"), [pup("p6", "L4", "retained", "Kept")]),
-      // An older current litter than L1: it leads.
+      // Only a reserved puppy left: spoken for, not Available, so not current.
       withPups(litter("L5", "A", "B", "2026-07-01"), [pup("p7", "L5", "reserved", "Bea")]),
+      // An older current litter than L1: it leads.
+      withPups(litter("L6", "A", "B", "2026-06-10"), [pup("p8", "L6", "available", "Ada")]),
     ],
     breedingRightDogIds: new Set<string>(),
-    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 5, errors: [] },
+    diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 6, errors: [] },
   };
 
-  it("counts a recent litter as current only while it offers a puppy, oldest first", () => {
-    expect(pqCurrentLitters(pq, now).map((l) => l.id)).toEqual(["L5", "L1"]);
+  it("counts a recent litter as current only while it has an Available puppy, oldest first", () => {
+    expect(pqCurrentLitters(pq, now).map((l) => l.id)).toEqual(["L6", "L1"]);
   });
-  it("lists only the puppies the record offers, with their litter", () => {
+  it("lists only the puppies listed Available, with their litter", () => {
     const names = pqAvailablePuppies(pq, now).map((e) => `${e.puppy.call_name}@${e.litter.id}`);
-    expect(names).toEqual(["Bea@L5", "Max@L1"]);
+    expect(names).toEqual(["Ada@L6", "Max@L1"]);
   });
 });
 

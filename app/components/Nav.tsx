@@ -9,7 +9,7 @@ const primaryLinks = [
   { label: "Home", href: "/" },
   { label: "Dams", href: "/dams" },
   { label: "Sires", href: "/sires" },
-  { label: "Our Puppies", href: "/our-puppies" },
+  { label: "Puppies", href: "/puppies" },
   { label: "Litters", href: "/litters" },
 ];
 

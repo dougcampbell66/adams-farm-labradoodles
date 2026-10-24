@@ -8,13 +8,13 @@ const siteLinks = [
   { label: "Litters", href: "/litters" },
   { label: "Our program", href: "/our-program" },
   { label: "Guardians", href: "/guardians" },
-  { label: "Puppies", href: "/puppies2" },
+  { label: "Puppies", href: "/puppies" },
   { label: "Testimonials", href: "/#testimonials" },
   { label: "FAQ", href: "/#faq" },
 ];
 
 const getAPuppyLinks = [
-  { label: "See available puppies", href: "/puppies2" },
+  { label: "See available puppies", href: "/puppies" },
   { label: "Join the waitlist", href: "/contact" },
   { label: "Meet the dams", href: "/dams" },
   { label: "Meet the sires", href: "/sires" },

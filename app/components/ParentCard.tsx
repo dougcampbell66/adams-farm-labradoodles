@@ -36,7 +36,11 @@ export default function ParentCard({
   const meta = [dog.breed, dog.color].filter(Boolean).join(" · ");
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-[18px] border border-warm-border bg-white">
+    // id: a litter's parent links here (pqParentHref) — this site has no page per dog.
+    <div
+      id={`dog-${dog.id}`}
+      className="flex scroll-mt-24 flex-col overflow-hidden rounded-[18px] border border-warm-border bg-white"
+    >
       <div className="relative aspect-[4/5] w-full bg-photo-placeholder">
         {photo ? (
           <Image

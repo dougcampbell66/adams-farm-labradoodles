@@ -28,7 +28,7 @@ export default function PuppiesPage() {
       />
 
       {/* ── CURRENT LITTER — live from the record ─────────── */}
-      <AvailablePuppies eyebrow="Current Litter" />
+      <AvailablePuppies />
 
       {/* ── PLANNED LITTERS ───────────────────────────────── */}
       <section id="planned" className="bg-cream-panel py-12 md:py-16 px-6">

@@ -109,8 +109,22 @@ export function pqShortName(dog: PqDog): string {
   if (!reg) return "Unnamed dog";
   const apostrophe = reg.match(/^.*?['']s\s+(.+)$/);
   if (apostrophe) return apostrophe[1];
-  const kennel = reg.match(/^adams\s+farm\s+(.+)$/i);
+  // Legend Manor's dams and sires stand in Adams Farm's co-litters, and the
+  // Puppies page names parents by call name ("Legend Manor Prancer" → "Prancer").
+  const kennel = reg.match(/^(?:adams\s+farm|legend\s+manor)\s+(.+)$/i);
   return kennel ? kennel[1] : reg;
+}
+
+/**
+ * "Lia × Gate" — a litter's dam and sire by call name (pqShortName: the call
+ * name, or the registered name less its kennel), falling back to the names
+ * the litter records. The Puppies page names parents this way (Douglas,
+ * 2026-10-24).
+ */
+export function pqLitterPairing(litter: PqLitter): string {
+  const dam = litter.dam ? pqShortName(litter.dam) : (litter.damName ?? "Unknown dam");
+  const sire = litter.sire ? pqShortName(litter.sire) : (litter.sireName ?? "Unknown sire");
+  return `${dam} × ${sire}`;
 }
 
 function slugify(value: string): string {
@@ -334,6 +348,22 @@ export function pqBreedingLines(pq: PuppyQ) {
   return { dams: collect("dam"), sires: collect("sire") };
 }
 
+/**
+ * Where a litter's parent is on this site: its card on /dams or /sires, which
+ * carries the id `dog-<id>`. This site has no page per dog, so the card is the
+ * parent's page. Null when the dog is on neither — a parent the record knows
+ * only by name, or one whose litters are not on the Adams Farm record.
+ */
+export function pqParentHref(dog: PqDog | null, pq: PuppyQ): string | null {
+  if (!dog) return null;
+  const { dams, sires } = pqBreedingLines(pq);
+  const listed = (lines: typeof dams) =>
+    [...lines.producing, ...lines.retired].some((e) => e.dog?.id === dog.id);
+  if (listed(dams)) return `/dams#dog-${dog.id}`;
+  if (listed(sires)) return `/sires#dog-${dog.id}`;
+  return null;
+}
+
 // ─── Puppy helpers ────────────────────────────────────────────────────────────
 
 export type PqPuppyStanding =
@@ -362,6 +392,15 @@ export function pqPuppyStanding(puppy: PqDog): PqPuppyStanding {
   return "unknown";
 }
 
+/**
+ * True when the record lists this puppy as Available — the only puppies the
+ * Puppies page shows (Douglas, 2026-10-24). Narrower than pqPuppyOffered: a
+ * reserved puppy is spoken for, and shows on its litter's page, not there.
+ */
+export function pqPuppyAvailable(puppy: PqDog): boolean {
+  return pqPuppyStanding(puppy) === "available";
+}
+
 /** True unless the record says this puppy has gone home. */
 export function pqPuppyNotPlaced(puppy: PqDog): boolean {
   return pqPuppyStanding(puppy) !== "placed";
@@ -388,26 +427,27 @@ function monthsAgo(iso: string | null, now: Date): number {
 const CURRENT_WINDOW_MONTHS = 12;
 
 /**
- * Whelped within the window and still holding a puppy the record offers
- * (pqPuppyOffered), oldest litter first. The puppies pages are for puppies a
- * family can ask about (Douglas, 2026-10-24): a retained puppy is staying and
- * a placed one has gone, so a litter left with only those belongs to the
- * track record, not the current program.
+ * Whelped within the window and still holding a puppy listed Available
+ * (pqPuppyAvailable), oldest litter first. The Puppies page shows the
+ * Available puppies, litter by litter (Douglas, 2026-10-24); a litter with
+ * none left — reserved, retained or placed — belongs to the track record and
+ * shows there as a one-row card.
  */
 export function pqCurrentLitters(pq: PuppyQ, now = new Date()): PqLitter[] {
   return pq.litters
     .filter(
       (l) =>
         monthsAgo(l.birthdate, now) <= CURRENT_WINDOW_MONTHS &&
-        l.puppies.some(pqPuppyOffered),
+        l.puppies.some(pqPuppyAvailable),
     )
     .sort((a, b) => (a.birthdate ?? "").localeCompare(b.birthdate ?? ""));
 }
 
 /**
- * Puppies the record offers from current litters, oldest litter first —
- * the home page's Available Puppies. Each carries its litter so a card can
- * say where it comes from. Offered puppies first within a litter, by name.
+ * The Available puppies (pqPuppyAvailable) of current litters, oldest litter
+ * first, by name within a litter — the Available Puppies section on the home
+ * page and the Puppies page. Each carries its litter so the section can group
+ * them by it.
  */
 export function pqAvailablePuppies(
   pq: PuppyQ,
@@ -415,7 +455,7 @@ export function pqAvailablePuppies(
 ): { puppy: PqDog; litter: PqLitter }[] {
   return pqCurrentLitters(pq, now).flatMap((litter) =>
     [...litter.puppies]
-      .filter(pqPuppyOffered)
+      .filter(pqPuppyAvailable)
       .sort((a, b) => pqShortName(a).localeCompare(pqShortName(b)))
       .map((puppy) => ({ puppy, litter })),
   );
