@@ -174,7 +174,7 @@ export default async function Home() {
       )}
 
       {/* ── AVAILABLE PUPPIES — live from the record ─────────── */}
-      <AvailablePuppies />
+      <AvailablePuppies heading="Ready for the right home." />
 
       {/* ── PUPPYQ PROGRAM ──────────────────────────────────── */}
       <section className="bg-navy py-12 md:py-[72px] border-t border-white/12">

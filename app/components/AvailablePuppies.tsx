@@ -3,7 +3,7 @@ import Link from "next/link";
 import {
   getPuppyQ,
   pqAvailablePuppies,
-  pqLitterPairing,
+  pqLitterTitle,
   pqParentHref,
   pqPuppyPhoto,
   pqPuppyStanding,
@@ -56,15 +56,17 @@ function Parent({ role, dog, name, pq }: { role: string; dog: PqDog | null; name
  * the Puppies page, laid out as Legend Manor's is (Douglas, 2026-10-24).
  *
  * The puppies listed Available (pqAvailablePuppies), litter by litter, oldest
- * litter first. Each litter is headed by its dam × sire by call name, linked
- * to the litter's page, with a link to each parent's card; each puppy is a
+ * litter first. Each litter is headed by its theme name (pqLitterTitle),
+ * linked to the litter's page, with its dam and sire by call name, each
+ * linked to its card; each puppy is a
  * card with its photo from the media table (a placeholder when it has none),
  * name, colour, sex when the record holds it — null on most rows and never
  * guessed from a name — and status.
  */
 export default async function AvailablePuppies({
-  heading = "Ready for the right home.",
+  heading,
 }: {
+  /** A heading under the section label; the Puppies page shows none. */
   heading?: string;
 }) {
   const pq = await getPuppyQ();
@@ -77,12 +79,6 @@ export default async function AvailablePuppies({
     byLitter.set(litter.id, group);
   }
   const groups = [...byLitter.values()];
-  const intro =
-    groups.length === 0
-      ? "No puppies are available right now. Join the waitlist and we’ll reach out when the next litter arrives."
-      : groups.length === 1
-        ? `${pqLitterPairing(groups[0].litter)}, born ${fmtDate(groups[0].litter.birthdate)}.`
-        : `${groups.length} litters, oldest first.`;
 
   return (
     <section id="puppies" className="bg-white border-b border-line py-12 md:py-16">
@@ -91,10 +87,17 @@ export default async function AvailablePuppies({
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral-dark mb-2">
             Available Puppies{entries.length > 0 ? ` · ${entries.length}` : ""}
           </p>
-          <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
-            {heading}
-          </h2>
-          <p className="text-[0.95rem] text-muted leading-[1.65]">{intro}</p>
+          {heading ? (
+            <h2 className="font-heading font-bold text-[clamp(1.7rem,3vw,1.95rem)] text-navy mb-2.5">
+              {heading}
+            </h2>
+          ) : null}
+          {groups.length === 0 ? (
+            <p className="text-[0.95rem] text-muted leading-[1.65]">
+              No puppies are available right now. Join the waitlist and we’ll reach out when the
+              next litter arrives.
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-8">
@@ -106,7 +109,7 @@ export default async function AvailablePuppies({
                     href={`/litters/${litter.id}`}
                     className="font-heading font-bold text-[1.3rem] text-navy hover:text-coral-dark transition-colors"
                   >
-                    {pqLitterPairing(litter)}
+                    {pqLitterTitle(litter)}
                   </Link>
                   <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
                     <Parent role="Dam" dog={litter.dam} name={litter.damName} pq={pq} />

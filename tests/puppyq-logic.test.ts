@@ -18,6 +18,7 @@ import {
   pqPuppyOffered,
   pqAvailablePuppies,
   pqCurrentLitters,
+  pqLitterTitle,
   type PqDog,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -44,7 +45,7 @@ function dog(over: Partial<PqDog> & { id: string }): PqDog {
 
 function litter(id: string, dam_id: string | null, sire_id: string | null, whelp: string): PqLitter {
   return {
-    row: { id, name: null, sire_name: null, whelp_date: whelp, organization_id: "org", notes: null, dam_id, sire_id },
+    row: { id, name: null, sire_name: null, whelp_date: whelp, organization_id: "org", notes: null, dam_id, sire_id, theme: null, source: null },
     id,
     type: "solo",
     coProgram: null,
@@ -241,6 +242,25 @@ describe("pqAvailablePuppies — the home page's cards", () => {
   it("lists only the puppies listed Available, with their litter", () => {
     const names = pqAvailablePuppies(pq, now).map((e) => `${e.puppy.call_name}@${e.litter.id}`);
     expect(names).toEqual(["Ada@L6", "Max@L1"]);
+  });
+});
+
+describe("pqLitterTitle — a litter's heading on the Puppies page", () => {
+  const base = litter("L1", null, null, "2026-10-19");
+  const withRow = (row: Partial<PqLitter["row"]>): PqLitter => ({
+    ...base,
+    damName: "Lia",
+    sireName: "Gate",
+    row: { ...base.row, ...row },
+  });
+  it("uses the naming theme first", () => {
+    expect(pqLitterTitle(withRow({ theme: "Elf", name: "Other", source: "puppyq-app" }))).toBe("Elf");
+  });
+  it("uses the name a breeder typed in the app when no theme is set", () => {
+    expect(pqLitterTitle(withRow({ name: "The White Album", source: "puppyq-app" }))).toBe("The White Album");
+  });
+  it("ignores an imported litter's generated name, falling back to dam × sire", () => {
+    expect(pqLitterTitle(withRow({ name: "Legend Manor's Holly 2026-05-18", source: "alaa" }))).toBe("Lia × Gate");
   });
 });
 
