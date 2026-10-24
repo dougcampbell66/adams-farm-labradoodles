@@ -99,8 +99,8 @@ export default function Footer() {
             © {year} Adams Farm Labradoodles · Greensboro, NC
           </p>
           {/*
-            The platform credit, with the app's door under it (Douglas,
-            2026-10-24: "powered by PawsQ and login below that"), as Legend
+            The app's door above the platform credit (Douglas, 2026-10-24:
+            Log in, then "powered by PawsQ"), as Legend
             Manor's footer has it in its own palette. Only the brand name is
             the link, and the UTMs tell PawsQ which breeder site sent the
             visit. Log in stays quiet: the app under /app is for people who
@@ -109,6 +109,9 @@ export default function Footer() {
             proxied app.
           */}
           <div className="flex flex-col items-end gap-1 text-[0.75rem] text-cream/60">
+            <a href="/login" className="underline hover:text-cream transition-colors">
+              Log in
+            </a>
             <p>
               powered by{" "}
               <a
@@ -120,9 +123,6 @@ export default function Footer() {
                 PawsQ
               </a>
             </p>
-            <a href="/login" className="underline hover:text-cream transition-colors">
-              Log in
-            </a>
           </div>
         </div>
       </div>
