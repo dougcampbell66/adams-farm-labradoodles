@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   getPuppyQ,
   pqAvailablePuppies,
+  pqCoBreeders,
   pqLitterTitle,
   pqParentHref,
   pqPuppyPhoto,
@@ -111,6 +112,11 @@ export default async function AvailablePuppies({
                   >
                     {pqLitterTitle(litter)}
                   </Link>
+                  {pqCoBreeders(litter, pq).length > 0 ? (
+                    <p className="mt-0.5 text-[0.78rem] font-extrabold uppercase tracking-[0.08em] text-coral-dark">
+                      Co-bred with {pqCoBreeders(litter, pq).join(" and ")}
+                    </p>
+                  ) : null}
                   <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
                     <Parent role="Dam" dog={litter.dam} name={litter.damName} pq={pq} />
                     <Parent role="Sire" dog={litter.sire} name={litter.sireName} pq={pq} />

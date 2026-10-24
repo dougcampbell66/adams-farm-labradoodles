@@ -83,6 +83,13 @@ export interface PuppyQ {
    * ours but his right is.
    */
   breedingRightDogIds: Set<string>;
+  /**
+   * Every operation holding a breeding right on each dog, ours included —
+   * what says a litter is co-bred with a partner program (pqCoBreeders).
+   */
+  rightHoldersByDog: Record<string, string[]>;
+  /** Organization names by id, for naming a co-breeding program. */
+  orgNames: Record<string, string>;
   diagnostics: {
     keyKind: string;
     url: string | null;
@@ -132,6 +139,28 @@ export function pqLitterTitle(litter: PqLitter): string {
   const name = litter.row.source === "puppyq-app" ? litter.row.name?.trim() : null;
   if (name) return name;
   return pqLitterPairing(litter);
+}
+
+/**
+ * The partner programs a litter is co-bred with, by name (Douglas,
+ * 2026-10-24: Adams Farm and Legend Manor are both Douglas and Erika
+ * Campbell's, and each site says when a litter is the other's too). A
+ * program other than ours is a co-breeder when the litter is its own (a
+ * co-litter), or when it holds a breeding right on the dam or the sire —
+ * Gate's and Lia's rights are held by both. An outside stud's kennel is not
+ * a co-breeder: owning a parent is not holding a right in this record.
+ */
+export function pqCoBreeders(
+  litter: PqLitter,
+  pq: Pick<PuppyQ, "orgId" | "orgNames" | "rightHoldersByDog">,
+): string[] {
+  const ids = new Set<string>();
+  if (litter.row.organization_id) ids.add(litter.row.organization_id);
+  for (const id of [litter.row.dam_id, litter.row.sire_id]) {
+    if (id) for (const org of pq.rightHoldersByDog[id] ?? []) ids.add(org);
+  }
+  if (pq.orgId) ids.delete(pq.orgId);
+  return [...ids].map((id) => pq.orgNames[id]).filter((n): n is string => !!n);
 }
 
 /**
@@ -569,6 +598,8 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     allDogs: [],
     litters: [],
     breedingRightDogIds: new Set(),
+    rightHoldersByDog: {},
+    orgNames: {},
     diagnostics: {
       keyKind: supabaseKeyKind,
       url: supabaseUrl,
@@ -648,6 +679,15 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     allDogs,
     litters,
     breedingRightDogIds,
+    rightHoldersByDog: ((rightsRes.data ?? []) as { organization_id: string; dog_id: string }[]).reduce<
+      Record<string, string[]>
+    >((m, r) => {
+      (m[r.dog_id] ??= []).push(r.organization_id);
+      return m;
+    }, {}),
+    orgNames: Object.fromEntries(
+      org.candidates.filter((o) => o.name).map((o) => [o.id, o.name as string]),
+    ),
     diagnostics: {
       keyKind: supabaseKeyKind,
       url: supabaseUrl,
