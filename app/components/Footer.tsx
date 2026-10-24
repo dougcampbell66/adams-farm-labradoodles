@@ -81,18 +81,6 @@ export default function Footer() {
               Send us a message
             </Link>
           </p>
-          {/*
-            Sign in is last, deliberately quiet — same ruling as the Puppy
-            Therapy site's footer: the app under /app is for people who
-            already hold access (signing in cannot create an account), so its
-            door sits where those people will look for it without being sold
-            to anyone else.
-          */}
-          <p className="mt-1.5 text-[0.85rem] text-cream/75">
-            <Link href="/login" className="underline hover:text-cream transition-colors">
-              Sign in
-            </Link>
-          </p>
           <div className="mt-5">
             <Image
               src="/images/credentials/Adams-Farm-ALAA-Logo-2026.png"
@@ -111,23 +99,31 @@ export default function Footer() {
             © {year} Adams Farm Labradoodles · Greensboro, NC
           </p>
           {/*
-            The Q family attribution mark. Legend Manor carries the same wording
-            in its own palette. Only the brand name is the link — "powered by"
-            stays plain text — and the UTMs tell breederQ which breeder site sent
-            the visit. A plain <a>, not next/link: the target is off-site, so
-            there is no route to prefetch.
+            The app's door above the platform credit (Douglas, 2026-10-24:
+            Log in, then "powered by PawsQ"), as Legend
+            Manor's footer has it in its own palette. Only the brand name is
+            the link, and the UTMs tell PawsQ which breeder site sent the
+            visit. Log in stays quiet: the app under /app is for people who
+            already hold access (signing in cannot create an account). Plain
+            <a>s, not next/link — one target is off-site, the other is the
+            proxied app.
           */}
-          <p className="text-[0.75rem] text-cream/60">
-            powered by{" "}
-            <a
-              href="https://breederq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-coral hover:text-coral-dark transition-colors"
-            >
-              breederQ
+          <div className="flex flex-col items-end gap-1 text-[0.75rem] text-cream/60">
+            <a href="/login" className="underline hover:text-cream transition-colors">
+              Log in
             </a>
-          </p>
+            <p>
+              powered by{" "}
+              <a
+                href="https://pawsq.com/?utm_source=adamsfarmlabradoodles.com&utm_medium=referral&utm_campaign=powered-by"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-coral hover:text-coral-dark transition-colors"
+              >
+                PawsQ
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
