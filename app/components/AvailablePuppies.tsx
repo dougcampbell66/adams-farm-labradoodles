@@ -18,9 +18,9 @@ import {
 const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
   available: { label: "Available", cls: "bg-avail-bg text-avail-text" },
   reserved: { label: "Reserved", cls: "bg-coral text-navy" },
-  "in-program": { label: "In program", cls: "bg-avail-bg text-avail-text" },
+  "in-program": { label: "Active", cls: "bg-avail-bg text-avail-text" },
   retained: { label: "Retained", cls: "bg-white/12 text-cream/70" },
-  placed: { label: "Placed", cls: "bg-white/12 text-cream/70" },
+  placed: { label: "Adopted", cls: "bg-white/12 text-cream/70" },
   unknown: { label: "On record", cls: "bg-white/12 text-cream/70" },
 };
 
