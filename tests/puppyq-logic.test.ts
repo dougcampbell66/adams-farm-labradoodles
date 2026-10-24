@@ -20,6 +20,7 @@ import {
   pqCoBreeders,
   pqCurrentLitters,
   pqLitterTitle,
+  pqOwnLitters,
   type PqDog,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -290,6 +291,20 @@ describe("pqCoBreeders — the partner program a litter is co-bred with", () => 
   });
   it("names no one for our own litter with no shared parent", () => {
     expect(pqCoBreeders(withOrg("AF", "MACY", "KNOX"), pq)).toEqual([]);
+  });
+});
+
+describe("pqOwnLitters — the litters the site counts", () => {
+  const at = (id: string, org: string): PqLitter => {
+    const l = litter(id, null, null, "2026-08-19");
+    return { ...l, row: { ...l.row, organization_id: org } };
+  };
+  it("keeps only the litters registered to this breeder, not a partner's co-litter", () => {
+    const pq = { orgId: "AF", litters: [at("A", "AF"), at("B", "LM"), at("C", "AF")] };
+    expect(pqOwnLitters(pq).map((l) => l.id)).toEqual(["A", "C"]);
+  });
+  it("counts nothing when the breeder is not resolved", () => {
+    expect(pqOwnLitters({ orgId: null, litters: [at("A", "AF")] })).toEqual([]);
   });
 });
 

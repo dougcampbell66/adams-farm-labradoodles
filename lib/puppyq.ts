@@ -578,6 +578,17 @@ const BREEDING_RIGHT_COLS = "organization_id,dog_id";
  * is not ours, but Adams Farm holds the right to breed him, so the litter
  * belongs on this record too. (Legend Manor's site applies the same rule.)
  */
+/**
+ * The litters registered to this breeder: organization_id is the breeder's
+ * own. The counts on the site (litters, puppies, years) read these only — a
+ * co-litter registered to the partner is listed, but it is the partner's
+ * litter, not one of ours (Douglas, 2026-10-24).
+ */
+export function pqOwnLitters(pq: Pick<PuppyQ, "orgId" | "litters">): PqLitter[] {
+  if (!pq.orgId) return [];
+  return pq.litters.filter((l) => l.row.organization_id === pq.orgId);
+}
+
 export function pqLitterIsOurs(
   l: Pick<PqLitterRow, "organization_id" | "dam_id" | "sire_id">,
   orgId: string,
