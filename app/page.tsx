@@ -100,58 +100,40 @@ export default async function Home() {
   return (
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-navy overflow-visible">
-        <div className="max-w-[1160px] mx-auto px-6 grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10 md:gap-14 items-stretch">
-          <div className="flex flex-col justify-center pt-10 pb-8 md:py-16 md:min-h-[500px]">
-            <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
-              Australian Labradoodles
-            </p>
-            <h1 className="font-heading font-bold text-[clamp(2rem,4vw,2.9rem)] leading-[1.15] text-cream mb-5">
-              Puppies with a Purpose
-            </h1>
-            <p className="text-[1.05rem] text-cream/75 leading-[1.7] max-w-[440px] mb-7">
-              Every litter comes from fully health-tested parents and grows up
-              surrounded by family, before going to yours.
-            </p>
-            <Link
-              href="#puppies"
-              className="self-stretch sm:self-start text-center inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
-            >
-              See available puppies
-            </Link>
-          </div>
-
-          {/* Circular image — desktop/tablet: centered in the right column,
-              large enough (~520px) to bleed slightly above/below the hero.
-              z-10 lifts it over the next section; overflow-visible + the
-              sticky z-[100] nav mean the top tucks behind the nav cleanly. */}
-          <div className="hidden md:block relative">
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(520px,42vw)] h-[min(520px,42vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)] z-10">
-              <Image
-                src="/images/hero-portrait.png"
-                alt="A girl holding an Adams Farm Labradoodle puppy"
-                fill
-                priority
-                sizes="520px"
-                className="object-cover"
-                style={{ objectPosition: "center top" }}
-              />
-            </div>
-          </div>
+      {/* Legend Manor's hero, the standard breeder site (pawsq
+          DECISIONS-2026-10-24 S1): the words on the left, the photo on the
+          right as a square filling its half edge to edge. On a phone the
+          photo sits full width under the words. Paisley's photo is a close
+          crop of her portrait, face, bow and chest. */}
+      <section className="grid bg-navy md:grid-cols-[1.15fr_0.85fr]">
+        <div className="flex flex-col justify-center px-6 py-12 md:px-[6vw] md:py-16 lg:py-24">
+          <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
+            Australian Labradoodles
+          </p>
+          <h1 className="font-heading font-bold text-[clamp(2rem,4vw,2.9rem)] leading-[1.15] text-cream mb-5">
+            Puppies with a Purpose
+          </h1>
+          <p className="text-[1.05rem] text-cream/75 leading-[1.7] max-w-[440px] mb-7">
+            Every litter comes from fully health-tested parents and grows up
+            surrounded by family, before going to yours.
+          </p>
+          <Link
+            href="#puppies"
+            className="self-stretch sm:self-start text-center inline-block bg-coral text-navy font-extrabold py-[14px] px-7 rounded-lg text-[0.95rem] hover:bg-coral-dark transition-colors"
+          >
+            See available puppies
+          </Link>
         </div>
 
-        {/* Circular image — mobile: centered below the text */}
-        <div className="md:hidden flex justify-center pb-10">
-          <div className="relative w-[min(220px,60vw)] h-[min(220px,60vw)] rounded-full overflow-hidden ring-[6px] ring-coral shadow-[0_18px_50px_rgba(0,0,0,0.4)]">
-            <Image
-              src="/images/hero-portrait.png"
-              alt="A girl holding an Adams Farm Labradoodle puppy"
-              fill
-              sizes="220px"
-              className="object-cover"
-              style={{ objectPosition: "center top" }}
-            />
-          </div>
+        <div className="relative aspect-square w-full border-t border-coral/25 md:border-l md:border-t-0">
+          <Image
+            src="/images/paisley-hero.jpg"
+            alt="Paisley, an Adams Farm Australian Labradoodle puppy, in a lilac bow"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 45vw"
+            className="object-cover"
+          />
         </div>
       </section>
 
