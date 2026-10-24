@@ -534,15 +534,19 @@ async function resolveOrg(
   errors: string[],
 ): Promise<{ id: string | null; name: string | null; candidates: PqOrg[] }> {
   const override = process.env.ADAMS_FARM_ORG_ID;
-  if (override) return { id: override, name: "(from ADAMS_FARM_ORG_ID)", candidates: [] };
 
   const { data, error } = await supabase.from("organizations").select("id,name,kennel_name");
   if (error) {
     errors.push(`organizations: ${error.message}`);
-    return { id: null, name: null, candidates: [] };
+    return override
+      ? { id: override, name: "(from ADAMS_FARM_ORG_ID)", candidates: [] }
+      : { id: null, name: null, candidates: [] };
   }
 
   const orgs = (data ?? []) as PqOrg[];
+  // The override pins our id; the names are still read, so a partner program
+  // can be named — a co-litter's label and "Co-bred with" need them.
+  if (override) return { id: override, name: "(from ADAMS_FARM_ORG_ID)", candidates: orgs };
   const norm = (s: string | null) => (s ?? "").trim().toLowerCase();
 
   const match =
