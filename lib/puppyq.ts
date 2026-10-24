@@ -44,6 +44,10 @@ export interface PqLitterRow {
   notes: string | null;
   dam_id: string | null;
   sire_id: string | null;
+  /** The litter's naming theme (pawsq migration 62), as the breeder typed it. */
+  theme: string | null;
+  /** Provenance: 'puppyq-app' when the breeder added the litter in the app. */
+  source: string | null;
 }
 
 export interface PqOrg {
@@ -113,6 +117,21 @@ export function pqShortName(dog: PqDog): string {
   // Puppies page names parents by call name ("Legend Manor Prancer" → "Prancer").
   const kennel = reg.match(/^(?:adams\s+farm|legend\s+manor)\s+(.+)$/i);
   return kennel ? kennel[1] : reg;
+}
+
+/**
+ * A litter's own name for its heading on the Puppies page (Douglas,
+ * 2026-10-24): its naming theme; else the litter name the breeder typed when
+ * adding it in the app — an imported litter's name is the import's own label,
+ * not a name anyone gave it, so only an app-added litter's (source exactly
+ * 'puppyq-app') counts; else, with neither recorded, "Lia × Gate".
+ */
+export function pqLitterTitle(litter: PqLitter): string {
+  const theme = litter.row.theme?.trim();
+  if (theme) return theme;
+  const name = litter.row.source === "puppyq-app" ? litter.row.name?.trim() : null;
+  if (name) return name;
+  return pqLitterPairing(litter);
 }
 
 /**
@@ -514,7 +533,7 @@ async function resolveOrg(
 
 const DOG_COLS =
   "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id";
-const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id";
+const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id,theme,source";
 const BREEDING_RIGHT_COLS = "organization_id,dog_id";
 
 /**

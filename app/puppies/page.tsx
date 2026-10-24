@@ -36,7 +36,7 @@ export default async function PuppiesPage() {
         intro="Adams Farm litters — raised underfoot, loved from day one."
       />
 
-      <AvailablePuppies heading="Available now, litter by litter." />
+      <AvailablePuppies />
 
       {past.length > 0 && (
         <section className="py-12 md:py-16 px-6 bg-cream">
