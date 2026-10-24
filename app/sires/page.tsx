@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/app/components/PageHero";
 import BreedingTier from "@/app/components/BreedingTier";
-import { getPuppyQ, pqBreedingLines, type PqParentEntry } from "@/lib/puppyq";
+import { getPuppyQ, pqBreedingLines, pqOwnLitters, type PqParentEntry } from "@/lib/puppyq";
 
 export const metadata: Metadata = {
   title: "Sires",
@@ -56,7 +56,9 @@ export default async function SiresPage() {
   // Adams Farm record — our own studs and hired ones alike.
   const { sires } = pqBreedingLines(pq);
   const total = sires.producing.length + sires.retired.length + sires.nameOnly.length;
-  const totalPuppies = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
+  // Only the litters registered to Adams Farm count (pqOwnLitters).
+  const own = pqOwnLitters(pq);
+  const totalPuppies = own.reduce((n, l) => n + l.puppies.length, 0);
 
   return (
     <main>
@@ -67,8 +69,8 @@ export default async function SiresPage() {
           total > 0
             ? `Every sire here has fathered a litter on the Adams Farm record — ${total} ${
                 total === 1 ? "father" : "fathers"
-              } across ${pq.litters.length} ${
-                pq.litters.length === 1 ? "litter" : "litters"
+              } across ${own.length} ${
+                own.length === 1 ? "litter" : "litters"
               } and ${totalPuppies} puppies.`
             : "The fathers behind Adams Farm — every sire of a litter on our record."
         }

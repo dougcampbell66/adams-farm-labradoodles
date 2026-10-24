@@ -6,6 +6,7 @@ import {
   pqLittersByYear,
   pqCurrentLitters,
   pqName,
+  pqOwnLitters,
   type PqLitter,
 } from "@/lib/puppyq";
 
@@ -66,8 +67,11 @@ export default async function OurLittersPage() {
   const currentIds = new Set(pqCurrentLitters(pq).map((l) => l.id));
   const { litters } = pq;
 
-  const totalPuppies = litters.reduce((n, l) => n + l.puppies.length, 0);
-  const years = groups.map((g) => g.year).filter(Boolean);
+  // The counts read only the litters registered to Adams Farm (pqOwnLitters);
+  // the list below still shows the co-litters too.
+  const own = pqOwnLitters(pq);
+  const totalPuppies = own.reduce((n, l) => n + l.puppies.length, 0);
+  const years = own.map((l) => l.year).filter((y): y is number => !!y);
   const firstYear = years.length ? Math.min(...years) : null;
   const latestYear = years.length ? Math.max(...years) : null;
 
@@ -76,13 +80,13 @@ export default async function OurLittersPage() {
       <PageHero
         eyebrow="Litter Registry · Live"
         title={
-          litters.length > 0
-            ? `${litters.length} litter${litters.length !== 1 ? "s" : ""}${firstYear ? `, ${firstYear}–${latestYear}` : ""}`
+          own.length > 0
+            ? `${own.length} litter${own.length !== 1 ? "s" : ""}${firstYear ? `, ${firstYear}–${latestYear}` : ""}`
             : "Our Litters"
         }
         intro={
-          litters.length > 0
-            ? `${totalPuppies} puppies placed across ${litters.length} litter${litters.length !== 1 ? "s" : ""} — every pairing Adams Farm has bred, including co-litters with partner programs.`
+          own.length > 0
+            ? `${totalPuppies} puppies across ${own.length} litter${own.length !== 1 ? "s" : ""} registered to Adams Farm. Co-litters with partner programs are listed too.`
             : "Every litter Adams Farm has bred — read live from the PuppyQ record."
         }
       />

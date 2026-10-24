@@ -3,7 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import PuppyQCards from "./components/PuppyQCards";
 import AvailablePuppies from "./components/AvailablePuppies";
-import { getPuppyQ } from "@/lib/puppyq";
+import { getPuppyQ, pqOwnLitters } from "@/lib/puppyq";
 
 // The litter and puppy counts are read from the same PuppyQ record /litters
 // and /dams use, so the home page can't drift away from them again. Same
@@ -82,8 +82,10 @@ const faqs = [
 
 export default async function Home() {
   const pq = await getPuppyQ();
-  const litterCount = pq.litters.length;
-  const puppyCount = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
+  // Only the litters registered to Adams Farm count (pqOwnLitters).
+  const own = pqOwnLitters(pq);
+  const litterCount = own.length;
+  const puppyCount = own.reduce((n, l) => n + l.puppies.length, 0);
 
   // With the record unreadable the counts would both be zero, and "0 Litters"
   // over the hero is worse than no bar at all — so the whole strip drops out,

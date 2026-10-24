@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/app/components/PageHero";
 import BreedingTier from "@/app/components/BreedingTier";
-import { getPuppyQ, pqBreedingLines } from "@/lib/puppyq";
+import { getPuppyQ, pqBreedingLines, pqOwnLitters } from "@/lib/puppyq";
 
 export const metadata: Metadata = {
   title: "Dams",
@@ -19,7 +19,9 @@ export default async function DamsPage() {
   // Adams Farm record. Prospects wait for their first litter.
   const { dams } = pqBreedingLines(pq);
   const total = dams.producing.length + dams.retired.length;
-  const totalPuppies = pq.litters.reduce((n, l) => n + l.puppies.length, 0);
+  // Only the litters registered to Adams Farm count (pqOwnLitters).
+  const own = pqOwnLitters(pq);
+  const totalPuppies = own.reduce((n, l) => n + l.puppies.length, 0);
 
   return (
     <main>
@@ -30,8 +32,8 @@ export default async function DamsPage() {
           total > 0
             ? `Every dam here has whelped a litter on the Adams Farm record — ${total} ${
                 total === 1 ? "mother" : "mothers"
-              } across ${pq.litters.length} ${
-                pq.litters.length === 1 ? "litter" : "litters"
+              } across ${own.length} ${
+                own.length === 1 ? "litter" : "litters"
               } and ${totalPuppies} puppies.`
             : "The mothers behind Adams Farm — every dam who has whelped a litter on our record."
         }
