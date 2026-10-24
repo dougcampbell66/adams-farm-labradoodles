@@ -103,8 +103,10 @@ export default async function Home() {
       {/* Legend Manor's hero, the standard breeder site (pawsq
           DECISIONS-2026-10-24 S1): the words on the left, the photo on the
           right as a square filling its half edge to edge. On a phone the
-          photo sits full width under the words. Paisley's photo is a close
-          crop of her portrait, face, bow and chest. */}
+          photo sits full width under the words. Paisley's photo is a square
+          crop of her portrait that keeps her whole, bow to paws, and the
+          woven basket she is sitting on (Douglas, 2026-10-24: "zoom out a
+          bit so that you see the puppy and the box"). */}
       <section className="grid bg-navy md:grid-cols-[1.15fr_0.85fr]">
         <div className="flex flex-col justify-center px-6 py-12 md:px-[6vw] md:py-16 lg:py-24">
           <p className="text-[0.75rem] font-extrabold tracking-[0.14em] uppercase text-coral mb-3">
