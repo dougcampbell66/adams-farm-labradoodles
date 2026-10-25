@@ -144,7 +144,7 @@ export default async function AvailablePuppies({
                   const s = STANDING[pqPuppyStanding(puppy)];
                   return (
                     <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
-                      <div className="relative aspect-[3/4] w-full bg-photo-placeholder">
+                      <div className="relative aspect-[10/11] w-full bg-photo-placeholder">
                         {photo ? (
                           <Image
                             src={photo}
