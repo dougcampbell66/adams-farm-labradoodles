@@ -196,8 +196,9 @@ ruling, made on both sites.
 - `/litters/[id]` shows every puppy with its photo and status.
 - Puppy grids: 1 column on a phone, 3 on a tablet, 4 on a computer.
 - Puppy and dog card photos are 3:4 on every breeder site (P11):
-  `CardPhoto` fills the card, or shows a wide shot whole on the site's
-  background; the choice is `cardPhotoMode` in `lib/card-photo.ts`.
+  `CardPhoto` fills the card only when the photo is already close to 3:4
+  and otherwise shows it whole on the site's background, so no photo is
+  cropped by hand; the choice is `cardPhotoMode` in `lib/card-photo.ts`.
 
 ## Conventions
 

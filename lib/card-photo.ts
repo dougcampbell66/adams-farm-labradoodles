@@ -11,7 +11,11 @@
 //          above and below in the site's own background colour. A newborn
 //          photographed lying down is a wide shot, and a 3:4 crop cuts it off.
 //
-// The rule today reads only the photo's shape: wider than tall → fit. The
+// The rule today reads only the photo's shape. Douglas, 2026-10-25: a band of
+// background is fine, and the point is that nobody resizes or crops a photo by
+// hand before uploading it. So a photo is filled only when it is already close
+// to 3:4 — when filling would cut away no more than CARD_FILL_MAX_LOSS of it —
+// and shown whole otherwise: wide newborn shots, squares, very tall portraits. The
 // inputs already have room for what the photo-intake work will add — the
 // focal box pawsq migration 78 stores on `media` (focal_x/y/w/h, nothing reads
 // it yet) and a per-photo manual choice — so that work changes this function
@@ -43,8 +47,18 @@ export const CARD_FILL_POSITION = "50% 40%";
  */
 export const CARD_IMAGE_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 300px";
 
+/** The most of a photo that filling may cut away; past this it is shown whole. */
+export const CARD_FILL_MAX_LOSS = 0.12;
+
+/** The share of a width x height photo that a 3:4 fill would cut away. */
+export function cardFillLoss(width: number, height: number): number {
+  const card = CARD_ASPECT.width / CARD_ASPECT.height;
+  const photo = width / height;
+  return photo > card ? 1 - card / photo : 1 - photo / card;
+}
+
 export function cardPhotoMode({ width, height, override }: CardPhotoInput): CardPhotoMode {
   if (override) return override;
-  if (width && height && width > height) return "fit";
-  return "fill";
+  if (!width || !height) return "fill";
+  return cardFillLoss(width, height) <= CARD_FILL_MAX_LOSS ? "fill" : "fit";
 }
