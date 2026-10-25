@@ -1,29 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
+import PuppyCard from "@/app/components/PuppyCard";
 import {
   getPuppyQ,
   pqAvailablePuppies,
   pqCoBreeders,
   pqLitterTitle,
   pqParentHref,
-  pqPuppyPhoto,
-  pqPuppyStanding,
-  pqSex,
   pqShortName,
   type PqDog,
   type PqLitter,
-  type PqPuppyStanding,
   type PuppyQ,
 } from "@/lib/puppyq";
-
-const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
-  available: { label: "Available", cls: "bg-avail-bg text-avail-text" },
-  reserved: { label: "Reserved", cls: "bg-coral text-navy" },
-  "in-program": { label: "Active", cls: "bg-avail-bg text-avail-text" },
-  retained: { label: "Retained", cls: "bg-white/12 text-cream/70" },
-  placed: { label: "Adopted", cls: "bg-white/12 text-cream/70" },
-  unknown: { label: "On record", cls: "bg-white/12 text-cream/70" },
-};
 
 function fmtDate(iso: string | null) {
   if (!iso) return null;
@@ -137,53 +124,9 @@ export default async function AvailablePuppies({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 p-5 sm:p-6">
-                {puppies.map((puppy) => {
-                  const name = pqShortName(puppy);
-                  const photo = pqPuppyPhoto(puppy);
-                  const sex = pqSex(puppy, pq.litters);
-                  const s = STANDING[pqPuppyStanding(puppy)];
-                  return (
-                    <div key={puppy.id} className="bg-navy rounded-xl overflow-hidden">
-                      <div className="relative aspect-[10/11] w-full bg-photo-placeholder">
-                        {photo ? (
-                          <Image
-                            src={photo}
-                            alt={name}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
-                            className="object-cover object-top"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
-                              Photo
-                              <br />
-                              coming soon
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2 p-3 sm:p-3.5">
-                        <span className="text-[0.85rem] font-extrabold text-cream">{name}</span>
-                        {puppy.color ? (
-                          <span className="text-[0.7rem] text-cream/70 -mt-1.5 capitalize">{puppy.color}</span>
-                        ) : null}
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          {sex && (
-                            <span className="text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold bg-white/12 text-cream">
-                              {sex}
-                            </span>
-                          )}
-                          <span
-                            className={`text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.07em] px-2 sm:px-2.5 py-[3px] rounded-full font-extrabold ${s.cls}`}
-                          >
-                            {s.label}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                {puppies.map((puppy) => (
+                <PuppyCard key={puppy.id} puppy={puppy} />
+              ))}
               </div>
             </div>
           ))}
