@@ -21,6 +21,7 @@ import {
   pqCurrentLitters,
   pqLitterTitle,
   pqOwnLitters,
+  pqByBirthOrder,
   type PqDog,
   type PqLitter,
 } from "@/lib/puppyq";
@@ -41,6 +42,7 @@ function dog(over: Partial<PqDog> & { id: string }): PqDog {
     sire_name: null,
     dam_name: null,
     litter_id: null,
+    birth_time: null,
     ...over,
   };
 }
@@ -291,6 +293,25 @@ describe("pqCoBreeders — the partner program a litter is co-bred with", () => 
   });
   it("names no one for our own litter with no shared parent", () => {
     expect(pqCoBreeders(withOrg("AF", "MACY", "KNOX"), pq)).toEqual([]);
+  });
+});
+
+describe("pqByBirthOrder — puppies in birth order", () => {
+  it("puts the firstborn first, then those with no time recorded by name", () => {
+    const pups = [
+      dog({ id: "1", call_name: "Walter", birth_time: "03:10:00" }),
+      dog({ id: "2", call_name: "Charlotte" }),
+      dog({ id: "3", call_name: "Buddy", birth_time: "00:25:00" }),
+      dog({ id: "4", call_name: "Amy" }),
+      dog({ id: "5", call_name: "Jovie", birth_time: "01:05:00" }),
+    ];
+    expect([...pups].sort(pqByBirthOrder).map((p) => p.call_name)).toEqual([
+      "Buddy",
+      "Jovie",
+      "Walter",
+      "Amy",
+      "Charlotte",
+    ]);
   });
 });
 
