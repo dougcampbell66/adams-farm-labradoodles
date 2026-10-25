@@ -1,4 +1,4 @@
-import Image from "next/image";
+import CardPhoto from "@/app/components/CardPhoto";
 import {
   pqLittersProduced,
   pqOffspring,
@@ -41,15 +41,9 @@ export default function ParentCard({
       id={`dog-${dog.id}`}
       className="flex scroll-mt-24 flex-col overflow-hidden rounded-[18px] border border-warm-border bg-white"
     >
-      <div className="relative aspect-[4/5] w-full bg-photo-placeholder">
+      <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
-          <Image
-            src={photo}
-            alt={name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover object-top"
-          />
+          <CardPhoto src={photo} alt={name} />
         ) : (
           <div className="flex h-full w-full items-center justify-center px-4 text-center text-[0.75rem] font-bold leading-relaxed text-tan">
             Photo

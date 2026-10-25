@@ -195,8 +195,9 @@ ruling, made on both sites.
   `/sires` (`pqParentHref`) — this site has no page per dog.
 - `/litters/[id]` shows every puppy with its photo and status.
 - Puppy grids: 1 column on a phone, 3 on a tablet, 4 on a computer.
-- A puppy card's photo is 10:11 (height a tenth more than width),
-  filling the frame from the top — the same on every breeder site (P11).
+- Puppy and dog card photos are 3:4 on every breeder site (P11):
+  `CardPhoto` fills the card, or shows a wide shot whole on the site's
+  background; the choice is `cardPhotoMode` in `lib/card-photo.ts`.
 
 ## Conventions
 

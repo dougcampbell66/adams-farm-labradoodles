@@ -1,4 +1,4 @@
-import Image from "next/image";
+import CardPhoto from "@/app/components/CardPhoto";
 import {
   pqPuppyPhoto,
   pqPuppyStanding,
@@ -19,9 +19,9 @@ const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
 /**
  * The puppy card — one layout on every site PawsQ builds (pawsq
  * DECISIONS-2026-10-24 P11–P12), Legend Manor's LivePuppyCard in Adams
- * Farm's colours: the photo at 10:11, filling the frame from the top, with
- * the status on its top-right corner; then call name, then colour. Nothing
- * else. This site has no page per dog, so the card is not a link.
+ * Farm's colours: the photo at 3:4 (CardPhoto: filled, or shown whole when it
+ * is a wide shot), with the status on its top-right corner; then call name,
+ * then colour. Nothing else. This site has no page per dog, so the card is not a link.
  */
 export default function PuppyCard({ puppy }: { puppy: PqDog }) {
   const name = pqShortName(puppy);
@@ -29,15 +29,9 @@ export default function PuppyCard({ puppy }: { puppy: PqDog }) {
   const s = STANDING[pqPuppyStanding(puppy)];
   return (
     <div className="bg-navy rounded-xl overflow-hidden">
-      <div className="relative aspect-[10/11] w-full bg-photo-placeholder">
+      <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
-          <Image
-            src={photo}
-            alt={name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover object-top"
-          />
+          <CardPhoto src={photo} alt={name} />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
