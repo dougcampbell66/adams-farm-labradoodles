@@ -33,6 +33,8 @@ export interface PqDog {
   sire_name: string | null;
   dam_name: string | null;
   litter_id: string | null;
+  /** Time of day the puppy was born, as recorded in the app; null when not recorded. */
+  birth_time: string | null;
 }
 
 export interface PqLitterRow {
@@ -492,6 +494,22 @@ export function pqCurrentLitters(pq: PuppyQ, now = new Date()): PqLitter[] {
 }
 
 /**
+ * Birth order, firstborn first (Douglas, 2026-10-25; pawsq DECISIONS-2026-10-24
+ * P13): by the birth time recorded in the app, then by name. A puppy with no
+ * time recorded follows those with one. birth_time is a time of day with no
+ * date, so a whelp that runs past midnight would sort its late puppies first;
+ * none on record does, and the rule is "generally" birth order.
+ */
+export function pqByBirthOrder(a: PqDog, b: PqDog): number {
+  const at = a.birth_time ?? "";
+  const bt = b.birth_time ?? "";
+  if (at && bt && at !== bt) return at.localeCompare(bt);
+  if (at && !bt) return -1;
+  if (!at && bt) return 1;
+  return pqShortName(a).localeCompare(pqShortName(b));
+}
+
+/**
  * The Available puppies (pqPuppyAvailable) of current litters, oldest litter
  * first, by name within a litter — the Available Puppies section on the home
  * page and the Puppies page. Each carries its litter so the section can group
@@ -504,7 +522,7 @@ export function pqAvailablePuppies(
   return pqCurrentLitters(pq, now).flatMap((litter) =>
     [...litter.puppies]
       .filter(pqPuppyAvailable)
-      .sort((a, b) => pqShortName(a).localeCompare(pqShortName(b)))
+      .sort(pqByBirthOrder)
       .map((puppy) => ({ puppy, litter })),
   );
 }
@@ -565,7 +583,7 @@ async function resolveOrg(
 // ─── Main fetch ───────────────────────────────────────────────────────────────
 
 const DOG_COLS =
-  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id";
+  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id,birth_time";
 const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id,theme,source";
 const BREEDING_RIGHT_COLS = "organization_id,dog_id";
 

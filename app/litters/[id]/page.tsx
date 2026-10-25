@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import {
   getPuppyQ,
   pqCurrentLitters,
+  pqByBirthOrder,
   pqLitterPairing,
   pqParentHref,
   pqPuppyAvailable,
@@ -74,11 +75,9 @@ export default async function LitterPage({
 
   const isCurrent = pqCurrentLitters(pq).some((l) => l.id === litter.id);
   const available = litter.puppies.filter(pqPuppyAvailable).length;
-  // Available first, then by name — the order a family reads them in.
+  // Available first, then birth order (P13).
   const puppies = [...litter.puppies].sort(
-    (a, b) =>
-      Number(pqPuppyAvailable(b)) - Number(pqPuppyAvailable(a)) ||
-      pqShortName(a).localeCompare(pqShortName(b)),
+    (a, b) => Number(pqPuppyAvailable(b)) - Number(pqPuppyAvailable(a)) || pqByBirthOrder(a, b),
   );
 
   return (
