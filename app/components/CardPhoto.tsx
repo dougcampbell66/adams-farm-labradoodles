@@ -18,7 +18,8 @@ import {
  * zoom before the first paint: with a box, the card zooms to the puppy. A
  * photo with no stored size is measured on load and decided by the same
  * function. A zoomed photo asks the image service for as many more pixels
- * as it is zoomed, so the puppy is sharp.
+ * as it is zoomed, so the puppy is sharp — and is clipped to the frame here,
+ * so a zoom never spills over the name beneath whichever card holds it.
  */
 export default function CardPhoto({
   src,
@@ -29,22 +30,36 @@ export default function CardPhoto({
   alt: string;
   frame?: Pick<CardPhotoInput, "width" | "height" | "focal"> | null;
 }) {
-  const [measured, setMeasured] = useState<{ width: number; height: number } | null>(null);
-  const size = frame?.width && frame?.height ? { width: frame.width, height: frame.height } : measured;
+  const [measured, setMeasured] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+  const size =
+    frame?.width && frame?.height
+      ? { width: frame.width, height: frame.height }
+      : measured;
   const f = cardPhotoFrame({ ...(size ?? {}), focal: frame?.focal ?? null });
   return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      sizes={scaleSizes(CARD_IMAGE_SIZES, frameZoom(f))}
-      className={f.mode === "fit" ? "object-contain object-center" : "object-cover"}
-      style={{ objectPosition: f.objectPosition, transform: f.transform, transformOrigin: f.transformOrigin }}
-      onLoad={(e) => {
-        if (size) return;
-        const img = e.currentTarget;
-        setMeasured({ width: img.naturalWidth, height: img.naturalHeight });
-      }}
-    />
+    <div className="absolute inset-0 overflow-hidden">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={scaleSizes(CARD_IMAGE_SIZES, frameZoom(f))}
+        className={
+          f.mode === "fit" ? "object-contain object-center" : "object-cover"
+        }
+        style={{
+          objectPosition: f.objectPosition,
+          transform: f.transform,
+          transformOrigin: f.transformOrigin,
+        }}
+        onLoad={(e) => {
+          if (size) return;
+          const img = e.currentTarget;
+          setMeasured({ width: img.naturalWidth, height: img.naturalHeight });
+        }}
+      />
+    </div>
   );
 }
