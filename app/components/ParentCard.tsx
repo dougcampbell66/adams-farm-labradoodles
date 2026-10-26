@@ -7,6 +7,7 @@ import {
   pqRole,
   type PqDog,
   type PuppyQ,
+  pqPhotoFrame,
 } from "@/lib/puppyq";
 
 /**
@@ -43,7 +44,7 @@ export default function ParentCard({
     >
       <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
-          <CardPhoto src={photo} alt={name} />
+          <CardPhoto src={photo} alt={name} frame={pqPhotoFrame(dog)} />
         ) : (
           <div className="flex h-full w-full items-center justify-center px-4 text-center text-[0.75rem] font-bold leading-relaxed text-tan">
             Photo

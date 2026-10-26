@@ -5,6 +5,7 @@ import {
   pqShortName,
   type PqDog,
   type PqPuppyStanding,
+  pqPhotoFrame,
 } from "@/lib/puppyq";
 
 const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
@@ -31,7 +32,7 @@ export default function PuppyCard({ puppy }: { puppy: PqDog }) {
     <div className="bg-navy rounded-xl overflow-hidden">
       <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
-          <CardPhoto src={photo} alt={name} />
+          <CardPhoto src={photo} alt={name} frame={pqPhotoFrame(puppy)} />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <p className="text-tan text-[0.75rem] font-bold text-center px-4 leading-relaxed">
