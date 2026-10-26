@@ -13,6 +13,7 @@
 
 import { cache } from "react";
 import { getSupabase, supabaseKeyKind, supabaseUrl } from "@/lib/supabase";
+import { focalOf, pickCardPhoto, type CardPhotoInput } from "@/lib/card-photo";
 import { pqDogPhoto } from "@/lib/images-pq";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -187,7 +188,7 @@ function slugify(value: string): string {
 
 // ─── Media (the database's photos) ───────────────────────────────────────────
 
-/** One media row, as fetched for photo resolution. */
+/** One media row as fetched for photo resolution. */
 interface PqMediaRow {
   dog_id: string | null;
   bucket: string;
@@ -199,55 +200,84 @@ interface PqMediaRow {
    *  Anyone on the operation may upload; only a published row reaches
    *  a website. */
   published: boolean;
+  /** The day it was taken (read from the camera at upload), the breeder's
+   *  pin, the stored size and the focal box — pawsq migrations 78 and 93. */
+  taken_on: string | null;
+  pinned_at?: string | null;
+  width?: number | null;
+  height?: number | null;
+  focal_x?: number | null;
+  focal_y?: number | null;
+  focal_w?: number | null;
+  focal_h?: number | null;
 }
 
+/** How a dog's card photo is framed: its size and focal box, from the row. */
+export type PqPhotoFrame = Pick<CardPhotoInput, "width" | "height" | "focal">;
+
 /**
- * Best photo per dog from the media table — the same Supabase Storage rows
- * Legend Manor's site reads, so one upload (through that site's dashboard)
- * shows on both. Rebuilt on every fetch; module-level so the synchronous
- * pqPuppyPhoto() call sites in server components stay simple.
+ * Card photo per dog, resolved from the media table. Populated by
+ * fetchMediaPhotoMap() during each data fetch (module-level so the sync
+ * call sites in server components stay simple; repopulated on every fetch,
+ * so it can never outlive an ISR pass by more than one render).
  */
 let mediaPhotoByDogId: Record<string, string> = {};
+let mediaFrameByDogId: Record<string, PqPhotoFrame> = {};
 
+/** Public-bucket URL for a stored object. */
 function storageUrl(bucket: string, path: string): string {
   return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
 }
 
+const MEDIA_COLUMNS = "dog_id,bucket,storage_path,kind,label,sort,published,taken_on";
+const FRAME_COLUMNS = "pinned_at,width,height,focal_x,focal_y,focal_w,focal_h";
+
 /**
- * Preference mirrors Legend Manor's reader: portraits before gallery shots,
- * then the highest label (numeric-aware, so "molly-8wk" < "molly-10wk" and
- * the latest age wins). On any error the map is emptied and puppies render
- * without photos — visible, never papered over.
+ * Fetch media rows and rebuild the per-dog card-photo map, by the rule every
+ * PawsQ site shares (lib/card-photo.ts pickCardPhoto, Douglas 2026-10-25):
+ * the photo the breeder pinned, else the newest published one by the day it
+ * was taken. Older rows carry no date, and among them this site's former
+ * order stands: portraits before gallery shots, then the latest label.
+ * The pin and size columns arrive with pawsq migration 93; on a database
+ * without them (an undefined column, 42703) the rest is read alone. On any
+ * other error the map is left empty and dogs render without photos —
+ * deliberately visible, never papered over.
  */
 async function fetchMediaPhotoMap(
   supabase: NonNullable<ReturnType<typeof getSupabase>>,
 ): Promise<string | null> {
-  const { data, error } = await supabase
-    .from("media")
-    .select("dog_id,bucket,storage_path,kind,label,sort,published")
-    .eq("published", true);
+  const read = (cols: string) => supabase.from("media").select(cols).eq("published", true);
+  let { data, error } = await read(`${MEDIA_COLUMNS},${FRAME_COLUMNS}`);
+  if (error?.code === "42703") ({ data, error } = await read(MEDIA_COLUMNS));
   if (error || !data) {
     mediaPhotoByDogId = {};
+    mediaFrameByDogId = {};
     return error ? `media: ${error.message}` : null;
   }
   const score = (m: PqMediaRow) => (m.kind === "portrait" ? 0 : 1);
-  const best: Record<string, PqMediaRow> = {};
+  const tieBreak = (a: PqMediaRow, b: PqMediaRow) =>
+    score(a) - score(b) || (b.label ?? "").localeCompare(a.label ?? "", undefined, { numeric: true });
+  const byDog: Record<string, PqMediaRow[]> = {};
   for (const row of data as unknown as PqMediaRow[]) {
     if (!row.dog_id) continue;
-    const cur = best[row.dog_id];
-    if (
-      !cur ||
-      score(row) < score(cur) ||
-      (score(row) === score(cur) &&
-        (row.label ?? "").localeCompare(cur.label ?? "", undefined, { numeric: true }) > 0)
-    ) {
-      best[row.dog_id] = row;
-    }
+    (byDog[row.dog_id] ??= []).push(row);
   }
-  mediaPhotoByDogId = Object.fromEntries(
-    Object.entries(best).map(([id, m]) => [id, storageUrl(m.bucket, m.storage_path)]),
-  );
+  const photos: Record<string, string> = {};
+  const frames: Record<string, PqPhotoFrame> = {};
+  for (const [id, rows] of Object.entries(byDog)) {
+    const m = pickCardPhoto(rows, tieBreak);
+    if (!m) continue;
+    photos[id] = storageUrl(m.bucket, m.storage_path);
+    frames[id] = { width: m.width ?? null, height: m.height ?? null, focal: focalOf(m) };
+  }
+  mediaPhotoByDogId = photos;
+  mediaFrameByDogId = frames;
   return null;
+}
+
+/** The card photo's framing for a dog id — what CardPhoto zooms or fits by. */
+export function pqPhotoFrame(dogOrId: string | { id: string }): PqPhotoFrame | null {
+  return mediaFrameByDogId[typeof dogOrId === "string" ? dogOrId : dogOrId.id] ?? null;
 }
 
 /** The database's photo for a dog id, if the media table holds one. */
