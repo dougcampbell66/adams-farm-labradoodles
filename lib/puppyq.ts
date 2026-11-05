@@ -15,6 +15,7 @@ import { cache } from "react";
 import { getSupabase, supabaseKeyKind, supabaseUrl } from "@/lib/supabase";
 import { focalOf, pickCardPhoto, type CardPhotoInput } from "@/lib/card-photo";
 import { pqDogPhoto } from "@/lib/images-pq";
+import { buildDogUrlIndex, type DogUrlIndex } from "@/lib/dog-url";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -36,6 +37,8 @@ export interface PqDog {
   litter_id: string | null;
   /** Time of day the puppy was born, as recorded in the app; null when not recorded. */
   birth_time: string | null;
+  /** This dog's /dogs/ path segment (lib/dog-url.ts), set by getPuppyQ. */
+  url_segment?: string;
 }
 
 export interface PqLitterRow {
@@ -77,6 +80,13 @@ export interface PuppyQ {
   orgId: string | null;
   dogs: PqDog[];
   allDogs: PqDog[];
+  /** Every dog's public address (pawsq DECISIONS-2026-11-05 R5), for /dogs/[id]. */
+  dogUrls: DogUrlIndex;
+  /**
+   * The dogs with a page on this site: our own, every puppy and parent of a
+   * litter on the Adams Farm record, and every dog we hold a breeding right on.
+   */
+  onRecordIds: Set<string>;
   litters: PqLitter[];
   /**
    * Dogs Adams Farm holds a recorded right to breed (pawsq `breeding_rights`,
@@ -429,19 +439,21 @@ export function pqBreedingLines(pq: PuppyQ) {
 }
 
 /**
- * Where a litter's parent is on this site: its card on /dams or /sires, which
- * carries the id `dog-<id>`. This site has no page per dog, so the card is the
- * parent's page. Null when the dog is on neither — a parent the record knows
- * only by name, or one whose litters are not on the Adams Farm record.
+ * A dog's own page on this site (pawsq DECISIONS-2026-11-05 R4–R5):
+ * /dogs/<registered-name>-MM-DD-YYYY, else /dogs/<id>. Null for a dog that is
+ * not on the Adams Farm record — it has no page here.
+ */
+export function pqDogHref(dog: PqDog | null, pq: Pick<PuppyQ, "onRecordIds">): string | null {
+  if (!dog || !pq.onRecordIds.has(dog.id)) return null;
+  return `/dogs/${dog.url_segment ?? dog.id}`;
+}
+
+/**
+ * Where a litter's parent is on this site: its own page (R4). Null when the
+ * record knows the parent only by name, or the dog is not on this record.
  */
 export function pqParentHref(dog: PqDog | null, pq: PuppyQ): string | null {
-  if (!dog) return null;
-  const { dams, sires } = pqBreedingLines(pq);
-  const listed = (lines: typeof dams) =>
-    [...lines.producing, ...lines.retired].some((e) => e.dog?.id === dog.id);
-  if (listed(dams)) return `/dams#dog-${dog.id}`;
-  if (listed(sires)) return `/sires#dog-${dog.id}`;
-  return null;
+  return pqDogHref(dog, pq);
 }
 
 // ─── Puppy helpers ────────────────────────────────────────────────────────────
@@ -659,6 +671,8 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     orgId: null,
     dogs: [],
     allDogs: [],
+    dogUrls: buildDogUrlIndex([]),
+    onRecordIds: new Set(),
     litters: [],
     breedingRightDogIds: new Set(),
     rightHoldersByDog: {},
@@ -700,6 +714,10 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
   if (mediaError) errors.push(mediaError);
 
   const allDogs = (dogsRes.data ?? []) as unknown as PqDog[];
+  // Each dog's address, worked out over every dog — the same addresses Legend
+  // Manor gives — so that two which would share one both keep their ids (R5).
+  const dogUrls = buildDogUrlIndex(allDogs);
+  for (const d of allDogs) d.url_segment = dogUrls.segmentById.get(d.id) ?? d.id;
   const litterRows = (littersRes.data ?? []) as unknown as PqLitterRow[];
 
   const orgId = org.id;
@@ -736,10 +754,19 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     })
     .sort((a, b) => (b.birthdate ?? "").localeCompare(a.birthdate ?? ""));
 
+  const onRecordIds = new Set<string>([...ours, ...breedingRightDogIds]);
+  for (const l of litters) {
+    if (l.dam) onRecordIds.add(l.dam.id);
+    if (l.sire) onRecordIds.add(l.sire.id);
+    for (const p of l.puppies) onRecordIds.add(p.id);
+  }
+
   return {
     orgId,
     dogs,
     allDogs,
+    dogUrls,
+    onRecordIds,
     litters,
     breedingRightDogIds,
     rightHoldersByDog: ((rightsRes.data ?? []) as { organization_id: string; dog_id: string }[]).reduce<

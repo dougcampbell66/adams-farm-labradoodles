@@ -7,6 +7,7 @@
 // scripts/puppyq-smoke.mjs.
 
 import { describe, it, expect } from "vitest";
+import { buildDogUrlIndex } from "@/lib/dog-url";
 import {
   pqName,
   pqShortName,
@@ -137,6 +138,8 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       withParents(litter("L3", "H", null, "2026-05-18"), holly, null, "Tarheel's Knox"),
     ],
     breedingRightDogIds: new Set<string>(),
+    dogUrls: buildDogUrlIndex([]),
+    onRecordIds: new Set<string>(),
     rightHoldersByDog: {},
     orgNames: {},
     diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 4, litterRows: 3, errors: [] },
@@ -172,6 +175,8 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       allDogs: [...pq.allDogs, gate],
       litters: [...pq.litters, withParents(litter("L4", "A", "G", "2026-08-19"), macy, gate)],
       breedingRightDogIds: new Set(["G"]),
+      dogUrls: buildDogUrlIndex([]),
+      onRecordIds: new Set<string>(),
       rightHoldersByDog: {},
       orgNames: {},
     };
@@ -241,6 +246,8 @@ describe("pqAvailablePuppies — the home page's cards", () => {
       withPups(litter("L6", "A", "B", "2026-06-10"), [pup("p8", "L6", "available", "Ada")]),
     ],
     breedingRightDogIds: new Set<string>(),
+    dogUrls: buildDogUrlIndex([]),
+    onRecordIds: new Set<string>(),
     rightHoldersByDog: {},
     orgNames: {},
     diagnostics: { keyKind: "secret", url: null, orgId: "org", orgName: null, dogRows: 0, litterRows: 6, errors: [] },

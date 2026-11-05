@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CardPhoto from "@/app/components/CardPhoto";
 import {
   pqPuppyPhoto,
@@ -22,14 +23,15 @@ const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
  * DECISIONS-2026-10-24 P11–P12), Legend Manor's LivePuppyCard in Adams
  * Farm's colours: the photo at 3:4 (CardPhoto: filled, or shown whole when it
  * is a wide shot), with the status on its top-right corner; then call name,
- * then colour. Nothing else. This site has no page per dog, so the card is not a link.
+ * then colour. Nothing else. With an href (pqDogHref) the card opens the
+ * puppy's own page (pawsq DECISIONS-2026-11-05 R4).
  */
-export default function PuppyCard({ puppy }: { puppy: PqDog }) {
+export default function PuppyCard({ puppy, href }: { puppy: PqDog; href?: string | null }) {
   const name = pqShortName(puppy);
   const photo = pqPuppyPhoto(puppy);
   const s = STANDING[pqPuppyStanding(puppy)];
-  return (
-    <div className="bg-navy rounded-xl overflow-hidden">
+  const card = (
+    <div className="bg-navy rounded-xl overflow-hidden h-full">
       <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
           <CardPhoto src={photo} alt={name} frame={pqPhotoFrame(puppy)} />
@@ -55,5 +57,12 @@ export default function PuppyCard({ puppy }: { puppy: PqDog }) {
         ) : null}
       </div>
     </div>
+  );
+  return href ? (
+    <Link href={href} className="block rounded-xl transition-opacity hover:opacity-90" title={name}>
+      {card}
+    </Link>
+  ) : (
+    card
   );
 }
