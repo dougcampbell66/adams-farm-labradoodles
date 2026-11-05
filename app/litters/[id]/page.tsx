@@ -7,6 +7,7 @@ import {
   pqCurrentLitters,
   pqByBirthOrder,
   pqLitterPairing,
+  pqDogHref,
   pqParentHref,
   pqPuppyAvailable,
   pqShortName,
@@ -59,9 +60,8 @@ function Parent({ role, dog, name, pq }: { role: string; dog: PqDog | null; name
 
 /**
  * One litter: every puppy with its photo and status (Douglas, 2026-10-24),
- * under its dam × sire by call name, each parent linked to its card. The
- * Puppies page links here from each litter; this site has no page per dog,
- * so a puppy is a card, not a link.
+ * under its dam × sire by call name. Each parent and each puppy links to its
+ * own page (pawsq DECISIONS-2026-11-05 R4).
  */
 export default async function LitterPage({
   params,
@@ -112,7 +112,7 @@ export default async function LitterPage({
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {puppies.map((puppy) => (
-                <PuppyCard key={puppy.id} puppy={puppy} />
+                <PuppyCard key={puppy.id} puppy={puppy} href={pqDogHref(puppy, pq)} />
               ))}
             </div>
           )}

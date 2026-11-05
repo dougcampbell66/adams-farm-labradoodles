@@ -1,5 +1,7 @@
+import Link from "next/link";
 import CardPhoto from "@/app/components/CardPhoto";
 import {
+  pqDogHref,
   pqLittersProduced,
   pqOffspring,
   pqPhoto,
@@ -35,12 +37,14 @@ export default function ParentCard({
   const offspring = pqOffspring(dog, pq.litters).length;
   const active = (dog.status ?? "").toLowerCase() === "active";
   const meta = [dog.breed, dog.color].filter(Boolean).join(" · ");
+  const href = pqDogHref(dog, pq);
 
   return (
-    // id: a litter's parent links here (pqParentHref) — this site has no page per dog.
+    // id kept so an old /dams#dog-<id> link still lands on the card; the
+    // card itself opens the dog's own page (R4).
     <div
       id={`dog-${dog.id}`}
-      className="flex scroll-mt-24 flex-col overflow-hidden rounded-[18px] border border-warm-border bg-white"
+      className="relative flex scroll-mt-24 flex-col overflow-hidden rounded-[18px] border border-warm-border bg-white"
     >
       <div className={`relative aspect-[3/4] w-full ${photo ? "bg-cream" : "bg-photo-placeholder"}`}>
         {photo ? (
@@ -70,7 +74,13 @@ export default function ParentCard({
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-heading font-semibold text-[1.05rem] leading-tight text-navy">
-          {name}
+          {href ? (
+            <Link href={href} className="after:absolute after:inset-0 hover:text-coral-dark">
+              {name}
+            </Link>
+          ) : (
+            name
+          )}
         </h3>
         {subtitle && (
           <p className="mt-1 text-[0.75rem] italic leading-snug text-navy/55">{subtitle}</p>

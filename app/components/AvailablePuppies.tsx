@@ -5,6 +5,7 @@ import {
   pqAvailablePuppies,
   pqCoBreeders,
   pqLitterTitle,
+  pqDogHref,
   pqParentHref,
   pqShortName,
   type PqDog,
@@ -125,7 +126,7 @@ export default async function AvailablePuppies({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 p-5 sm:p-6">
                 {puppies.map((puppy) => (
-                <PuppyCard key={puppy.id} puppy={puppy} />
+                <PuppyCard key={puppy.id} puppy={puppy} href={pqDogHref(puppy, pq)} />
               ))}
               </div>
             </div>
