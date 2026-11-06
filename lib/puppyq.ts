@@ -39,9 +39,6 @@ export interface PqDog {
   birth_time: string | null;
   /** This dog's /dogs/ path segment (lib/dog-url.ts), set by getPuppyQ. */
   url_segment?: string;
-  /** The dog-wide breeding dial's fallback (pawsq migration 42); a program's
-   *  own breeding right, when it has one, wins (pqBreedingRetired). */
-  breeding_status?: string | null;
 }
 
 export interface PqLitterRow {
@@ -370,18 +367,6 @@ export function pqOffspring(dog: PqDog, litters: PqLitter[]): PqDog[] {
 
 // ─── Breeding lines (Dams / Sires) ────────────────────────────────────────────
 
-/**
- * Statuses that mean a parent's breeding days here are over. Everything else
- * ('active', 'retained', 'reserved') is still in the program.
- *
- * Legend Manor splits its tiers on `status === 'active'` alone. That rule reads
- * wrong against the Adams Farm slice, where the record marks the dam of the
- * newest litter and the sire of four of five litters as 'retained': it would
- * empty the active tier and file the program's busiest sire under "retired",
- * while promoting a once-hired outside stud into it. Naming the finished
- * statuses instead keeps the same intent honest against the data we have.
- */
-const RETIRED_STATUSES = new Set(["retired", "placed", "transferred", "deceased"]);
 
 /**
  * One parent on the /dams or /sires page: the dog row when the record has one,
@@ -632,7 +617,7 @@ async function resolveOrg(
 // ─── Main fetch ───────────────────────────────────────────────────────────────
 
 const DOG_COLS =
-  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id,birth_time,breeding_status";
+  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id,birth_time";
 const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id,theme,source";
 const BREEDING_RIGHT_COLS = "organization_id,dog_id,status";
 
@@ -807,32 +792,28 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
 });
 
 /**
- * Whether a breeding dog is retired here — what the app's Dogs dial says
- * (Douglas, 2026-11-06: Silas read Active in the app and Retired on the site).
- * The program's own breeding right wins, as in the app; then the dog-wide
- * breeding status; then, for a dog with neither, the old reading of the
- * free-form status column (RETIRED_STATUSES).
+ * Whether a breeding dog is retired here — Adams Farm's own Breeding dial,
+ * the one the app's Dogs page sets (DECISIONS-2026-11-06 R8). A parent Adams
+ * Farm holds no breeding right on is not in its program today, so it files
+ * with the foundation and retired dogs. Nothing else is read: the dog-wide
+ * breeding_status is retired (pawsq migration 96), and a dog's Placement
+ * (dogs.status) says nothing about breeding.
  */
 export function pqBreedingRetired(dog: PqDog, pq: Pick<PuppyQ, "rightStatusByDog">): boolean {
-  const done = (v: string) => v === "retired" || v === "transferred";
   const right = pq.rightStatusByDog[dog.id];
-  if (right) return done(right);
-  const dial = (dog.breeding_status ?? "").toLowerCase().trim();
-  if (dial) return done(dial);
-  return RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
+  return !right || right === "retired" || right === "transferred";
 }
 
 /**
- * The word a breeding dog's badge shows: the program's own dial, else the
- * dog-wide breeding status — Active, Prospect, Retired, Transferred. Null for
- * a dog with neither, whose badge shows its own status.
+ * A dog's Breeding word here: Adams Farm's own dial — Active, Prospect,
+ * Retired, Transferred. Null when Adams Farm holds no right on the dog.
  */
 export function pqBreedingLabel(dog: PqDog, pq: Pick<PuppyQ, "rightStatusByDog">): string | null {
-  const v = (pq.rightStatusByDog[dog.id] ?? dog.breeding_status ?? "").toLowerCase().trim();
+  const v = (pq.rightStatusByDog[dog.id] ?? "").toLowerCase().trim();
   return v ? v.charAt(0).toUpperCase() + v.slice(1) : null;
 }
 
-/** A dog's status as the site shows it: "placed" reads as Adopted. */
+/** A dog's Placement as the site shows it: "placed" reads as Adopted. */
 export function pqStatusWord(status: string | null): string | null {
   const v = (status ?? "").toLowerCase().trim();
   if (!v) return null;

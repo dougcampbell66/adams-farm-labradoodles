@@ -9,6 +9,7 @@ import { resolveDogParam } from "@/lib/dog-url";
 import {
   getPuppyQ,
   pqBreedingLabel,
+  pqStatusWord,
   pqByBirthOrder,
   pqDogHref,
   pqLittersProduced,
@@ -166,6 +167,9 @@ export default async function DogPage({
                 <Row label="Sex" value={sex} />
                 <Row label="Breed" value={dog.breed} />
                 <Row label="Color" value={dog.color} />
+                {/* Two statuses, named (DECISIONS-2026-11-06 R8). */}
+                <Row label="Placement" value={pqStatusWord(dog.status)} />
+                <Row label="Breeding" value={pqBreedingLabel(dog, pq)} />
               </dl>
 
               <div className="mt-6 flex flex-wrap gap-10">
