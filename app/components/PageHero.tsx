@@ -2,9 +2,11 @@ type PageHeroProps = {
   eyebrow: string;
   title: string;
   intro?: string;
+  /** Anything under the intro, inside the hero — Our Dogs' section buttons. */
+  children?: React.ReactNode;
 };
 
-export default function PageHero({ eyebrow, title, intro }: PageHeroProps) {
+export default function PageHero({ eyebrow, title, intro, children }: PageHeroProps) {
   return (
     <div className="bg-navy py-12 md:py-16 px-6 border-b border-white/12">
       <div className="max-w-[1160px] mx-auto">
@@ -19,6 +21,7 @@ export default function PageHero({ eyebrow, title, intro }: PageHeroProps) {
             {intro}
           </p>
         )}
+        {children}
       </div>
     </div>
   );

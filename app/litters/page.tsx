@@ -50,11 +50,11 @@ function LitterCard({ litter, current }: { litter: PqLitter; current: boolean })
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-heading font-semibold text-[1.1rem] leading-snug text-navy">
           {/* The dam and sire each have their own page — link the pairing to both */}
-          <Link href="/dams" className="hover:text-coral-dark transition-colors">
+          <Link href="/dogs#dams" className="hover:text-coral-dark transition-colors">
             {litter.damName ?? "Unknown dam"}
           </Link>
           <span className="text-navy/40"> × </span>
-          <Link href="/sires" className="hover:text-coral-dark transition-colors">
+          <Link href="/dogs#sires" className="hover:text-coral-dark transition-colors">
             {litter.sireName ?? "Unknown sire"}
           </Link>
         </h3>

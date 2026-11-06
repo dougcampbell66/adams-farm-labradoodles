@@ -4,8 +4,7 @@ import Image from "next/image";
 const siteLinks = [
   { label: "Home", href: "/" },
   { label: "Puppies", href: "/puppies" },
-  { label: "Dams", href: "/dams" },
-  { label: "Sires", href: "/sires" },
+  { label: "Our Dogs", href: "/dogs" },
   { label: "Litters", href: "/litters" },
   { label: "Our program", href: "/our-program" },
   { label: "Guardians", href: "/guardians" },
@@ -16,8 +15,7 @@ const siteLinks = [
 const getAPuppyLinks = [
   { label: "See available puppies", href: "/puppies" },
   { label: "Join the waitlist", href: "/contact" },
-  { label: "Meet the dams", href: "/dams" },
-  { label: "Meet the sires", href: "/sires" },
+  { label: "Meet our dogs", href: "/dogs" },
   { label: "Our health guarantee", href: "/our-program" },
 ];
 
