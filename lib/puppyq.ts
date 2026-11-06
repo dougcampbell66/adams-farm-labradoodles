@@ -395,11 +395,11 @@ export interface PqParentEntry {
  * Farm record. Prospects wait for their first litter; nothing here is
  * aspirational.
  *
- * One deliberate difference from Legend Manor, which counts only litters its
- * own org owns: Adams Farm's record already scopes `pq.litters` to litters the
- * farm owns *or* co-bred, and /litters shows every one of them. Counting the
- * same set here keeps the two pages telling one story — the parents of a
- * co-litter show up, flagged as belonging to the partner program.
+ * Counted, as on Legend Manor, over the litters registered to Adams Farm
+ * only (pawsq DECISIONS-2026-11-06 R7). It used to count co-litters too,
+ * which put a partner program's dam — Legend Manor's Holly — on Adams Farm's
+ * Our Dogs. A partner's litter still shows on the Puppies page while it has
+ * an Available puppy; its parents are not ours.
  */
 export function pqBreedingLines(pq: PuppyQ) {
   // In the program: a dog of ours, or one we hold a breeding right on. A shared
@@ -410,6 +410,7 @@ export function pqBreedingLines(pq: PuppyQ) {
     const done = (dog: PqDog) => RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
     const m = new Map<string, PqParentEntry>();
     for (const l of pq.litters) {
+      if (l.row.organization_id !== pq.orgId) continue;
       const dog = side === "dam" ? l.dam : l.sire;
       const recordedName = side === "dam" ? l.damName : l.sireName;
       const key = dog ? dog.id : `name:${(recordedName ?? "?").toLowerCase()}`;
@@ -752,7 +753,10 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
         puppies: allDogs.filter((d) => d.litter_id === row.id),
       };
     })
-    .sort((a, b) => (b.birthdate ?? "").localeCompare(a.birthdate ?? ""));
+    .sort((a, b) => (b.birthdate ?? "").localeCompare(a.birthdate ?? ""))
+    // A partner program's litter shows here only while it has an Available
+    // puppy (pawsq DECISIONS-2026-11-06 R7); Adams Farm's own always show.
+    .filter((l) => l.row.organization_id === orgId || l.puppies.some(pqPuppyAvailable));
 
   const onRecordIds = new Set<string>([...ours, ...breedingRightDogIds]);
   for (const l of litters) {

@@ -134,8 +134,10 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
     litters: [
       withParents(litter("L1", "A", "B", "2026-02-04"), macy, silas),
       withParents(litter("L2", "W", "B", "2025-08-03"), winnie, silas),
-      // Co-litter: the dam belongs to a partner program, the sire is name-only.
-      withParents(litter("L3", "H", null, "2026-05-18"), holly, null, "Tarheel's Knox"),
+      // A partner program's litter (Legend Manor's Holly), registered to it.
+      { ...withParents(litter("L3", "H", null, "2026-05-18"), holly, null, "Tarheel's Knox"), row: { ...litter("L3", "H", null, "2026-05-18").row, organization_id: "other" } },
+      // Our own litter by a stud the record knows only by name.
+      withParents(litter("L5", "A", null, "2025-03-01"), macy, null, "Tarheel's Knox"),
     ],
     breedingRightDogIds: new Set<string>(),
     dogUrls: buildDogUrlIndex([]),
@@ -184,9 +186,10 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
     expect(gateEntry?.outside).toBe(false);
   });
 
-  it("flags a partner program's dam as outside", () => {
-    const hollyEntry = dams.producing.find((e) => e.name === "Holly");
-    expect(hollyEntry?.outside).toBe(true);
+  it("keeps a partner program's dam off Our Dogs (DECISIONS-2026-11-06 R7)", () => {
+    // Holly is Legend Manor's, and her litter is registered to Legend Manor.
+    const everyone = [...dams.producing, ...dams.retired, ...dams.nameOnly];
+    expect(everyone.map((e) => e.name)).not.toContain("Holly");
     expect(dams.producing.find((e) => e.name === "Macy")?.outside).toBe(false);
   });
   it("keeps a sire the record knows only by name in his own tier", () => {
