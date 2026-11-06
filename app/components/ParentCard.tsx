@@ -1,7 +1,9 @@
 import Link from "next/link";
 import CardPhoto from "@/app/components/CardPhoto";
 import {
+  pqBreedingLabel,
   pqDogHref,
+  pqStatusWord,
   pqLittersProduced,
   pqOffspring,
   pqPhoto,
@@ -35,7 +37,9 @@ export default function ParentCard({
   const photo = pqPhoto(dog);
   const litters = pqLittersProduced(dog, pq.litters).length;
   const offspring = pqOffspring(dog, pq.litters).length;
-  const active = (dog.status ?? "").toLowerCase() === "active";
+  // The breeding dial, as in the app (Active, Retired …); else its own status.
+  const badge = pqBreedingLabel(dog, pq) ?? pqStatusWord(dog.status);
+  const active = badge === "Active";
   const meta = [dog.breed, dog.color].filter(Boolean).join(" · ");
   const href = pqDogHref(dog, pq);
 
@@ -61,13 +65,13 @@ export default function ParentCard({
           {role}
         </span>
 
-        {dog.status && (
+        {badge && (
           <span
             className={`absolute right-0 top-0 px-2.5 py-[5px] text-[0.62rem] font-extrabold uppercase tracking-[0.08em] ${
               active ? "bg-avail-bg text-avail-text" : "bg-charcoal/80 text-cream"
             }`}
           >
-            {dog.status}
+            {badge}
           </span>
         )}
       </div>
