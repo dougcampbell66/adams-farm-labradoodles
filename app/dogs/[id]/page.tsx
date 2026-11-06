@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import CardPhoto from "@/app/components/CardPhoto";
 import LitterRow from "@/app/components/LitterRow";
+import PedigreeTree from "@/app/components/PedigreeTree";
 import PuppyCard from "@/app/components/PuppyCard";
 import { resolveDogParam } from "@/lib/dog-url";
 import {
@@ -180,6 +181,18 @@ export default async function DogPage({
               ) : null}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Pedigree, four generations — as on Legend Manor's dog pages. */}
+      <section className="bg-white px-6 py-12 md:py-16">
+        <div className="mx-auto max-w-[1160px]">
+          <h2 className="mb-2 font-heading text-[1.6rem] font-bold text-navy">Pedigree</h2>
+          <p className="mb-6 max-w-[620px] text-[0.9rem] leading-[1.65] text-muted">
+            Sires above dams, four generations back. An ancestor with a page on this site is
+            linked; one the record knows only by name is shown by name.
+          </p>
+          <PedigreeTree dog={dog} pq={pq} />
         </div>
       </section>
 
