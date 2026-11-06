@@ -38,8 +38,9 @@ const nextConfig: NextConfig = {
       // the bloodline, which is defined by what a dog has produced. /dams is
       // the closest thing to what a visitor following an old link wanted, and
       // /sires is one click away in the nav. Permanent (308) — the page is not
-      // coming back, so search engines should consolidate onto /dams.
-      { source: "/our-dogs", destination: "/dams", permanent: true },
+      // coming back. Since pawsq DECISIONS-2026-11-06 R6 the parents are one
+      // page again, /dogs, so the old address lands there.
+      { source: "/our-dogs", destination: "/dogs", permanent: true },
       // /our-puppies became /puppies when the page took Legend Manor's layout
       // (2026-10-24). Permanent, so old links and search results land on it.
       { source: "/our-puppies", destination: "/puppies", permanent: true },

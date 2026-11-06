@@ -126,9 +126,7 @@ export default async function DogPage({
     : [];
   const back = isPuppy
     ? { href: `/litters/${birthLitter!.id}`, label: "← The litter" }
-    : sex === "male"
-      ? { href: "/sires", label: "← Sires" }
-      : { href: "/dams", label: "← Dams" };
+    : { href: sex === "male" ? "/dogs#sires" : "/dogs#dams", label: "← Our Dogs" };
 
   return (
     <main>

@@ -5,13 +5,12 @@ import { useState } from "react";
 
 // "Litters" points at the newer /litters registry; the older /our-litters page
 // stays live but unlinked, the same way /puppies2 was kept after its rename.
-// The order is Legend Manor's — Home, Puppies, Dams, Sires, Litters — the
-// standard breeder site (pawsq DECISIONS-2026-10-24 S1).
+// The order is Legend Manor's — Home, Puppies, Our Dogs, Litters — the
+// standard breeder site (pawsq DECISIONS-2026-10-24 S1; 2026-11-06 R6).
 const primaryLinks = [
   { label: "Home", href: "/" },
   { label: "Puppies", href: "/puppies" },
-  { label: "Dams", href: "/dams" },
-  { label: "Sires", href: "/sires" },
+  { label: "Our Dogs", href: "/dogs" },
   { label: "Litters", href: "/litters" },
 ];
 
