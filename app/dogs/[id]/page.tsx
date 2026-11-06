@@ -8,6 +8,7 @@ import PuppyCard from "@/app/components/PuppyCard";
 import { resolveDogParam } from "@/lib/dog-url";
 import {
   getPuppyQ,
+  pqBreedingLabel,
   pqByBirthOrder,
   pqDogHref,
   pqLittersProduced,
@@ -119,7 +120,11 @@ export default async function DogPage({
   const isPuppy = !!birthLitter && produced.length === 0;
   const role = isPuppy ? "Puppy" : pqRole(dog, pq.litters);
   const photo = (isPuppy ? pqPuppyPhoto(dog) : null) ?? pqPhoto(dog);
-  const standing = STANDING_LABEL[pqPuppyStanding(dog)] ?? (dog.status ? dog.status : null);
+  // A breeding dog shows the breeding dial, as in the app; a puppy its standing.
+  const standing =
+    (produced.length > 0 ? pqBreedingLabel(dog, pq) : null) ??
+    STANDING_LABEL[pqPuppyStanding(dog)] ??
+    (dog.status ? dog.status : null);
   const sex = pqSex(dog, pq.litters);
   const littermates = birthLitter
     ? [...birthLitter.puppies].filter((p) => p.id !== dog.id).sort(pqByBirthOrder)

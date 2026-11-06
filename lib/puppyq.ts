@@ -39,6 +39,9 @@ export interface PqDog {
   birth_time: string | null;
   /** This dog's /dogs/ path segment (lib/dog-url.ts), set by getPuppyQ. */
   url_segment?: string;
+  /** The dog-wide breeding dial's fallback (pawsq migration 42); a program's
+   *  own breeding right, when it has one, wins (pqBreedingRetired). */
+  breeding_status?: string | null;
 }
 
 export interface PqLitterRow {
@@ -96,6 +99,9 @@ export interface PuppyQ {
    * ours but his right is.
    */
   breedingRightDogIds: Set<string>;
+  /** Adams Farm's own breeding-right status per dog — the dial in the app
+   *  (active · prospect · retired · transferred). */
+  rightStatusByDog: Record<string, string>;
   /**
    * Every operation holding a breeding right on each dog, ours included —
    * what says a litter is co-bred with a partner program (pqCoBreeders).
@@ -407,7 +413,7 @@ export function pqBreedingLines(pq: PuppyQ) {
   const ours = new Set([...pq.dogs.map((d) => d.id), ...pq.breedingRightDogIds]);
 
   const collect = (side: "dam" | "sire") => {
-    const done = (dog: PqDog) => RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
+    const done = (dog: PqDog) => pqBreedingRetired(dog, pq);
     const m = new Map<string, PqParentEntry>();
     for (const l of pq.litters) {
       if (l.row.organization_id !== pq.orgId) continue;
@@ -626,9 +632,9 @@ async function resolveOrg(
 // ─── Main fetch ───────────────────────────────────────────────────────────────
 
 const DOG_COLS =
-  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id,birth_time";
+  "id,call_name,registered_name,organization_id,sex,status,breed,color,birthdate,notes,sire_id,dam_id,sire_name,dam_name,litter_id,birth_time,breeding_status";
 const LITTER_COLS = "id,name,sire_name,whelp_date,organization_id,notes,dam_id,sire_id,theme,source";
-const BREEDING_RIGHT_COLS = "organization_id,dog_id";
+const BREEDING_RIGHT_COLS = "organization_id,dog_id,status";
 
 /**
  * WHICH LITTERS ARE ON THE ADAMS FARM RECORD. A litter is ours when the farm
@@ -676,6 +682,7 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     onRecordIds: new Set(),
     litters: [],
     breedingRightDogIds: new Set(),
+    rightStatusByDog: {},
     rightHoldersByDog: {},
     orgNames: {},
     diagnostics: {
@@ -773,6 +780,11 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     onRecordIds,
     litters,
     breedingRightDogIds,
+    rightStatusByDog: Object.fromEntries(
+      ((rightsRes.data ?? []) as { organization_id: string; dog_id: string; status: string | null }[])
+        .filter((r) => r.organization_id === orgId && r.status)
+        .map((r) => [r.dog_id, (r.status as string).toLowerCase()]),
+    ),
     rightHoldersByDog: ((rightsRes.data ?? []) as { organization_id: string; dog_id: string }[]).reduce<
       Record<string, string[]>
     >((m, r) => {
@@ -793,3 +805,36 @@ export const getPuppyQ = cache(async function getPuppyQ(): Promise<PuppyQ> {
     },
   };
 });
+
+/**
+ * Whether a breeding dog is retired here — what the app's Dogs dial says
+ * (Douglas, 2026-11-06: Silas read Active in the app and Retired on the site).
+ * The program's own breeding right wins, as in the app; then the dog-wide
+ * breeding status; then, for a dog with neither, the old reading of the
+ * free-form status column (RETIRED_STATUSES).
+ */
+export function pqBreedingRetired(dog: PqDog, pq: Pick<PuppyQ, "rightStatusByDog">): boolean {
+  const done = (v: string) => v === "retired" || v === "transferred";
+  const right = pq.rightStatusByDog[dog.id];
+  if (right) return done(right);
+  const dial = (dog.breeding_status ?? "").toLowerCase().trim();
+  if (dial) return done(dial);
+  return RETIRED_STATUSES.has((dog.status ?? "").toLowerCase());
+}
+
+/**
+ * The word a breeding dog's badge shows: the program's own dial, else the
+ * dog-wide breeding status — Active, Prospect, Retired, Transferred. Null for
+ * a dog with neither, whose badge shows its own status.
+ */
+export function pqBreedingLabel(dog: PqDog, pq: Pick<PuppyQ, "rightStatusByDog">): string | null {
+  const v = (pq.rightStatusByDog[dog.id] ?? dog.breeding_status ?? "").toLowerCase().trim();
+  return v ? v.charAt(0).toUpperCase() + v.slice(1) : null;
+}
+
+/** A dog's status as the site shows it: "placed" reads as Adopted. */
+export function pqStatusWord(status: string | null): string | null {
+  const v = (status ?? "").toLowerCase().trim();
+  if (!v) return null;
+  return v === "placed" ? "Adopted" : v.charAt(0).toUpperCase() + v.slice(1);
+}

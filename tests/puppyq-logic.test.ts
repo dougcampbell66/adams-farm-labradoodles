@@ -140,6 +140,7 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       withParents(litter("L5", "A", null, "2025-03-01"), macy, null, "Tarheel's Knox"),
     ],
     breedingRightDogIds: new Set<string>(),
+    rightStatusByDog: {},
     dogUrls: buildDogUrlIndex([]),
     onRecordIds: new Set<string>(),
     rightHoldersByDog: {},
@@ -177,6 +178,7 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       allDogs: [...pq.allDogs, gate],
       litters: [...pq.litters, withParents(litter("L4", "A", "G", "2026-08-19"), macy, gate)],
       breedingRightDogIds: new Set(["G"]),
+      rightStatusByDog: {},
       dogUrls: buildDogUrlIndex([]),
       onRecordIds: new Set<string>(),
       rightHoldersByDog: {},
@@ -191,6 +193,19 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
     const everyone = [...dams.producing, ...dams.retired, ...dams.nameOnly];
     expect(everyone.map((e) => e.name)).not.toContain("Holly");
     expect(dams.producing.find((e) => e.name === "Macy")?.outside).toBe(false);
+  });
+  it("files a dog by the app's breeding dial before its free-form status (Silas)", () => {
+    // Silas reads 'placed' on the dog row, which alone would retire him; the
+    // program's own right says active, and the app's dial is what wins.
+    const placedSilas = dog({ id: "B", call_name: "Silas", status: "placed" });
+    const withDial = {
+      ...pq,
+      litters: [withParents(litter("L1", "A", "B", "2026-02-04"), macy, placedSilas)],
+      rightStatusByDog: { B: "active" },
+    };
+    expect(pqBreedingLines(withDial).sires.producing.map((e) => e.name)).toContain("Silas");
+    const retiredDial = { ...withDial, rightStatusByDog: { B: "retired" } };
+    expect(pqBreedingLines(retiredDial).sires.retired.map((e) => e.name)).toContain("Silas");
   });
   it("keeps a sire the record knows only by name in his own tier", () => {
     expect(sires.nameOnly.map((e) => e.name)).toEqual(["Tarheel's Knox"]);
@@ -249,6 +264,7 @@ describe("pqAvailablePuppies — the home page's cards", () => {
       withPups(litter("L6", "A", "B", "2026-06-10"), [pup("p8", "L6", "available", "Ada")]),
     ],
     breedingRightDogIds: new Set<string>(),
+    rightStatusByDog: {},
     dogUrls: buildDogUrlIndex([]),
     onRecordIds: new Set<string>(),
     rightHoldersByDog: {},
