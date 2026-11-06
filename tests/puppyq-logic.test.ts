@@ -140,7 +140,7 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       withParents(litter("L5", "A", null, "2025-03-01"), macy, null, "Tarheel's Knox"),
     ],
     breedingRightDogIds: new Set<string>(),
-    rightStatusByDog: {},
+    rightStatusByDog: { A: "active", B: "active", W: "retired" },
     dogUrls: buildDogUrlIndex([]),
     onRecordIds: new Set<string>(),
     rightHoldersByDog: {},
@@ -154,11 +154,15 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
     expect(dams.producing.map((e) => e.name)).toContain("Macy");
     expect(dams.retired.map((e) => e.name)).toContain("Winnie");
   });
-  it("treats 'retained' as still in the program, not retired", () => {
-    // The live record marks working parents 'retained'; filing them under
-    // "Foundation & Retired" would misreport the program.
+  it("files by the Breeding dial, never by Placement (DECISIONS-2026-11-06 R8)", () => {
+    // Silas's Placement is 'retained'; his Breeding dial says active.
     expect(sires.producing.map((e) => e.name)).toContain("Silas");
     expect(sires.retired.map((e) => e.name)).not.toContain("Silas");
+  });
+  it("files a parent we hold no breeding right on with the retired", () => {
+    // Not in Adams Farm's program today: foundation or retired, never active.
+    const noRight = { ...pq, rightStatusByDog: { A: "active", B: "active" } };
+    expect(pqBreedingLines(noRight).dams.retired.map((e) => e.name)).toContain("Winnie");
   });
   it("keeps a dog with no litter off both pages", () => {
     const everyone = [...dams.producing, ...dams.retired, ...sires.producing, ...sires.retired];
@@ -178,7 +182,7 @@ describe("pqBreedingLines — who earns a place on /dams and /sires", () => {
       allDogs: [...pq.allDogs, gate],
       litters: [...pq.litters, withParents(litter("L4", "A", "G", "2026-08-19"), macy, gate)],
       breedingRightDogIds: new Set(["G"]),
-      rightStatusByDog: {},
+      rightStatusByDog: { ...pq.rightStatusByDog, G: "active" },
       dogUrls: buildDogUrlIndex([]),
       onRecordIds: new Set<string>(),
       rightHoldersByDog: {},
