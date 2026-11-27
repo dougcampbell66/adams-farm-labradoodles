@@ -94,6 +94,8 @@ export interface IntakePayload {
     replyTo?: string;
   };
   optIn?: OptInInput;
+  /** The text opt-in box (pawsq migration 110): sent whenever the form showed it. */
+  textOptIn?: OptInInput;
 }
 
 /** null = the platform could not be reached; the caller falls back. */
