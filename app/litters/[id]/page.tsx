@@ -10,6 +10,7 @@ import {
   pqDogHref,
   pqParentHref,
   pqPuppyAvailable,
+  pqRegisteredBeside,
   pqShortName,
   type PqDog,
   type PuppyQ,
@@ -44,6 +45,8 @@ export async function generateMetadata({
 function Parent({ role, dog, name, pq }: { role: string; dog: PqDog | null; name: string | null; pq: PuppyQ }) {
   const label = dog ? pqShortName(dog) : (name ?? "Not recorded");
   const href = pqParentHref(dog, pq);
+  // Both names: the call name leads, the registered name sits under it.
+  const registered = dog ? pqRegisteredBeside(dog, label) : null;
   return (
     <div>
       <p className="text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-cream/60">{role}</p>
@@ -54,13 +57,15 @@ function Parent({ role, dog, name, pq }: { role: string; dog: PqDog | null; name
       ) : (
         <p className="font-heading font-bold text-[1.15rem] text-cream">{label}</p>
       )}
+      {registered ? <p className="mt-0.5 text-[0.85rem] italic text-cream/70">{registered}</p> : null}
     </div>
   );
 }
 
 /**
  * One litter: every puppy with its photo and status (Douglas, 2026-10-24),
- * under its dam × sire by call name. Each parent and each puppy links to its
+ * under its dam × sire by call name, each with its registered name beneath
+ * (Douglas, 2026-11-27). Each parent and each puppy links to its
  * own page (pawsq DECISIONS-2026-11-05 R4).
  */
 export default async function LitterPage({
@@ -112,7 +117,7 @@ export default async function LitterPage({
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {puppies.map((puppy) => (
-                <PuppyCard key={puppy.id} puppy={puppy} href={pqDogHref(puppy, pq)} />
+                <PuppyCard key={puppy.id} puppy={puppy} href={pqDogHref(puppy, pq)} showRegistered />
               ))}
             </div>
           )}

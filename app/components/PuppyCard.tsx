@@ -7,6 +7,7 @@ import {
   type PqDog,
   type PqPuppyStanding,
   pqPhotoFrame,
+  pqRegisteredBeside,
 } from "@/lib/puppyq";
 
 const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
@@ -25,9 +26,22 @@ const STANDING: Record<PqPuppyStanding, { label: string; cls: string }> = {
  * is a wide shot), with the status on its top-right corner; then call name,
  * then colour. Nothing else. With an href (pqDogHref) the card opens the
  * puppy's own page (pawsq DECISIONS-2026-11-05 R4).
+ *
+ * `showRegistered` adds the registered name under the call name. The litter
+ * page asks for it (Douglas, 2026-11-27); the other grids keep the ruled
+ * card as it is.
  */
-export default function PuppyCard({ puppy, href }: { puppy: PqDog; href?: string | null }) {
+export default function PuppyCard({
+  puppy,
+  href,
+  showRegistered = false,
+}: {
+  puppy: PqDog;
+  href?: string | null;
+  showRegistered?: boolean;
+}) {
   const name = pqShortName(puppy);
+  const registered = showRegistered ? pqRegisteredBeside(puppy, name) : null;
   const photo = pqPuppyPhoto(puppy);
   const s = STANDING[pqPuppyStanding(puppy)];
   const card = (
@@ -52,6 +66,9 @@ export default function PuppyCard({ puppy, href }: { puppy: PqDog; href?: string
       </div>
       <div className="p-4">
         <p className="font-heading text-[0.95rem] font-bold leading-snug text-cream">{name}</p>
+        {registered ? (
+          <p className="mt-0.5 text-[0.75rem] italic leading-snug text-cream/70">{registered}</p>
+        ) : null}
         {puppy.color ? (
           <p className="mt-1 text-[0.75rem] text-cream/70 capitalize">{puppy.color}</p>
         ) : null}

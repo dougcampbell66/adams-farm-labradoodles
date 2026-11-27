@@ -355,6 +355,18 @@ export function pqRegisteredName(dog: PqDog): string | null {
   return reg;
 }
 
+/**
+ * The registered name to print beside a name already shown (Douglas,
+ * 2026-11-27: call name and registered name both, on the litter page and
+ * the dog's page). Null when the record holds none, or when it is the very
+ * words already on screen — a name is never printed twice.
+ */
+export function pqRegisteredBeside(dog: PqDog, shown: string): string | null {
+  const reg = dog.registered_name?.trim();
+  if (!reg || reg === shown.trim()) return null;
+  return reg;
+}
+
 /** Every litter this dog is recorded as a parent of. */
 export function pqLittersProduced(dog: PqDog, litters: PqLitter[]): PqLitter[] {
   return litters.filter((l) => l.row.dam_id === dog.id || l.row.sire_id === dog.id);
