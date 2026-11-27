@@ -38,6 +38,25 @@ export const MARKETING_OPT_IN_WORDING =
   "unsubscribe from any message.";
 
 /**
+ * The TEXT opt-in: a second, separate box (Douglas, 2026-11-27; pawsq
+ * migration 110 and docs/TEXTING.md). Its own field, its own wording,
+ * its own consent row — channel sms, to this brand. Neither box implies
+ * the other, and this one is never pre-ticked either.
+ *
+ * The wording names the company, says what the texts are about, and
+ * carries the lines a carrier's review looks for (frequency, rates,
+ * STOP and HELP). It is about the person's own enquiry and puppy; it is
+ * not a marketing subscription.
+ */
+export const TEXT_OPT_IN_FIELD = "text_opt_in";
+
+export const TEXT_OPT_IN_WORDING =
+  "Yes — Adams Farm Labradoodles may text me at the phone number above " +
+  "about my enquiry and my puppy. Message frequency varies. Message and " +
+  "data rates may apply. Reply STOP to stop or HELP for help. This is " +
+  "optional and is not needed for a reply.";
+
+/**
  * Whether a raw checkbox value means "ticked".
  *
  * The forms post JSON and send a real boolean, but these routes also

@@ -46,6 +46,7 @@ export function doorArgs(
   row: Record<string, unknown>,
   form: string,
   optIn: unknown,
+  textOptIn?: unknown,
 ): Record<string, unknown> {
   const args: Record<string, unknown> = { p_brand: BRAND_KEY, p_form: form };
   for (const k of DOOR_FIELDS) {
@@ -57,6 +58,9 @@ export function doorArgs(
   // it in the same transaction (R11 step 5). Nothing else about consent is
   // this site's to say.
   args.p_marketing_opt_in = optIn && typeof optIn === "object" ? optIn : null;
+  // The text opt-in (pawsq migration 110). Named only when ticked, so a
+  // call without one is the same call the door has always taken.
+  if (textOptIn && typeof textOptIn === "object") args.p_text_opt_in = textOptIn;
   // Unscreened on purpose — this path runs only when the platform, which
   // holds the screener, is unreachable — and recorded rather than held: a
   // real enquiry must not wait 90 days on a human because our endpoint
@@ -82,6 +86,8 @@ export type CorporateLead = {
    * rather than omitted, keeping the row shape the same either way.
    */
   marketing_opt_in?: OptInPacket | null;
+  /** The text opt-in packet, or null when that box was not ticked. */
+  text_opt_in?: OptInPacket | null;
 };
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? null;
@@ -119,6 +125,7 @@ export async function insertCorporateLead(lead: CorporateLead): Promise<boolean>
     },
     lead.source_form,
     lead.marketing_opt_in ?? null,
+    lead.text_opt_in ?? null,
   );
 
   try {

@@ -4,7 +4,7 @@ import { insertCorporateLead } from "@/lib/leads";
 import { SOURCE, provenance } from "@/lib/brand";
 import { HONEYPOT_FIELD, STARTED_FIELD } from "@/lib/decoy";
 import { platformIntake } from "@/lib/platform";
-import { optInPacket, visitorIp, MARKETING_OPT_IN_WORDING } from "@/lib/consent";
+import { optInPacket, visitorIp, MARKETING_OPT_IN_WORDING, TEXT_OPT_IN_WORDING } from "@/lib/consent";
 
 /**
  * The contact form, from /contact.
@@ -67,6 +67,10 @@ export async function POST(request: Request) {
   const optInWording = str(body.marketing_opt_in_wording) || MARKETING_OPT_IN_WORDING;
   const formUrl = str(body.form_url) || request.headers.get("referer") || null;
   const ip = visitorIp(request);
+  // The text opt-in: a second box with its own wording (pawsq migration
+  // 110). Only an affirmative `true` counts, as above.
+  const textOptedIn = body.text_opt_in === true;
+  const textOptInWording = str(body.text_opt_in_wording) || TEXT_OPT_IN_WORDING;
 
   // Deliberately does not require a last name even though the form marks it
   // required: refusing a submission server-side over a missing surname would
@@ -109,6 +113,8 @@ export async function POST(request: Request) {
     optIn: optedIn
       ? { checked: true, wording: optInWording, formUrl, ip }
       : undefined,
+    // Sent ticked or not, so the platform knows the box was on the form.
+    textOptIn: { checked: textOptedIn, wording: textOptInWording, formUrl, ip },
   });
 
   if (result) {
@@ -143,6 +149,12 @@ export async function POST(request: Request) {
     marketing_opt_in: optInPacket({
       checked: optedIn,
       wording: optInWording,
+      formUrl,
+      ip,
+    }),
+    text_opt_in: optInPacket({
+      checked: textOptedIn,
+      wording: textOptInWording,
       formUrl,
       ip,
     }),

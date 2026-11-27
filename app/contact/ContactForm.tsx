@@ -6,6 +6,8 @@ import { HONEYPOT_FIELD } from "@/lib/decoy";
 import {
   MARKETING_OPT_IN_FIELD,
   MARKETING_OPT_IN_WORDING,
+  TEXT_OPT_IN_FIELD,
+  TEXT_OPT_IN_WORDING,
 } from "@/lib/consent";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -56,6 +58,9 @@ export default function ContactForm() {
           // change showed the OLD text, and that is what its visitor
           // agreed to.
           marketing_opt_in_wording: MARKETING_OPT_IN_WORDING,
+          // The text opt-in: its own box, read and sent the same way.
+          [TEXT_OPT_IN_FIELD]: fd.get(TEXT_OPT_IN_FIELD) === "yes",
+          text_opt_in_wording: TEXT_OPT_IN_WORDING,
           form_url: window.location.href,
         }),
       });
@@ -183,6 +188,21 @@ export default function ContactForm() {
         />
         <span className="text-[0.86rem] text-body-soft leading-snug">
           {MARKETING_OPT_IN_WORDING}
+        </span>
+      </label>
+
+      {/* The text opt-in: a second box, separate from the email one, so
+          a family can say yes to either and no to the other. Unchecked
+          by default, always. */}
+      <label className="flex items-start gap-3 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          name={TEXT_OPT_IN_FIELD}
+          value="yes"
+          className="mt-[3px] h-4 w-4 shrink-0 accent-navy cursor-pointer"
+        />
+        <span className="text-[0.86rem] text-body-soft leading-snug">
+          {TEXT_OPT_IN_WORDING}
         </span>
       </label>
 
